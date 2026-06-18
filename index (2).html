@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CPO Calculator — Last-Mile Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --bg:#0B0F0D;
+    --surface:#111714;
+    --surface-2:#161D19;
+    --line:rgba(255,255,255,0.08);
+    --line-strong:rgba(255,255,255,0.14);
+    --txt:#E8EDE9;
+    --muted:#8A968F;
+    --faint:#5C6863;
+    --accent:#1FA855;
+    --accent-dim:#14633a;
+    --amber:#C9A227;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --display:"Space Grotesk",var(--sans);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--txt);
+    font-family:var(--sans);
+    font-size:15px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:40px 28px 96px}
+  /* Header */
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 10px;font-weight:500;
+  }
+  h1{
+    font-family:var(--display);font-weight:600;font-size:34px;letter-spacing:-.01em;
+    margin:0 0 6px;
+  }
+  .sub{color:var(--muted);font-size:14px;margin:0 0 32px;max-width:60ch}
+  /* Upload */
+  .drop{
+    border:1px dashed var(--line-strong);border-radius:10px;background:var(--surface);
+    padding:34px 28px;text-align:center;transition:border-color .15s,background .15s;cursor:pointer;
+  }
+  .drop:hover,.drop.over{border-color:var(--accent);background:var(--surface-2)}
+  .drop h2{font-family:var(--display);font-weight:500;font-size:17px;margin:0 0 6px}
+  .drop p{color:var(--muted);font-size:13px;margin:0}
+  .drop .cols{font-family:var(--mono);font-size:12px;color:var(--faint);margin-top:14px}
+  .drop .cols b{color:var(--muted);font-weight:500}
+  input[type=file]{display:none}
+  .fname{font-family:var(--mono);font-size:12px;color:var(--accent);margin-top:14px}
+  /* Summary strip */
+  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:28px 0 8px}
+  .stat{background:var(--surface);padding:18px 18px 16px}
+  .stat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+  .stat .v{font-family:var(--mono);font-weight:600;font-size:21px;letter-spacing:-.01em}
+  .stat.hero{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .stat.hero .k{color:var(--accent)}
+  .stat.hero .v{color:var(--accent)}
+  /* Banner */
+  .banner{border:1px solid rgba(201,162,39,.4);background:rgba(201,162,39,.07);
+    border-radius:8px;padding:13px 16px;margin:18px 0 0;font-size:13px;color:#E9D9A4}
+  .banner b{color:var(--amber)}
+  .banner code{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,.05);padding:1px 6px;border-radius:4px;margin:0 2px}
+  /* Date blocks */
+  .date-block{margin-top:34px}
+  .date-head{display:flex;align-items:baseline;justify-content:space-between;
+    padding-bottom:10px;border-bottom:1px solid var(--line-strong);margin-bottom:2px}
+  .date-head .d{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em}
+  .date-head .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse}
+  thead th{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--faint);font-weight:500;text-align:right;padding:12px 14px 10px;border-bottom:1px solid var(--line)}
+  thead th.l{text-align:left}
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--line);font-size:14px}
+  tbody td.num{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+  tbody td.store{font-weight:500}
+  tbody td.basis{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:left}
+  tbody tr:hover td{background:rgba(255,255,255,.018)}
+  td.cpo{color:var(--accent);font-weight:600}
+  tr.combined td{border-top:1px solid var(--line-strong);border-bottom:none;
+    padding-top:13px;background:rgba(31,168,85,.05)}
+  tr.combined td.store{font-family:var(--display);font-weight:600;letter-spacing:.01em}
+  tr.combined td.cpo{font-size:15px}
+  /* Footer actions */
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:38px;align-items:center}
+  button.act{
+    font-family:var(--sans);font-size:13.5px;font-weight:500;color:var(--txt);
+    background:var(--surface-2);border:1px solid var(--line-strong);border-radius:8px;
+    padding:10px 18px;cursor:pointer;transition:border-color .15s,background .15s}
+  button.act:hover{border-color:var(--accent);background:var(--surface)}
+  button.act.primary{background:var(--accent-dim);border-color:var(--accent)}
+  button.act.primary:hover{background:#19794a}
+  button.act:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  /* Methodology */
+  .method{margin-top:30px;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+  .method summary{list-style:none;cursor:pointer;padding:16px 20px;font-family:var(--display);
+    font-weight:500;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+  .method summary::-webkit-details-marker{display:none}
+  .method summary .chev{color:var(--faint);font-family:var(--mono);font-size:12px}
+  .method[open] summary{border-bottom:1px solid var(--line)}
+  .method .body{padding:6px 20px 20px;color:var(--muted);font-size:13.5px}
+  .method .body ul{margin:10px 0 0;padding-left:18px}
+  .method .body li{margin:7px 0}
+  .method .body code{font-family:var(--mono);font-size:12px;color:var(--txt);background:var(--surface-2);padding:1px 6px;border-radius:4px}
+  .hidden{display:none}
+  .err{color:#E58B8B;font-size:13px;margin-top:14px;font-family:var(--mono)}
+  @media (max-width:720px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    h1{font-size:27px}
+    .basis,thead th.basis-h{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  /* Tabs */
+  .tabs{display:flex;gap:4px;margin:0 0 8px;border-bottom:1px solid var(--line)}
+  .tab{font-family:var(--display);font-size:14px;font-weight:500;color:var(--muted);
+    background:transparent;border:none;border-bottom:2px solid transparent;
+    padding:10px 4px;margin-right:18px;cursor:pointer;transition:color .15s,border-color .15s}
+  .tab:hover{color:var(--txt)}
+  .tab.active{color:var(--txt);border-bottom-color:var(--accent)}
+  .tab:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  /* Logic panel */
+  .logic-intro{color:var(--muted);font-size:13.5px;margin:22px 0 4px;max-width:70ch}
+  .lgroup{margin-top:30px}
+  .lgroup-h{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);padding-bottom:9px;border-bottom:1px solid var(--line-strong);margin-bottom:2px}
+  table.logic{width:100%;border-collapse:collapse;table-layout:fixed}
+  table.logic th{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--faint);font-weight:500;text-align:left;padding:11px 14px 9px;border-bottom:1px solid var(--line)}
+  table.logic td{padding:13px 14px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
+  table.logic td.s{font-family:var(--mono);font-weight:600;color:var(--txt);width:21%;font-size:13px}
+  table.logic td.pr{width:50%;color:var(--txt)}
+  table.logic td.sl{width:29%;color:var(--muted)}
+  table.logic tr:hover td{background:rgba(255,255,255,.018)}
+  .bands{margin:0;padding:0;list-style:none}
+  .bands li{font-family:var(--mono);font-size:12px;color:var(--txt);padding:1px 0;white-space:nowrap}
+  .bands li .r{color:var(--accent)}
+  .pr .lead{display:block;margin-bottom:5px}
+  table.logic code,.sl code{font-family:var(--mono);font-size:12px;color:var(--txt);
+    background:var(--surface-2);padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Last-Mile Operations</p>
+  <h1>CPO Calculator</h1>
+  <p class="sub">Upload a daily rider sheet to compute total cost, total orders, and cost per order for every store and the combined network — broken out by date.</p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" id="tab-calc"  role="tab" aria-selected="true">Calculator</button>
+    <button class="tab"        id="tab-logic" role="tab" aria-selected="false">Calculation logic</button>
+  </div>
+
+  <section id="panel-calc">
+    <label class="drop" id="drop">
+      <h2>Drop your sheet here, or click to browse</h2>
+      <p>Accepts .xlsx, .xls, or .csv — one row per rider × store × date</p>
+      <div class="cols">required columns&nbsp;&nbsp;<b>date</b>&nbsp;·&nbsp;<b>store_name</b>&nbsp;·&nbsp;<b>rider_id</b>&nbsp;·&nbsp;<b>total_orders</b></div>
+      <div class="fname hidden" id="fname"></div>
+      <input type="file" id="file" accept=".xlsx,.xls,.csv" />
+    </label>
+    <div class="err hidden" id="err"></div>
+    <div id="results" class="hidden"></div>
+  </section>
+
+  <section id="panel-logic" class="hidden"></section>
+</div>
+
+<script>
+"use strict";
+
+/* ------------------------------------------------------------------ */
+/*  STORE RULES — keyed by normalized (UPPERCASE, trimmed) store name  */
+/* ------------------------------------------------------------------ */
+const RULES = {
+  // 1800 group — literal markup as specified: x = subtotal + 1800; final = x + x*1.07 + x*0.07*0.18
+  "BELLANDUR-2":      {kind:"tier", band:900,  bp:22, post:"g1800"},
+  "HSR-1":            {kind:"tier", band:900,  bp:22, post:"g1800"},
+  "HSR-3":            {kind:"tier", band:900,  bp:22, post:"g1800"},
+  "TAVAREKERE-1":     {kind:"tier", band:900,  bp:22, post:"g1800"},
+  "BLR-WHITE-05":     {kind:"tier", band:900,  bp:22, post:"g1800", bonus:{ge:15, amt:100}},
+  "BLR-KUDLU-01":     {kind:"tier", band:900,  bp:20, post:"none"},          // band 900, no markup/tax
+
+  "BLR-KORA-02":      {kind:"tier", band:950,  bp:20, post:"gst"},          // subtotal * 1.18
+  "BLR-MAHA-01":      {kind:"tier", band:900,  bp:22, post:"g1800", bonus:{gt:10, amt:100}}, // 1800-group markup; +100/rider>10
+  "KASAVANAHALLI":    {kind:"tier", band:920,  bp:21, post:"gst"},
+  "BLR-SARJ-04":      {kind:"tier", band:865,  bp:20, post:"gst"},
+
+  // Efficiency-based per-order rate — rate is set by the store's daily efficiency
+  "BLR-BTM-01":       {kind:"eff", scheme:"btm",  post:"gst"},
+  "BLR-MARA-03":      {kind:"eff", scheme:"btm",  post:"gst"},
+  "BLR-BELLA-05":     {kind:"eff", scheme:"kora", post:"gst"},
+  "KORAMANGALA-1":    {kind:"eff", scheme:"kora", post:"addGst", add:1800},
+  "BLR-WHITEFIELD-1": {kind:"tier", band:900,  bp:22, post:"g1800", bonus:{ge:15, amt:200}},
+
+  "GGN-SEC19-03":     {kind:"eff", scheme:"sec19", post:"none"},
+  "GGN-SEC53-01":     {kind:"perOrder", rate:70.8, post:"none", minOrders:500},
+  "GGN-SEC51-02":     {kind:"perOrder", rate:70.8, post:"none", minOrders:450},
+
+  // ---- In-house stores (no tax / no markup) ----
+  "BLR-SARJ-03":      {kind:"orderTier", post:"none"},   // whole-qty per-order rate tiers
+  "BLR-BELLA-03":     {kind:"cpo", base:40, post:"m107gst",
+                       table:[[20,45],[23,45.5],[26,46],[29,46.5],[32,47],[35,48],[38,49],[40,50]]},
+  "BLR-BTM-02":       {kind:"cpo", base:40, post:"none",
+                       table:[[10,47.5],[12,48],[14,48.5],[16,49],[18,49.5],[20,50],[23,51],[26,52],[29,53],[33,54],[37,54]]},
+  "BLR-INDI-02":      {kind:"tier", band:900, bp:22, post:"none"},
+  "BLR-INDIRANAGAR-1":{kind:"tier", band:900, lo:18, bp:20, post:"none", bonus:{gt:30, amt:100}},
+  "BLR-JAK-01":       {kind:"cpo", base:40, post:"none",
+                       table:[[8,40],[10,43],[12,48],[15,52],[17,54],[19,56],[21,58],[23,59],[26,61],[30,56],[34,58]]},
+  "BLR-MARA-01":      {kind:"cpo", base:40, post:"none",
+                       table:[[24,44],[28,45],[32,46],[36,47],[40,47]]},
+  "BLR-WHITE-03":     {kind:"cpo", base:40, post:"none",
+                       table:[[20,43.5],[24,44],[28,45],[32,46],[36,46],[40,47],[45,47]]},
+  "BLR-WHITE-06":     {kind:"cpo", base:40, post:"none",
+                       table:[[18,46],[22,47],[26,48],[30,49],[34,49],[38,50],[45,50]]},
+  "GGN-SEC24-04":     {kind:"bands", post:"none", bands:[
+                         {upTo:14, per:40},
+                         {upTo:17, flat:675},
+                         {upTo:20, flat:815},
+                         {upTo:23, flat:1000},
+                         {upTo:26, flat:1150},
+                         {upTo:29, flat:1340},
+                         {upTo:Infinity, per:50}
+                       ]},
+  "GGN-SEC61-08":     {kind:"cpo", base:40, post:"none",
+                       table:[[10,45],[13,45.384],[16,47.5],[20,48],[23,49.565],[25,50]]},
+  "BLR-YLK-01":       {kind:"flat", amount:900, post:"none"},
+  "GGN-SEC14-07":     {kind:"default800", post:"none"},  // <=20 -> 800; >20 -> 800 + (o-20)*40
+};
+const DEFAULT_RULE = {kind:"default800", post:"none"};
+
+/* Short human-readable label for the "Basis" column */
+function postTag(rule){
+  switch(rule.post){
+    case "g1800":  return "+1800 ×1.0826";
+    case "gst":    return "×1.18";
+    case "addGst": return "+" + rule.add + " ×1.18";
+    default:       return "no tax";
+  }
+}
+function basisLabel(rule){
+  switch(rule.post){
+    case "g1800":  return "1800 + 7% mkup + GST";
+    case "gst":    return "x1.18";
+    case "maha":   return "+1800  x1.07 x1.18";
+    case "addGst": return "+" + rule.add + "  x1.18";
+    case "m107gst": return "x1.07 x1.18";
+    default:       return rule.kind==="flat" ? "flat 900/rider" : "in-house / no tax";
+  }
+}
+
+/* ---- per-rider amount ---- */
+function riderAmount(rule, o){
+  switch(rule.kind){
+    case "tier": {
+      const bp = rule.bp != null ? rule.bp : 20;
+      const lo = rule.lo != null ? rule.lo : 10;
+      const r  = rule.rate != null ? rule.rate : 40;
+      if (o < lo)   return o * r;
+      if (o <= bp)  return rule.band;
+      return rule.band + (o - bp) * r;
+    }
+    case "perOrder": return o * rule.rate;
+    case "orderTier":                       // BLR-SARJ-03, whole quantity at tier rate
+      if (o <= 10) return o * 40;
+      if (o <= 15) return o * 45;
+      if (o <= 20) return o * 50;
+      return o * 55;
+    case "cpo": {                            // step / floor to highest threshold <= orders
+      let rate = rule.base;
+      for (const [thr, r] of rule.table) { if (o >= thr) rate = r; }
+      return o * rate;
+    }
+    case "flat":       return rule.amount;   // regardless of orders
+    case "bands": {                           // mixed per-order / flat-total bands
+      for (const b of rule.bands){
+        const cap = b.upTo != null ? b.upTo : Infinity;
+        if (o <= cap) return b.flat != null ? b.flat : o * b.per;
+      }
+      return 0;
+    }
+    case "default800": return o <= 20 ? 800 : 800 + (o - 20) * 40;
+    case "eff":        return 0;             // handled at store-day level (needs efficiency)
+  }
+  return 0;
+}
+
+/* ---- efficiency -> per-order rate (efficiency = (orders/riders)/10) ----
+   Boundary convention: ">" is strict; band lower bounds are inclusive.        */
+function effRate(scheme, e){
+  if (scheme === "btm"){
+    if (e > 3.2)  return 35;
+    if (e >= 2.6) return 40;
+    if (e >= 2.2) return 45;
+    if (e >= 1.8) return 50;
+    if (e >= 1.5) return 55;
+    return 60;
+  }
+  if (scheme === "mara"){
+    if (e > 2.2)  return 45;
+    if (e >= 1.8) return 50;
+    if (e >= 1.5) return 55;
+    return 60;
+  }
+  if (scheme === "sec19"){
+    if (e > 2.2)  return 59;
+    if (e >= 1.8) return 64.9;
+    if (e >= 1.5) return 70.8;
+    return 76.7;   // 0 to < 1.5
+  }
+  // "kora" — shared by Koramangala-1, BLR-BELLA-05, BLR-WHITEFIELD-01.
+  // No band was defined below 2.2; the lowest defined rate (45) is extended downward.
+  if (e > 3.2)  return 38;
+  if (e >= 2.6) return 42;
+  return 45;
+}
+
+/* ---- store-level post-processing on the subtotal S ---- */
+function applyPost(rule, S){
+  switch(rule.post){
+    case "g1800":  { const x = S + 1800; return x*1.07 + x*0.07*0.18; }
+    case "gst":    return S * 1.18;
+    case "maha":   return (S + 1800) * 1.07 * 1.18;
+    case "addGst": return (S + rule.add) * 1.18;
+    case "m107gst": return S * 1.07 * 1.18;
+    default:       return S;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Parsing helpers                                                    */
+/* ------------------------------------------------------------------ */
+const canon = h => String(h).toLowerCase().replace(/[^a-z0-9]/g,"");
+const DATE_KEYS  = ["date","businessdate","shiftdate","orderdate","bizdate"];
+const STORE_KEYS = ["storename","store"];
+const RIDER_KEYS = ["riderid","rider","riderid"];
+const ORDER_KEYS = ["totalorders","orders","totalorder","order","ordercount","numorders","numorder","numoforders","orderscount","deliveredorders","completedorders"];
+
+function pickCol(headers, candidates){
+  for (const h of headers){ if (candidates.includes(canon(h))) return h; }
+  return null;
+}
+
+function pad2(n){ return String(n).padStart(2,"0"); }
+function fromSerial(serial){
+  // Excel serial day -> calendar date, timezone-independent (built on UTC midnight)
+  const d = new Date(Math.round((serial - 25569) * 86400000));
+  return d.getUTCFullYear() + "-" + pad2(d.getUTCMonth()+1) + "-" + pad2(d.getUTCDate());
+}
+function dateKey(v){
+  if (typeof v === "number" && isFinite(v)) return fromSerial(v);
+  if (v instanceof Date && !isNaN(v)){              // defensive: round to nearest day in UTC
+    const r = new Date(Math.round(v.getTime() / 86400000) * 86400000);
+    return r.getUTCFullYear() + "-" + pad2(r.getUTCMonth()+1) + "-" + pad2(r.getUTCDate());
+  }
+  return String(v).trim();
+}
+
+const inr = new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",minimumFractionDigits:2,maximumFractionDigits:2});
+const intf = new Intl.NumberFormat("en-IN");
+
+/* ------------------------------------------------------------------ */
+/*  Core compute                                                       */
+/* ------------------------------------------------------------------ */
+function compute(rows){
+  const headers = Object.keys(rows[0] || {});
+  const cDate  = pickCol(headers, DATE_KEYS);
+  const cStore = pickCol(headers, STORE_KEYS);
+  const cOrd   = pickCol(headers, ORDER_KEYS);
+  if (!cDate || !cStore || !cOrd)
+    throw new Error("Could not find required columns. Need date, store_name and total_orders. Found: " + headers.join(", "));
+
+  // date -> store -> {orders, subtotal, riders, displayName, rule}
+  const byDate = new Map();
+  const unmatched = new Set();
+
+  for (const row of rows){
+    const dRaw = row[cDate];
+    if (dRaw === null || dRaw === undefined || String(dRaw).trim() === "") continue;
+    const dk = dateKey(dRaw);
+    const storeRaw = String(row[cStore] == null ? "" : row[cStore]).trim();
+    if (!storeRaw) continue;
+    const key = storeRaw.toUpperCase();
+    const rule = RULES[key] || DEFAULT_RULE;
+    if (!RULES[key]) unmatched.add(storeRaw);
+    let o = Number(row[cOrd]);
+    if (!isFinite(o) || o < 0) o = 0;
+
+    if (!byDate.has(dk)) byDate.set(dk, new Map());
+    const stores = byDate.get(dk);
+    if (!stores.has(storeRaw))
+      stores.set(storeRaw, {orders:0, subtotalFixed:0, riders:0, bonusTotal:0, name:storeRaw, rule});
+    const s = stores.get(storeRaw);
+    s.orders        += o;
+    s.subtotalFixed += riderAmount(rule, o);   // used by non-efficiency rules
+    s.riders        += 1;
+    if (rule.bonus){
+      const b = rule.bonus;
+      const qualifies = b.ge != null ? (o >= b.ge) : (o > b.gt);
+      if (qualifies) s.bonusTotal += b.amt;
+    }
+  }
+
+  const bonusTag = b => "+₹" + b.amt + "/rider" + (b.ge != null ? "≥" + b.ge : ">" + b.gt);
+
+  // finalize
+  const dates = [];
+  let gCost = 0, gOrders = 0;
+  const allStoreNames = new Set();
+  for (const dk of [...byDate.keys()].sort()){
+    const stores = byDate.get(dk);
+    const list = [];
+    let dCost = 0, dOrders = 0;
+    for (const s of stores.values()){
+      const rule = s.rule;
+      let subtotal, basis, eff = null;
+
+      if (rule.kind === "eff"){
+        eff = s.riders > 0 ? (s.orders / s.riders) / 10 : 0;
+        const rate = effRate(rule.scheme, eff);
+        subtotal = s.orders * rate + s.bonusTotal;
+        basis = "eff " + eff.toFixed(2) + " · ₹" + fmt(rate) + "/order"
+              + (rule.bonus ? " · " + bonusTag(rule.bonus) : "")
+              + " · " + postTag(rule);
+      } else if (rule.minOrders){
+        subtotal = Math.max(s.orders, rule.minOrders) * rule.rate;
+        basis = "₹" + fmt(rule.rate) + "/order · min " + rule.minOrders + " orders/day";
+      } else {
+        subtotal = s.subtotalFixed + s.bonusTotal;
+        basis = basisLabel(rule) + (rule.bonus ? " · " + bonusTag(rule.bonus) : "");
+      }
+
+      const finalCost = applyPost(rule, subtotal);
+      const cpo = s.orders > 0 ? finalCost / s.orders : null;
+      list.push({name:s.name, orders:s.orders, cost:finalCost, cpo, riders:s.riders, eff, basis});
+      dCost += finalCost; dOrders += s.orders;
+      allStoreNames.add(s.name);
+    }
+    list.sort((a,b)=> a.name.localeCompare(b.name));
+    dates.push({date:dk, stores:list, combined:{orders:dOrders, cost:dCost, cpo:dOrders>0?dCost/dOrders:null}});
+    gCost += dCost; gOrders += dOrders;
+  }
+
+  return {
+    dates, unmatched:[...unmatched],
+    grand:{cost:gCost, orders:gOrders, cpo:gOrders>0?gCost/gOrders:null,
+           nDates:dates.length, nStores:allStoreNames.size}
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Render                                                             */
+/* ------------------------------------------------------------------ */
+let LAST = null;
+
+function render(model){
+  LAST = model;
+  const R = document.getElementById("results");
+  const cpoTxt = v => v==null ? "—" : inr.format(v);
+
+  let html = "";
+
+  // summary strip
+  const g = model.grand;
+  html += `<div class="strip">
+    <div class="stat"><div class="k">Dates</div><div class="v">${g.nDates}</div></div>
+    <div class="stat"><div class="k">Stores</div><div class="v">${g.nStores}</div></div>
+    <div class="stat"><div class="k">Total orders</div><div class="v">${intf.format(g.orders)}</div></div>
+    <div class="stat"><div class="k">Total cost</div><div class="v">${inr.format(g.cost)}</div></div>
+    <div class="stat hero"><div class="k">Blended CPO</div><div class="v">${cpoTxt(g.cpo)}</div></div>
+  </div>`;
+
+  // unmatched banner
+  if (model.unmatched.length){
+    html += `<div class="banner"><b>Heads up —</b> ${model.unmatched.length} store name${model.unmatched.length>1?"s":""} didn't match a defined rule and used the default basis (≤20 → 800, &gt;20 → 800 + (orders−20)×40): `
+      + model.unmatched.map(s=>`<code>${esc(s)}</code>`).join("")
+      + ` &nbsp;Check for spelling or casing mismatches.</div>`;
+  }
+
+  // per-date blocks
+  for (const d of model.dates){
+    html += `<div class="date-block">
+      <div class="date-head">
+        <span class="d">${esc(d.date)}</span>
+        <span class="meta">${d.stores.length} stores · ${intf.format(d.combined.orders)} orders</span>
+      </div>
+      <table>
+        <thead><tr>
+          <th class="l">Store</th>
+          <th class="l basis-h">Basis</th>
+          <th>Orders</th>
+          <th>Total cost</th>
+          <th>CPO</th>
+        </tr></thead>
+        <tbody>`;
+    for (const s of d.stores){
+      html += `<tr>
+        <td class="store">${esc(s.name)}</td>
+        <td class="basis">${esc(s.basis)}</td>
+        <td class="num">${intf.format(s.orders)}</td>
+        <td class="num">${inr.format(s.cost)}</td>
+        <td class="num cpo">${cpoTxt(s.cpo)}</td>
+      </tr>`;
+    }
+    html += `<tr class="combined">
+        <td class="store">Combined — all stores</td>
+        <td class="basis"></td>
+        <td class="num">${intf.format(d.combined.orders)}</td>
+        <td class="num">${inr.format(d.combined.cost)}</td>
+        <td class="num cpo">${cpoTxt(d.combined.cpo)}</td>
+      </tr>`;
+    html += `</tbody></table></div>`;
+  }
+
+  // actions + methodology
+  html += `<div class="actions">
+    <button class="act primary" id="exp">Export results (.xlsx)</button>
+    <button class="act" id="reset">Load a different sheet</button>
+  </div>`;
+
+  html += `<details class="method"><summary>Calculation basis <span class="chev">view</span></summary>
+    <div class="body">Per-store rules are listed in full under the <b>Calculation logic</b> tab. General conventions:
+      <ul>
+        <li><b>Efficiency stores</b> (BTM-01, MARA-03, BELLA-05, Koramangala-1, Whitefield-01): daily efficiency = (store orders ÷ riders) ÷ 10 sets the per-order rate; the <em>Basis</em> cell shows the efficiency and rate used that day.</li>
+        <li><b>1800 group</b> (Bellandur-2, HSR-1/3, Tavarekere-1, BLR-WHITE-05, Maha-01): <code>x = subtotal + 1800</code>, final = <code>x×1.07 + x×0.07×0.18</code> (≈ ×1.0826).</li>
+        <li><b>×1.18 only where stated.</b> In-house stores, default stores, the 76.7/order GGN stores, and BLR-KUDLU-01 carry <b>no tax</b>.</li>
+        <li><b>GGN-SEC19-03 / SEC53-01</b>: ₹76.7/order, billed for a minimum of 500 orders/day.</li>
+        <li><b>CPO tables</b> use step/floor — rate of the highest listed order-threshold ≤ the rider's orders; cost = orders × rate.</li>
+        <li><b>Default / GGN-SEC14-07</b>: orders ≤ 20 → ₹800 (even at 0); &gt; 20 → 800 + (orders − 20) × 40.</li>
+        <li><b>CPO</b> = final cost (post markup/GST) ÷ total orders, per store and combined.</li>
+      </ul>
+    </div></details>`;
+
+  R.innerHTML = html;
+  R.classList.remove("hidden");
+  document.getElementById("exp").addEventListener("click", exportXlsx);
+  document.getElementById("reset").addEventListener("click", ()=>{
+    R.classList.add("hidden"); R.innerHTML="";
+    document.getElementById("fname").classList.add("hidden");
+    document.getElementById("file").value="";
+  });
+  R.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ------------------------------------------------------------------ */
+/*  Export                                                             */
+/* ------------------------------------------------------------------ */
+function exportXlsx(){
+  if (!LAST) return;
+  const aoa = [["Date","Store","Basis","Total Orders","Total Cost (INR)","CPO (INR)"]];
+  for (const d of LAST.dates){
+    for (const s of d.stores)
+      aoa.push([d.date, s.name, s.basis, s.orders, round2(s.cost), s.cpo==null?"":round2(s.cpo)]);
+    aoa.push([d.date, "COMBINED — ALL STORES", "", d.combined.orders, round2(d.combined.cost), d.combined.cpo==null?"":round2(d.combined.cpo)]);
+  }
+  aoa.push([]);
+  aoa.push(["ALL DATES","COMBINED","", LAST.grand.orders, round2(LAST.grand.cost), LAST.grand.cpo==null?"":round2(LAST.grand.cpo)]);
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  ws["!cols"] = [{wch:12},{wch:22},{wch:22},{wch:13},{wch:16},{wch:12}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "CPO Summary");
+  XLSX.writeFile(wb, "cpo_summary.xlsx");
+}
+function round2(n){ return Math.round(n*100)/100; }
+
+/* ------------------------------------------------------------------ */
+/*  File handling                                                      */
+/* ------------------------------------------------------------------ */
+function handleFile(file){
+  const errEl = document.getElementById("err");
+  errEl.classList.add("hidden");
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, {type:"array"});
+      let rows = null, chosen = null;
+      const diag = [];
+      for (const name of wb.SheetNames){
+        const r = XLSX.utils.sheet_to_json(wb.Sheets[name], {raw:true, defval:null});
+        if (!r.length){ diag.push("“" + name + "” (empty)"); continue; }
+        const h = Object.keys(r[0]);
+        const ok = pickCol(h, DATE_KEYS) && pickCol(h, STORE_KEYS) && pickCol(h, ORDER_KEYS);
+        diag.push("“" + name + "” [" + h.join(", ") + "]" + (ok ? " ✓" : ""));
+        if (ok && !rows){ rows = r; chosen = name; }
+      }
+      if (!rows)
+        throw new Error("No sheet had the required columns (a date, a store name, and an orders count). Sheets found — " + diag.join("  |  "));
+      const fn = document.getElementById("fname");
+      fn.textContent = file.name + "  ·  " + rows.length + " rows"
+        + (wb.SheetNames.length > 1 ? "  ·  sheet “" + chosen + "”" : "");
+      fn.classList.remove("hidden");
+      render(compute(rows));
+    } catch (err) {
+      errEl.textContent = err.message || String(err);
+      errEl.classList.remove("hidden");
+    }
+  };
+  reader.onerror = () => { errEl.textContent = "Could not read the file."; errEl.classList.remove("hidden"); };
+  reader.readAsArrayBuffer(file);
+}
+
+const drop = document.getElementById("drop");
+const fileInput = document.getElementById("file");
+fileInput.addEventListener("change", e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+["dragenter","dragover"].forEach(ev => drop.addEventListener(ev, e=>{e.preventDefault();drop.classList.add("over");}));
+["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e=>{e.preventDefault();drop.classList.remove("over");}));
+drop.addEventListener("drop", e => { if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+
+/* ------------------------------------------------------------------ */
+/*  Calculation-logic tab — descriptions derived from the same RULES   */
+/* ------------------------------------------------------------------ */
+function fmt(n){ return Number(n).toLocaleString("en-IN",{maximumFractionDigits:2}); }
+
+function perRiderHTML(rule){
+  let bands = [];
+  switch(rule.kind){
+    case "tier": {
+      const lo = rule.lo != null ? rule.lo : 10;
+      const r  = rule.rate != null ? rule.rate : 40;
+      bands = [
+        `&lt; ${lo} &rarr; orders &times; <span class="r">&#8377;${fmt(r)}</span>`,
+        `${lo}&ndash;${rule.bp} &rarr; <span class="r">&#8377;${fmt(rule.band)}</span> flat`,
+        `&gt; ${rule.bp} &rarr; &#8377;${fmt(rule.band)} + (orders &minus; ${rule.bp}) &times; <span class="r">&#8377;${fmt(r)}</span>`
+      ];
+      let out = `<span class="lead">Per rider, by orders:</span><ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
+      if (rule.bonus) out += `<span style="color:var(--muted);font-size:12px">+ &#8377;${rule.bonus.amt} per rider with ${rule.bonus.ge!=null?"&ge; "+rule.bonus.ge:"&gt; "+rule.bonus.gt} orders</span>`;
+      return out;
+    }
+    case "orderTier":
+      bands = [
+        `&le; 10 &rarr; orders &times; <span class="r">&#8377;40</span>`,
+        `11&ndash;15 &rarr; orders &times; <span class="r">&#8377;45</span>`,
+        `16&ndash;20 &rarr; orders &times; <span class="r">&#8377;50</span>`,
+        `&gt; 20 &rarr; orders &times; <span class="r">&#8377;55</span>`
+      ];
+      return `<span class="lead">Whole quantity at the tier rate:</span><ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
+    case "perOrder":
+      return `Every order &times; <span class="r" style="font-family:var(--mono)">&#8377;${fmt(rule.rate)}</span>`
+        + (rule.minOrders ? `<br><span style="color:var(--muted);font-size:12px">store billed for at least ${rule.minOrders} orders/day even if fewer</span>` : "");
+    case "eff": {
+      const schemeBands = {
+        btm:[["&gt; 3.2",35],["2.6&ndash;3.2",40],["2.2&ndash;2.6",45],["1.8&ndash;2.2",50],["1.5&ndash;1.8",55],["&lt; 1.5",60]],
+        mara:[["&gt; 2.2",45],["1.8&ndash;2.2",50],["1.5&ndash;1.8",55],["&lt; 1.5",60]],
+        kora:[["&gt; 3.2",38],["2.6&ndash;3.2",42],["&le; 2.6",45]],
+        sec19:[["&gt; 2.2",59],["1.8&ndash;2.2",64.9],["1.5&ndash;1.8",70.8],["&lt; 1.5",76.7]]
+      }[rule.scheme];
+      bands = schemeBands.map(([r,rate])=>`eff ${r} &rarr; orders &times; <span class="r">&#8377;${rate}</span>`);
+      let out = `<span class="lead">Daily efficiency = (orders &divide; riders) &divide; 10, then:</span><ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
+      if (rule.bonus) out += `<span style="color:var(--muted);font-size:12px">+ &#8377;${rule.bonus.amt} per rider with ${rule.bonus.ge!=null?"&ge; "+rule.bonus.ge:"&gt; "+rule.bonus.gt} orders</span>`;
+      if (rule.scheme==="kora") out += `<span style="color:var(--amber);font-size:12px;display:block;margin-top:4px">no band defined below 2.2 &mdash; &#8377;45 extended down</span>`;
+      return out;
+    }
+    case "flat":
+      return `<span class="r" style="font-family:var(--mono)">&#8377;${fmt(rule.amount)}</span> per rider, regardless of orders`;
+    case "bands": {
+      let lo = 0; const items = [];
+      rule.bands.forEach((b,i)=>{
+        const hi = (b.upTo!=null ? b.upTo : Infinity);
+        let range;
+        if (hi===Infinity) range = "&ge; " + lo;
+        else if (i===0)    range = "&lt; " + (hi+1);
+        else               range = lo + "&ndash;" + hi;
+        const val = b.flat!=null
+          ? `<span class="r">&#8377;${fmt(b.flat)}</span> total`
+          : `orders &times; <span class="r">&#8377;${fmt(b.per)}</span>`;
+        items.push(`${range} &rarr; ${val}`);
+        if (hi!==Infinity) lo = hi + 1;
+      });
+      return `<span class="lead">Per rider, by orders:</span><ul class="bands"><li>${items.join("</li><li>")}</li></ul>`;
+    }
+    case "default800":
+      bands = [
+        `&le; 20 &rarr; <span class="r">&#8377;800</span> flat (even at 0 orders)`,
+        `&gt; 20 &rarr; &#8377;800 + (orders &minus; 20) &times; <span class="r">&#8377;40</span>`
+      ];
+      return `<ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
+    case "cpo": {
+      const t = rule.table;
+      bands.push(`&lt; ${t[0][0]} &rarr; <span class="r">&#8377;${fmt(rule.base)}</span>/order`);
+      for (let i=0;i<t.length;i++){
+        const lo=t[i][0], hi = i<t.length-1 ? t[i+1][0]-1 : null;
+        const range = hi===null ? `&ge; ${lo}` : (lo===hi ? `${lo}` : `${lo}&ndash;${hi}`);
+        bands.push(`${range} &rarr; <span class="r">&#8377;${fmt(t[i][1])}</span>/order`);
+      }
+      return `<span class="lead">Cost = orders &times; CPO rate (step to band):</span><ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
+    }
+  }
+  return "";
+}
+
+function storeLevelHTML(rule){
+  switch(rule.post){
+    case "g1800":  return `Sum rider amounts, add <code>&#8377;1,800</code> &rarr; x. Charge <code>x&times;1.07 + x&times;0.07&times;0.18</code> (&asymp; &times;1.0826).`;
+    case "gst":    return `Sum of rider amounts <code>&times; 1.18</code> (GST).`;
+    case "maha":   return `Sum riders, add <code>&#8377;1,800</code>, then <code>&times; 1.07 &times; 1.18</code>.`;
+    case "addGst": return `Sum riders, add <code>&#8377;${fmt(rule.add)}</code>, then <code>&times; 1.18</code>.`;
+    case "m107gst": return `Sum of rider amounts <code>&times; 1.07 &times; 1.18</code>.`;
+    default:       return `Raw sum of rider amounts &mdash; no tax or markup.`;
+  }
+}
+
+function groupOf(rule){
+  if (rule.kind==="eff") return "g6";
+  if (rule.post==="g1800") return "g1";
+  if (rule.post==="gst")   return "g2";
+  if (rule.post==="maha" || rule.post==="addGst" || rule.post==="m107gst") return "g3";
+  if (rule.post==="none" && rule.kind==="perOrder") return "g4";
+  return "g5";
+}
+const GROUP_TITLES = {
+  g1:"Aggregator — add ₹1,800, +7% markup, GST on the markup",
+  g2:"Aggregator — GST ×1.18 on the store total",
+  g3:"Bespoke markup",
+  g4:"Aggregator — flat per-order rate, no tax",
+  g5:"In-house — no tax",
+  g6:"Efficiency-based per-order rate (rate set by daily efficiency)"
+};
+const GROUP_ORDER = ["g6","g1","g2","g3","g4","g5"];
+
+function renderLogic(){
+  const buckets = {g1:[],g2:[],g3:[],g4:[],g5:[],g6:[]};
+  for (const [name, rule] of Object.entries(RULES)) buckets[groupOf(rule)].push([name, rule]);
+
+  let html = `<p class="logic-intro">Exact rule applied to each store, generated from the calculator's own definitions. Store names are matched case-insensitively (spaces trimmed); anything not listed here uses the default rule at the bottom.</p>`;
+
+  const tableFor = rows => {
+    let t = `<table class="logic"><thead><tr><th>Store</th><th>Per-rider amount</th><th>Store-level (on the sum)</th></tr></thead><tbody>`;
+    for (const [name, rule] of rows)
+      t += `<tr><td class="s">${esc(name)}</td><td class="pr">${perRiderHTML(rule)}</td><td class="sl">${storeLevelHTML(rule)}</td></tr>`;
+    return t + `</tbody></table>`;
+  };
+
+  for (const g of GROUP_ORDER){
+    if (!buckets[g].length) continue;
+    buckets[g].sort((a,b)=>a[0].localeCompare(b[0]));
+    html += `<div class="lgroup"><div class="lgroup-h">${esc(GROUP_TITLES[g])}</div>${tableFor(buckets[g])}</div>`;
+  }
+  // default rule
+  html += `<div class="lgroup"><div class="lgroup-h">Any other / unlisted store — default</div>${tableFor([["(default)", DEFAULT_RULE]])}</div>`;
+
+  document.getElementById("panel-logic").innerHTML = html;
+}
+
+/* ---- tab switching ---- */
+const tabCalc  = document.getElementById("tab-calc");
+const tabLogic = document.getElementById("tab-logic");
+const panelCalc  = document.getElementById("panel-calc");
+const panelLogic = document.getElementById("panel-logic");
+function showTab(calc){
+  panelCalc.classList.toggle("hidden", !calc);
+  panelLogic.classList.toggle("hidden", calc);
+  tabCalc.classList.toggle("active", calc);   tabCalc.setAttribute("aria-selected", calc);
+  tabLogic.classList.toggle("active", !calc); tabLogic.setAttribute("aria-selected", !calc);
+}
+tabCalc.addEventListener("click",  ()=>showTab(true));
+tabLogic.addEventListener("click", ()=>showTab(false));
+
+renderLogic();
+</script>
+</body>
+</html>
