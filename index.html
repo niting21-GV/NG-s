@@ -1,4 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Swish Last Mile · Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1B211E; --ink:#EDF1EE; --muted:#A4B0AA; --faint:#74827B;
+    --line:rgba(255,255,255,.10); --card:#242C28; --card-2:#2C342F;
+    --brand:#28C06E; --brand-2:#179A57; --brand-soft:rgba(40,192,110,.13);
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --display:"Space Grotesk",var(--sans);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .app{display:flex;height:100vh;overflow:hidden}
+
+  .sidebar{width:252px;flex:0 0 252px;background:var(--card);border-right:1px solid var(--line);
+    display:flex;flex-direction:column;padding:20px 14px}
+  .brand{display:flex;align-items:center;gap:9px;padding:6px 8px 22px}
+  .brand .spark{width:20px;height:20px;color:var(--brand)}
+  .brand .wm{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:-.02em}
+  .brand .wm .g{color:var(--brand)}
+  .brand .tag{font-size:11px;color:var(--faint);font-weight:600;letter-spacing:.04em;margin-left:2px}
+  .seclabel{font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);padding:6px 10px 8px}
+
+  .nav{display:flex;flex-direction:column;gap:3px}
+  .navitem{display:flex;align-items:center;gap:11px;width:100%;border:0;cursor:pointer;
+    background:transparent;color:var(--muted);font-family:var(--sans);font-size:14px;font-weight:500;
+    padding:10px 12px;border-radius:10px;text-align:left;position:relative;transition:background .14s,color .14s}
+  .navitem .ic{width:19px;height:19px;display:grid;place-items:center;flex:0 0 19px;opacity:.92}
+  .navitem .ic svg{width:19px;height:19px}
+  .navitem:hover{background:var(--card-2);color:var(--ink)}
+  .navitem.active{background:var(--brand-soft);color:var(--ink)}
+  .navitem.active .ic{color:var(--brand);opacity:1}
+  .navitem.active::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--brand)}
+
+  .credit{margin-top:auto;padding:16px 12px 4px;border-top:1px solid var(--line);
+    font-size:11.5px;letter-spacing:.04em;color:var(--faint)}
+  .credit b{color:var(--muted);font-weight:600}
+
+  .content{flex:1;position:relative;background:var(--bg);min-width:0}
+  .frame{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:var(--bg)}
+  .frame.show{display:block}
+
+  .mtoggle{display:none}
+  @media (max-width:860px){
+    .app{flex-direction:column}
+    .sidebar{width:100%;flex:0 0 auto;flex-direction:row;align-items:center;gap:6px;
+      padding:10px 12px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line)}
+    .brand{padding:0 8px 0 2px;flex:0 0 auto}
+    .brand .tag{display:none}
+    .seclabel,.credit{display:none}
+    .nav{flex-direction:row;gap:6px;flex:1}
+    .navitem{width:auto;white-space:nowrap;padding:8px 12px}
+    .navitem.active::before{display:none}
+    .navitem .lb{font-size:13px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="spark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.7 6.1L20 10l-6.3 1.9L12 18l-1.7-6.1L4 10l6.3-1.9z"/></svg>
+      <div><span class="wm"><span class="g">swish</span></span> <span class="tag">Last Mile</span></div>
+    </div>
+    <div class="seclabel">Tools</div>
+    <nav class="nav">
+      <button class="navitem active" data-tool="cpo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.2"/><line x1="8.5" y1="7" x2="15.5" y2="7"/><line x1="8.5" y1="11.5" x2="9.5" y2="11.5"/><line x1="11.5" y1="11.5" x2="12.5" y2="11.5"/><line x1="14.5" y1="11.5" x2="15.5" y2="11.5"/><line x1="8.5" y1="15.5" x2="9.5" y2="15.5"/><line x1="11.5" y1="15.5" x2="12.5" y2="15.5"/><line x1="14.5" y1="15" x2="15.5" y2="16"/></svg></span><span class="lb">CPO Calculator</span></button>
+      <button class="navitem" data-tool="rider"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8.2 18H14a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h5.8"/></svg></span><span class="lb">Rider Planning</span></button>
+      <button class="navitem" data-tool="zones"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s6.5-5.8 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.3" r="2.4"/></svg></span><span class="lb">Zone Details Extractor</span></button>
+    </nav>
+    <div class="credit">Built by <b>NG</b></div>
+  </aside>
+  <main class="content" id="content">
+    <iframe class="frame show" id="frame-cpo" title="CPO Calculator"></iframe>
+    <iframe class="frame" id="frame-rider" title="Rider Planning"></iframe>
+    <iframe class="frame" id="frame-zones" title="Zone Details Extractor"></iframe>
+  </main>
+</div>
+
+<script type="text/html" id="src-cpo"><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -7,8 +94,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">%%ENDSCRIPT%%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js">%%ENDSCRIPT%%>
 <style>
   :root{
     --bg:#1B211E;
@@ -233,8 +320,6 @@
   <section id="panel-bydate" class="panel hidden"></section>
   <section id="panel-bystore" class="panel hidden"></section>
   <section id="panel-logic" class="panel hidden"></section>
-
-  <footer class="foot">Built by <span>NG</span></footer>
 </main>
 
 <script>
@@ -825,6 +910,2845 @@ function renderLogic(){
 }
 
 renderScope("bd"); renderScope("bs"); renderLogic();
+%%ENDSCRIPT%%>
+</body>
+</html>
+</script>
+<script type="text/html" id="src-rider"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rider Planning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">%%ENDSCRIPT%%>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">%%ENDSCRIPT%%>
+<style>
+:root {
+  --ink: #1B211E;
+  --ink-2: #242C28;
+  --ink-3: #2C342F;
+  --ink-4: #333D37;
+  --ink-5: #3A463F;
+  --rule: rgba(255,255,255,0.06);
+  --rule-2: rgba(255,255,255,0.1);
+  --rule-3: rgba(255,255,255,0.16);
+  --white: #EDF1EE;
+  --white-dim: #A4B0AA;
+  --white-faint: #74827B;
+  --white-ghost: #3A463F;
+
+  --volt: #28C06E;      /* primary accent */
+  --volt-dim: rgba(40,192,110,0.15);
+  --volt-glow: rgba(40,192,110,0.35);
+  --aqua: #6BB8D6;
+  --aqua-dim: rgba(107,184,214,0.12);
+  --rose: #ff5470;
+  --rose-dim: rgba(255,84,112,0.12);
+  --amber: #E2AE4D;
+  --amber-dim: rgba(226,174,77,0.12);
+  --sky: #5aa8ff;
+  --sky-dim: rgba(90,168,255,0.12);
+
+  --ff-head: 'Space Grotesk', sans-serif;
+  --ff-body: 'Inter', sans-serif;
+  --ff-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--ff-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* NOISE OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.022;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--ink-2); }
+::-webkit-scrollbar-thumb { background: var(--white-ghost); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--volt); }
+
+::selection { background: var(--volt); color: #000; }
+
+/* ── TOP NAV ─────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,11,13,0.82);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-inner {
+  max-width: 1760px; margin: 0 auto;
+  padding: 0 52px;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between; gap: 32px;
+}
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: inherit;
+}
+.brand-icon {
+  width: 32px; height: 32px;
+  background: var(--volt);
+  display: grid; place-items: center;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  flex-shrink: 0;
+}
+.brand-icon svg { width: 14px; height: 14px; }
+.brand-name {
+  font-family: var(--ff-head);
+  font-size: 15px; font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.brand-version {
+  font-family: var(--ff-mono);
+  font-size: 10px; color: var(--white-faint);
+  letter-spacing: 0.08em;
+  margin-left: 4px;
+}
+.nav-right {
+  display: flex; align-items: center; gap: 28px;
+  font-size: 12px;
+}
+.status-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 12px;
+  border: 1px solid var(--rule-2);
+  border-radius: 100px;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--white-dim);
+  transition: all 0.3s;
+}
+.status-pip {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--white-faint);
+  transition: all 0.3s;
+}
+.status-pill.ready { border-color: rgba(40,192,110,0.25); color: var(--volt); }
+.status-pill.ready .status-pip { background: var(--volt); box-shadow: 0 0 10px var(--volt-glow); }
+.status-pill.running .status-pip { background: var(--amber); box-shadow: 0 0 10px var(--amber-dim); animation: blink 0.9s ease-in-out infinite; }
+.status-pill.done { border-color: rgba(107,184,214,0.25); color: var(--aqua); }
+.status-pill.done .status-pip { background: var(--aqua); box-shadow: 0 0 10px var(--aqua-dim); }
+.status-pill.error { border-color: rgba(255,84,112,0.25); color: var(--rose); }
+.status-pill.error .status-pip { background: var(--rose); }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.nav-date { font-family: var(--ff-mono); font-size: 11px; color: var(--white-faint); }
+
+/* ── HERO ─────────────────────────────────── */
+.hero {
+  max-width: 1760px; margin: 0 auto;
+  padding: 96px 52px 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+  border-bottom: 1px solid var(--rule);
+}
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--ff-mono);
+  font-size: 11px; color: var(--volt);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.hero-eyebrow::after { content: ''; flex: 1; max-width: 64px; height: 1px; background: var(--volt); }
+.hero-title {
+  font-family: var(--ff-head);
+  font-size: clamp(44px, 5vw, 72px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 32px;
+}
+.hero-title .highlight {
+  color: var(--volt);
+  display: block;
+}
+.hero-description {
+  font-size: 16px; color: var(--white-dim);
+  line-height: 1.7; max-width: 560px;
+}
+.hero-description strong { color: var(--white); font-weight: 500; }
+
+.hero-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  align-self: center;
+  margin-top: 24px;
+}
+.hero-stat {
+  background: var(--ink-2);
+  padding: 28px 24px;
+}
+.hero-stat-num {
+  font-family: var(--ff-head);
+  font-size: 40px; font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--volt);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.hero-stat-label {
+  font-size: 12px; color: var(--white-faint);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  font-family: var(--ff-mono);
+}
+
+/* ── LAYOUT ─────────────────────────────────── */
+.page { max-width: 1760px; margin: 0 auto; padding: 0 52px; }
+
+/* ── SECTION HEADER ─────────────────────────── */
+.sect {
+  padding: 64px 0 48px;
+  border-bottom: 1px solid var(--rule);
+}
+.sect-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 40px;
+}
+.sect-num {
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.18em;
+  color: var(--white-faint);
+  margin-bottom: 8px;
+}
+.sect-title {
+  font-family: var(--ff-head);
+  font-size: 30px; font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.sect-meta {
+  font-family: var(--ff-mono);
+  font-size: 12px; color: var(--white-faint);
+  text-align: right; line-height: 1.7;
+}
+.sect-meta .accent { color: var(--volt); }
+
+/* ── UPLOAD GRID ─────────────────────────────── */
+.upload-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.upload-card {
+  background: var(--ink-2);
+  padding: 32px;
+  position: relative;
+  transition: background 0.2s;
+}
+.upload-card::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background 0.2s;
+}
+.upload-card.loaded { background: var(--ink-3); }
+.upload-card.loaded::after { background: var(--volt); }
+.upload-card.multi-store .upload-card.loaded::after { background: var(--aqua); }
+
+.upload-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--white-faint);
+  margin-bottom: 14px;
+}
+.upload-name {
+  font-family: var(--ff-head);
+  font-size: 20px; font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+}
+.upload-desc {
+  font-size: 13px; color: var(--white-dim);
+  line-height: 1.65; margin-bottom: 24px;
+}
+.upload-desc code {
+  font-family: var(--ff-mono);
+  font-size: 11.5px;
+  color: var(--aqua);
+  background: var(--aqua-dim);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.file-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 16px;
+  border: 1px dashed var(--rule-2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.file-row:hover { border-color: var(--volt); background: var(--volt-dim); }
+.file-row.has-file { border-style: solid; border-color: rgba(40,192,110,0.3); background: var(--volt-dim); }
+.file-row input[type="file"] { display: none; }
+.file-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.file-row-name {
+  font-size: 13px; font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.file-row-name.empty { color: var(--white-faint); font-style: italic; font-weight: 400; }
+.file-row-meta {
+  font-family: var(--ff-mono);
+  font-size: 11px; color: var(--volt);
+  letter-spacing: 0.04em;
+}
+.browse-btn {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  font-family: var(--ff-body);
+  background: var(--ink-4);
+  border: 1px solid var(--rule-2);
+  color: var(--white);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.browse-btn:hover { border-color: var(--volt); color: var(--volt); }
+
+/* ── SETTINGS ─────────────────────────────────── */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.setting-cell {
+  background: var(--ink-2);
+  padding: 28px 24px;
+}
+.setting-label {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--white-faint);
+  display: block;
+  margin-bottom: 12px;
+}
+.setting-cell input, .setting-cell select {
+  width: 100%;
+  background: var(--ink);
+  border: 1px solid var(--rule-2);
+  color: var(--white);
+  padding: 11px 14px;
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  outline: none;
+  transition: border 0.15s;
+  appearance: none;
+}
+.setting-cell input:focus, .setting-cell select:focus { border-color: var(--volt); }
+.setting-hint {
+  font-size: 11.5px; color: var(--white-faint);
+  margin-top: 8px; line-height: 1.5;
+}
+
+/* ── RUN BAR ─────────────────────────────────── */
+.run-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 36px 0 0;
+  gap: 24px;
+  border-top: 1px solid var(--rule);
+  margin-top: 36px;
+}
+.btn-group { display: flex; gap: 12px; }
+.btn {
+  padding: 14px 36px;
+  font-family: var(--ff-body);
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border: none; cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--volt); color: #000; }
+.btn-primary:hover:not(:disabled) { background: #6FE3A0; box-shadow: 0 0 24px var(--volt-glow); }
+.btn-primary:disabled { background: var(--ink-5); color: var(--white-faint); cursor: not-allowed; }
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--rule-3);
+}
+.btn-outline:hover:not(:disabled) { border-color: var(--volt); color: var(--volt); }
+.btn-outline:disabled { color: var(--white-faint); border-color: var(--rule); cursor: not-allowed; }
+
+/* ── PLANNED ORDERS ─────────────────────────── */
+.planned-controls {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 2px; background: var(--rule); border: 1px solid var(--rule);
+  margin-bottom: 2px;
+}
+.planned-empty {
+  background: var(--ink-2); padding: 28px 24px;
+  font-size: 13px; color: var(--white-faint);
+  font-family: var(--ff-mono); line-height: 1.6;
+}
+.planned-list {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px; background: var(--rule); border: 1px solid var(--rule);
+}
+.planned-row {
+  background: var(--ink-2); padding: 22px 24px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.planned-row .pr-store {
+  font-family: var(--ff-head); font-size: 15px; font-weight: 600;
+  letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px;
+}
+.planned-row .pr-badge {
+  font-family: var(--ff-mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #000; background: var(--sky); padding: 3px 8px;
+}
+.planned-row input {
+  width: 100%; background: var(--ink);
+  border: 1px solid var(--rule-2); color: var(--white);
+  padding: 10px 13px; font-family: var(--ff-mono); font-size: 14px;
+  outline: none; transition: border 0.15s;
+}
+.planned-row input:focus { border-color: var(--sky); }
+.planned-row .pr-hint {
+  font-size: 11px; color: var(--white-faint); font-family: var(--ff-mono);
+  letter-spacing: 0.04em;
+}
+.planned-row .pr-value {
+  font-family: var(--ff-mono); font-size: 22px; font-weight: 600;
+  color: var(--sky); letter-spacing: -0.01em; line-height: 1;
+}
+.setting-hint code {
+  font-family: var(--ff-mono); font-size: 11px;
+  color: var(--aqua); background: var(--aqua-dim);
+  padding: 1px 5px; border-radius: 3px;
+}
+@media (max-width: 1100px) {
+  .planned-list { grid-template-columns: 1fr; }
+  .planned-controls { grid-template-columns: 1fr; }
+}
+
+/* ── RESULTS ─────────────────────────────────── */
+.results { display: none; }
+.results.visible { display: block; }
+
+/* Store Section */
+.store-block {
+  border: 1px solid var(--rule);
+  margin-bottom: 40px;
+  background: var(--ink-2);
+}
+.store-block-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--ink-3);
+  gap: 16px;
+}
+.store-block-title {
+  font-family: var(--ff-head);
+  font-size: 22px; font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex; align-items: center; gap: 14px;
+}
+.store-badge {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #000;
+  background: var(--volt);
+  padding: 4px 10px;
+}
+.store-kpis {
+  display: flex; align-items: center; gap: 28px;
+  font-family: var(--ff-mono); font-size: 12px; color: var(--white-faint);
+}
+.store-kpis .kv { display: flex; flex-direction: column; gap: 2px; align-items: flex-end; }
+.store-kpis .kv-val { color: var(--white); font-weight: 500; font-size: 14px; }
+.store-kpis .kv-key { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* Tabs */
+.tab-bar {
+  display: flex; align-items: center; gap: 0;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--ink-2);
+}
+.tab-btn {
+  padding: 16px 20px;
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-weight: 500;
+  background: transparent; border: none;
+  color: var(--white-faint);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+}
+.tab-btn:hover { color: var(--white-dim); }
+.tab-btn.active { color: var(--volt); border-bottom-color: var(--volt); }
+
+/* TABLE */
+.table-outer { overflow-x: auto; }
+table.plan {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+table.plan thead {
+  background: var(--ink-4);
+  position: sticky; top: 60px; z-index: 10;
+}
+table.plan th {
+  font-family: var(--ff-mono);
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--white-faint);
+  padding: 14px 16px;
+  text-align: right;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+table.plan th.col-hour { text-align: left; }
+table.plan th.group-mt { color: var(--volt); border-bottom: 2px solid var(--volt); }
+table.plan th.group-fs { color: var(--aqua); border-bottom: 2px solid var(--aqua); }
+table.plan th.sep-left { border-left: 1px solid var(--rule-2); }
+
+table.plan td {
+  padding: 13px 16px;
+  text-align: right;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--ff-mono);
+  font-size: 12.5px;
+  color: var(--white-dim);
+  white-space: nowrap;
+  transition: background 0.1s;
+}
+table.plan td.col-hour {
+  text-align: left;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+table.plan tr:hover td { background: rgba(255,255,255,0.025); }
+table.plan td.sep-left { border-left: 1px solid var(--rule); }
+
+table.plan td.peak-demand { color: var(--amber); }
+table.plan td.lm-uplift { color: #2FC974; }
+table.plan td.kt-uplift { color: #179A57; }
+table.plan td.growth-uplift { color: var(--sky); }
+table.plan td.planned-demand { color: var(--white); font-weight: 500; }
+table.plan td.riders-mt {
+  color: var(--volt);
+  font-weight: 700; font-size: 14px;
+  background: rgba(40,192,110,0.04);
+}
+table.plan td.riders-fs {
+  color: var(--aqua);
+  font-weight: 700; font-size: 14px;
+  background: rgba(107,184,214,0.04);
+}
+table.plan td.null-cell { color: var(--white-ghost); }
+table.plan td.oph-cell { color: var(--white); font-weight: 500; }
+table.plan td.riders-planned {
+  color: var(--sky);
+  font-weight: 700; font-size: 14px;
+  background: rgba(90,168,255,0.06);
+}
+table.plan tr.total-row td.riders-planned { color: var(--sky); font-size: 16px; }
+table.plan tr.total-row td {
+  border-top: 1px solid var(--rule-2);
+  background: var(--ink-4);
+  font-weight: 600; color: var(--white);
+}
+table.plan tr.total-row td.col-hour {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--white-faint);
+}
+table.plan tr.total-row td.riders-mt { color: var(--volt); font-size: 16px; }
+table.plan tr.total-row td.riders-fs { color: var(--aqua); font-size: 16px; }
+
+/* ── WARNINGS ─────────────────────────────────── */
+.warn-box {
+  margin: 0 32px 24px;
+  padding: 16px 20px;
+  border-left: 3px solid var(--rose);
+  background: var(--rose-dim);
+  font-size: 13px; color: var(--white-dim);
+  line-height: 1.7;
+}
+.warn-title {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--rose); font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ── CHART ─────────────────────────────────── */
+.chart-panel {
+  padding: 32px;
+  border-top: 1px solid var(--rule);
+}
+.chart-title {
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--white-faint);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.chart-legend-item {
+  display: flex; align-items: center; gap: 6px;
+}
+.chart-legend-dot { width: 8px; height: 8px; border-radius: 1px; flex-shrink: 0; }
+.chart-canvas-wrap { height: 280px; position: relative; }
+
+/* ── SUMMARY METRICS ─────────────────────────── */
+.metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-bottom: 48px;
+}
+.metric-cell {
+  background: var(--ink-2);
+  padding: 28px 28px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.metric-cell::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.metric-cell.volt::before { background: var(--volt); }
+.metric-cell.aqua::before { background: var(--aqua); }
+.metric-cell.amber::before { background: var(--amber); }
+.metric-cell.sky::before { background: var(--sky); }
+.metric-label {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--white-faint);
+  margin-bottom: 14px;
+}
+.metric-value {
+  font-family: var(--ff-head);
+  font-size: 48px; font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.metric-cell.volt .metric-value { color: var(--volt); }
+.metric-cell.aqua .metric-value { color: var(--aqua); }
+.metric-cell.amber .metric-value { color: var(--amber); }
+.metric-cell.sky .metric-value { color: var(--sky); }
+.metric-sub { font-size: 12px; color: var(--white-faint); }
+
+/* ── METHOD ─────────────────────────────────── */
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.method-cell {
+  background: var(--ink-2);
+  padding: 28px 24px;
+}
+.method-step {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.14em; color: var(--volt);
+  margin-bottom: 12px;
+}
+.method-name {
+  font-family: var(--ff-head);
+  font-size: 16px; font-weight: 600;
+  margin-bottom: 10px;
+}
+.method-body {
+  font-size: 13px; color: var(--white-dim);
+  line-height: 1.65;
+}
+.method-body code {
+  font-family: var(--ff-mono);
+  font-size: 11.5px;
+  color: var(--aqua);
+  background: var(--aqua-dim);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.method-body strong { color: var(--white); font-weight: 500; }
+
+/* ── COLUMN LEGEND ─────────────────────────────── */
+.col-legend {
+  display: flex; align-items: flex-start; gap: 32px;
+  flex-wrap: wrap;
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--ink);
+}
+.col-legend-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--white-dim);
+}
+.col-legend-swatch {
+  width: 12px; height: 12px; flex-shrink: 0;
+}
+
+/* ── FOOTER ─────────────────────────────────── */
+footer {
+  max-width: 1760px; margin: 0 auto;
+  padding: 48px 52px;
+  border-top: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; color: var(--white-faint);
+  margin-top: 80px;
+}
+footer .mono { font-family: var(--ff-mono); font-size: 11px; }
+
+/* ── RESPONSIVE ─────────────────────────────── */
+@media (max-width: 1100px) {
+  .nav-inner, .page, footer { padding-left: 24px; padding-right: 24px; }
+  .hero { grid-template-columns: 1fr; padding: 64px 24px 48px; }
+  .upload-grid, .settings-grid, .metrics-strip, .method-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 44px; }
+}
+
+/* ── INPUT COUNT BADGE ─────────────────────── */
+.count-badge {
+  display: inline-block;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  padding: 3px 9px;
+  border: 1px solid var(--rule-2);
+  color: var(--white-faint);
+  letter-spacing: 0.06em;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.count-badge.all { border-color: var(--volt); color: var(--volt); }
+
+/* ── STORE SEPARATOR ─────────────────────── */
+.multi-results-label {
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--white-faint);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 14px;
+}
+.multi-results-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+/* ── DIVIDER ─────────────────────────────── */
+.divider { height: 1px; background: var(--rule); margin: 0; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#">
+      <div class="brand-icon">
+        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 1L13 4.5V10L7 13.5L1 10V4.5L7 1Z" stroke="#000" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M7 5V9M5 7H9" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <span class="brand-name">Rider Planning</span>
+      </div>
+    </a>
+    <div class="nav-right">
+      <div class="status-pill" id="status-pill">
+        <div class="status-pip"></div>
+        <span id="status-text">Awaiting inputs</span>
+      </div>
+      <div class="nav-date" id="nav-date"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-left">
+    <h1 class="hero-title">Rider <span class="highlight">Planning</span></h1>
+    <p class="hero-description">Per-store hourly rider requirements, computed from <strong>downtime, trip components, and order history</strong>.</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">18</div>
+        <div class="hero-stat-label">Hours modeled</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">2</div>
+        <div class="hero-stat-label">Day groups</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">8</div>
+        <div class="hero-stat-label">Compute steps</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">0</div>
+        <div class="hero-stat-label">Data sent anywhere</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 01: INPUTS ──────────────────────── -->
+<div class="page">
+<section class="sect">
+  <div class="sect-header">
+    <div>
+      <div class="sect-num">01 / Inputs</div>
+      <h2 class="sect-title">Upload your data files</h2>
+    </div>
+    <div class="sect-meta">
+      4 files required<br>
+      <span class="accent" id="input-count-label">0 / 4 uploaded</span>
+    </div>
+  </div>
+
+  <div class="upload-grid">
+    <div class="upload-card" id="card-lm">
+      <div class="upload-tag">LM Downtime · wide format · minutes</div>
+      <div class="upload-name">Last-Mile Downtime</div>
+      <p class="upload-desc">One row per day. Columns: <code>store_name</code>, <code>date</code>, then hour columns <code>8…23, 0, 1</code>. Values are minutes of downtime. Engine uses this to recover suppressed demand.</p>
+      <label class="file-row" id="zone-lm">
+        <div class="file-info">
+          <span class="file-row-name empty" id="name-lm">No file selected</span>
+          <span class="file-row-meta" id="meta-lm"></span>
+        </div>
+        <span class="browse-btn">Browse</span>
+        <input type="file" id="f-lm" accept=".xlsx,.xls,.csv" onchange="onFile(event,'lm')">
+      </label>
+    </div>
+
+    <div class="upload-card" id="card-kt">
+      <div class="upload-tag">Kitchen Downtime · wide format · minutes</div>
+      <div class="upload-name">Kitchen Downtime</div>
+      <p class="upload-desc">Same structure as LM downtime. Columns: <code>store_name</code>, <code>date</code>, hour columns. Hours with kitchen stress see their suppressed demand recovered separately in the output.</p>
+      <label class="file-row" id="zone-kt">
+        <div class="file-info">
+          <span class="file-row-name empty" id="name-kt">No file selected</span>
+          <span class="file-row-meta" id="meta-kt"></span>
+        </div>
+        <span class="browse-btn">Browse</span>
+        <input type="file" id="f-kt" accept=".xlsx,.xls,.csv" onchange="onFile(event,'kt')">
+      </label>
+    </div>
+
+    <div class="upload-card" id="card-orders">
+      <div class="upload-tag">Hourly trip components · pre-aggregated</div>
+      <div class="upload-name">Trip Components per Hour</div>
+      <p class="upload-desc">One row per store per hour. Columns: <code>store_name</code>, <code>hour</code>, <code>avg_p2a</code>, <code>avg_a2d</code>. All times in minutes. Used to compute trip time and efficiency per hour.</p>
+      <label class="file-row" id="zone-orders">
+        <div class="file-info">
+          <span class="file-row-name empty" id="name-orders">No file selected</span>
+          <span class="file-row-meta" id="meta-orders"></span>
+        </div>
+        <span class="browse-btn">Browse</span>
+        <input type="file" id="f-orders" accept=".xlsx,.xls,.csv" onchange="onFile(event,'orders')">
+      </label>
+    </div>
+
+    <div class="upload-card" id="card-hist">
+      <div class="upload-tag">Order history · wide format · 3 weeks</div>
+      <div class="upload-name">Hourly Order History</div>
+      <p class="upload-desc">Three weeks of daily rows. Columns: <code>store_name</code>, <code>date</code>, hour columns. Most recent week sets the historical peak baseline; all three weeks compute week-on-week growth.</p>
+      <label class="file-row" id="zone-hist">
+        <div class="file-info">
+          <span class="file-row-name empty" id="name-hist">No file selected</span>
+          <span class="file-row-meta" id="meta-hist"></span>
+        </div>
+        <span class="browse-btn">Browse</span>
+        <input type="file" id="f-hist" accept=".xlsx,.xls,.csv" onchange="onFile(event,'hist')">
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 02: PLANNED ORDERS ──────────────── -->
+<section class="sect">
+  <div class="sect-header">
+    <div>
+      <div class="sect-num">02 / Planned Orders</div>
+      <h2 class="sect-title">Plan a day&rsquo;s order volume</h2>
+    </div>
+    <div class="sect-meta">
+      Optional · upload sheet<br>
+      <span class="accent" id="planned-store-count">No planned sheet loaded</span>
+    </div>
+  </div>
+
+  <div class="planned-controls">
+    <div class="setting-cell">
+      <label class="setting-label">Planned orders sheet · optional</label>
+      <label class="file-row" id="zone-planned" style="margin-top:2px;">
+        <div class="file-info">
+          <span class="file-row-name empty" id="name-planned">No file selected</span>
+          <span class="file-row-meta" id="meta-planned"></span>
+        </div>
+        <span class="browse-btn">Browse</span>
+        <input type="file" id="f-planned" accept=".xlsx,.xls,.csv" onchange="onPlannedFile(event)">
+      </label>
+      <div class="setting-hint">One row per store. Columns: <code>store_name</code>, <code>planned_orders</code> (the day total per store). Re-upload to replace.</div>
+    </div>
+    <div class="setting-cell">
+      <label class="setting-label">Hourly distribution basis</label>
+      <select id="set-basis">
+        <option value="all" selected>All days · blended profile</option>
+        <option value="mt">Mon–Thu profile</option>
+        <option value="fs">Fri–Sun profile</option>
+      </select>
+      <div class="setting-hint">Each store's day total is split across hours using this historical demand shape, then <strong style="color:var(--white)">riders</strong> = ⌈hourly orders ÷ efficiency⌉.</div>
+    </div>
+  </div>
+
+  <div id="planned-store-list">
+    <div class="planned-empty">Upload a planned-orders sheet above to generate hourly OPH and riders per store. Optional — skip it to run the data-driven plan only.</div>
+  </div>
+</section>
+
+<!-- ── SECTION 03: SETTINGS ──────────────────── -->
+<section class="sect">
+  <div class="sect-header">
+    <div>
+      <div class="sect-num">03 / Settings</div>
+      <h2 class="sect-title">Model parameters</h2>
+    </div>
+    <div class="sect-meta">
+      Applied to all stores<br>
+      <span class="accent" style="font-family:var(--ff-mono);font-size:11px;">Trip = x + 2·p2a + a2d</span>
+    </div>
+  </div>
+
+  <div class="settings-grid">
+    <div class="setting-cell">
+      <label class="setting-label">x · trip constant (min)</label>
+      <input type="number" id="set-x" value="2" step="0.5" min="0">
+      <div class="setting-hint">Covers pickup wait and dispatch lag. Adjust per store.</div>
+    </div>
+    <div class="setting-cell">
+      <label class="setting-label">Weekday group</label>
+      <select id="set-weekday">
+        <option value="1,2,3,4" selected>Monday – Thursday</option>
+        <option value="1,2,3,4,5">Monday – Friday</option>
+      </select>
+      <div class="setting-hint">All other days fall into the Fri–Sun group.</div>
+    </div>
+    <div class="setting-cell">
+      <label class="setting-label">Demand sizing method</label>
+      <select id="set-sizing">
+        <option value="max" selected>Peak day (max)</option>
+        <option value="p90">90th percentile</option>
+        <option value="p75">75th percentile</option>
+        <option value="mean">Average</option>
+      </select>
+      <div class="setting-hint">Which day in each group drives the plan.</div>
+    </div>
+    <div class="setting-cell">
+      <label class="setting-label">Growth cap</label>
+      <select id="set-cap">
+        <option value="0.5" selected>± 50%</option>
+        <option value="0.25">± 25%</option>
+        <option value="0.15">± 15%</option>
+        <option value="999">No cap</option>
+      </select>
+      <div class="setting-hint">Prevents outlier weeks from distorting the projection.</div>
+    </div>
+  </div>
+
+  <div class="run-bar">
+    <div class="status-pill" id="run-pill">
+      <div class="status-pip"></div>
+      <span id="run-text">Waiting for 4 files</span>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-outline" id="btn-dl" onclick="downloadXLSX()" disabled>Download XLSX</button>
+      <button class="btn btn-primary" id="btn-run" onclick="runEngine()" disabled>Run Engine</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 03: RESULTS ───────────────────── -->
+<div class="results" id="results">
+<section class="sect">
+  <div class="sect-header">
+    <div>
+      <div class="sect-num">04 / Output</div>
+      <h2 class="sect-title">Hourly rider plan</h2>
+    </div>
+    <div class="sect-meta" id="result-meta"></div>
+  </div>
+
+  <div class="metrics-strip" id="metrics-strip"></div>
+
+  <div id="store-blocks"></div>
+</section>
+
+<!-- ── SECTION 04: METHOD ────────────────────── -->
+<section class="sect">
+  <div class="sect-header">
+    <div>
+      <div class="sect-num">05 / Method</div>
+      <h2 class="sect-title">How every number is computed</h2>
+    </div>
+    <div class="sect-meta">8 core + 1 optional step<br><span class="accent" style="font-family:var(--ff-mono);font-size:11px;">fully client-side</span></div>
+  </div>
+
+  <div class="method-grid">
+    <div class="method-cell">
+      <div class="method-step">STEP 01</div>
+      <div class="method-name">Trip time per hour</div>
+      <p class="method-body"><code>trip_time = x + 2·avg_p2a + avg_a2d</code>, using the hour's supplied averages. The 2× on p2a accounts for the return leg. <code>x</code> covers pickup wait and dispatch lag, tunable per store.</p>
+    </div>
+    <div class="method-cell">
+      <div class="method-step">STEP 02</div>
+      <div class="method-name">Hourly efficiency</div>
+      <p class="method-body">Computed directly from the hour's average trip time. <strong>Efficiency</strong> = <code>60 / trip_time</code> in orders per rider per hour. Reflects real-world delivery pace.</p>
+    </div>
+    <div class="method-cell">
+      <div class="method-step">STEP 03</div>
+      <div class="method-name">Peak demand (historical)</div>
+      <p class="method-body">Raw observed orders from the order-history file at the peak (or chosen sizing percentile) across the window — no recovery applied yet. This is the baseline from your data as-is.</p>
+    </div>
+    <div class="method-cell">
+      <div class="method-step">STEP 04</div>
+      <div class="method-name">LM downtime uplift</div>
+      <p class="method-body">For hours with LM downtime <code>D</code>, observed <code>N</code> orders placed in <code>(60−D)</code> minutes. Implied full-hour rate = <code>N×60/(60−D)</code>. Uplift = the gap (absolute orders).</p>
+    </div>
+    <div class="method-cell">
+      <div class="method-step">STEP 05</div>
+      <div class="method-name">Kitchen downtime uplift</div>
+      <p class="method-body">Same logic applied independently to kitchen downtime. Shown as a separate absolute-orders column so you can see the split between LM and kitchen contribution.</p>
+    </div>
+    <div class="method-cell">
+      <div class="method-step">STEP 06</div>
+      <div class="method-name">Growth uplift</div>
+      <p class="method-body">Geometric mean WoW growth computed from 3-week history (Mon–Thu and Fri–Sun independently). Growth uplift = <code>recovered_demand × growth_rate</code> as absolute orders.</p>
+    </div>
+    <div class="method-cell">
+      <div class="method-step">STEP 07</div>
+      <div class="method-name">Planned demand</div>
+      <p class="method-body"><code>Planned = peak + LM uplift + kitchen uplift + growth uplift</code>. The plan sizes for <strong>next week's expected peak day</strong>, not last week's average.</p>
+    </div>
+    <div class="method-cell">
+      <div class="method-step">STEP 08</div>
+      <div class="method-name">Riders per hour</div>
+      <p class="method-body"><code>Riders = ⌈planned_demand / efficiency⌉</code>. Both Mon–Thu and Fri–Sun computed independently. Hours with no trip data show <code>—</code>.</p>
+    </div>
+    <div class="method-cell">
+      <div class="method-step">STEP 09 · OPTIONAL</div>
+      <div class="method-name">Planned-day OPH &amp; riders</div>
+      <p class="method-body">Enter a target day total per store. It's split into <strong>hourly OPH</strong> via the chosen demand profile (<code>OPH = total × hour_share</code>), then <code>riders = ⌈OPH / efficiency⌉</code> per hour — a what-if scenario beside the data-driven plan.</p>
+    </div>
+  </div>
+</section>
+</div>
+
+</div><!-- /page -->
+
+<footer>
+  <div>Rider Planning · client-side only · no data transmitted</div>
+  <div class="mono" id="footer-ts"></div>
+</footer>
+
+<script>
+// ────────────────────────────────────────────────
+// CONSTANTS & STATE
+// ────────────────────────────────────────────────
+const HOUR_ORDER = [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1];
+const files = { lm:null, kt:null, orders:null, hist:null };
+const plannedOrders = {};   // store name -> planned daily order total
+let allResults = [];   // array of per-store result objects
+let chartInstances = {};
+
+// Init UI
+document.getElementById('nav-date').textContent = new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+document.getElementById('footer-ts').textContent = new Date().toISOString();
+
+// ────────────────────────────────────────────────
+// DATE PARSING — human-readable + ISO
+// ────────────────────────────────────────────────
+function parseHumanDate(v) {
+  if (!v) return null;
+  if (v instanceof Date) {
+    if (isNaN(v)) return null;
+    return v.toISOString().slice(0, 10);
+  }
+  if (typeof v === 'number') {
+    // Excel serial
+    const d = new Date(Math.round((v - 25569) * 86400 * 1000));
+    if (!isNaN(d)) return d.toISOString().slice(0, 10);
+  }
+  const s = String(v).trim();
+  // Already ISO
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
+  // Try native parse for formats like "May 17, 2026", "17 May 2026", "17/05/2026", "05-17-2026" etc.
+  const d = new Date(s);
+  if (!isNaN(d)) {
+    // Use UTC to avoid TZ shifts
+    const fixed = new Date(s.replace(/(\d+)\/(\d+)\/(\d+)/, (_, a, b, c) => {
+      // DD/MM/YYYY (common Indian format) vs MM/DD/YYYY — heuristic: if first part > 12 it's DD
+      return Number(a) > 12 ? `${c}-${b.padStart(2,'0')}-${a.padStart(2,'0')}` : _;
+    }));
+    if (!isNaN(fixed)) return fixed.toISOString().slice(0, 10);
+    return d.toISOString().slice(0, 10);
+  }
+  return s.slice(0, 10);
+}
+
+function dayOfWeek(dateStr) {
+  return new Date(dateStr + 'T12:00:00').getDay();
+}
+
+// ────────────────────────────────────────────────
+// FILE LOADING
+// ────────────────────────────────────────────────
+function onFile(ev, kind) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, { type: 'array', cellDates: true });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: null, raw: false });
+      // normalize all date cells
+      rows.forEach(r => {
+        if (r.date !== undefined) r.date = parseHumanDate(r.date);
+      });
+      const stores = [...new Set(rows.map(r => r.store_name).filter(Boolean))];
+      files[kind] = { name: file.name, rows, stores };
+      document.getElementById('name-' + kind).textContent = file.name;
+      document.getElementById('name-' + kind).className = 'file-row-name';
+      document.getElementById('meta-' + kind).textContent =
+        rows.length + ' rows · ' + stores.length + ' store' + (stores.length !== 1 ? 's' : '');
+      document.getElementById('zone-' + kind).classList.add('has-file');
+      document.getElementById('card-' + kind).classList.add('loaded');
+      checkReady();
+    } catch (err) {
+      document.getElementById('name-' + kind).textContent = 'Parse error: ' + err.message;
+      document.getElementById('name-' + kind).style.color = 'var(--rose)';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function checkReady() {
+  const count = Object.values(files).filter(f => f).length;
+  const label = count + ' / 4 uploaded';
+  document.getElementById('input-count-label').textContent = label;
+  const countBadge = document.getElementById('count-badge');
+  if (countBadge) countBadge.textContent = label;
+
+  const ready = count === 4;
+  document.getElementById('btn-run').disabled = !ready;
+  setStatus(ready ? 'ready' : '', ready ? 'Ready to run' : 'Waiting for ' + (4 - count) + ' file(s)');
+  const rp = document.getElementById('run-pill');
+  rp.className = 'status-pill' + (ready ? ' ready' : '');
+  document.getElementById('run-text').textContent = ready ? 'Ready to run' : 'Waiting for ' + (4 - count) + ' file(s)';
+}
+
+function setStatus(state, text) {
+  const pill = document.getElementById('status-pill');
+  pill.className = 'status-pill' + (state ? ' ' + state : '');
+  document.getElementById('status-text').textContent = text;
+}
+
+// ────────────────────────────────────────────────
+// PLANNED ORDERS — upload sheet (store_name, planned_orders)
+// ────────────────────────────────────────────────
+const PLANNED_VALUE_KEYS = ['planned_orders','planned_demand','planned','day_orders','day_total','orders','total'];
+
+function onPlannedFile(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, { type: 'array' });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: null, raw: false });
+
+      // reset existing planned values
+      Object.keys(plannedOrders).forEach(k => delete plannedOrders[k]);
+
+      let parsed = 0, skipped = 0;
+      rows.forEach(r => {
+        const storeRaw = r.store_name != null ? r.store_name : r.store;
+        let v = null;
+        for (const k of PLANNED_VALUE_KEYS) {
+          if (r[k] != null && r[k] !== '') { v = Number(r[k]); break; }
+        }
+        if (v == null || isNaN(v)) { skipped++; return; }
+        const key = (storeRaw != null && String(storeRaw).trim() !== '') ? String(storeRaw).trim() : 'All Stores';
+        plannedOrders[key] = Math.max(0, v);
+        parsed++;
+      });
+
+      const nameEl = document.getElementById('name-planned');
+      nameEl.textContent = file.name;
+      nameEl.className = 'file-row-name';
+      nameEl.style.color = '';
+      document.getElementById('meta-planned').textContent =
+        parsed + ' store' + (parsed !== 1 ? 's' : '') + ' · planned orders' + (skipped ? ' · ' + skipped + ' skipped' : '');
+      document.getElementById('zone-planned').classList.add('has-file');
+      renderPlannedPreview();
+    } catch (err) {
+      const nameEl = document.getElementById('name-planned');
+      nameEl.textContent = 'Parse error: ' + err.message;
+      nameEl.style.color = 'var(--rose)';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function renderPlannedPreview() {
+  const list = document.getElementById('planned-store-list');
+  const countEl = document.getElementById('planned-store-count');
+  if (!list) return;
+  const keys = Object.keys(plannedOrders).sort();
+  if (!keys.length) {
+    list.className = '';
+    list.innerHTML = '<div class="planned-empty">Upload a planned-orders sheet above to generate hourly OPH and riders per store. Optional — skip it to run the data-driven plan only.</div>';
+    countEl.textContent = 'No planned sheet loaded';
+    return;
+  }
+  countEl.textContent = keys.length + ' store' + (keys.length !== 1 ? 's' : '') + ' loaded';
+  list.className = 'planned-list';
+  list.innerHTML = keys.map((s, i) => {
+    const disp = String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    return `<div class="planned-row">
+      <div class="pr-store"><span class="pr-badge">${String(i+1).padStart(2,'0')}</span>${disp}</div>
+      <div class="pr-value">${Number(plannedOrders[s]).toLocaleString('en-IN')}</div>
+      <div class="pr-hint">planned orders · one day</div>
+    </div>`;
+  }).join('');
+}
+
+// ────────────────────────────────────────────────
+// WIDE → HOURLY MAP
+// ────────────────────────────────────────────────
+function parseWide(rows, storeName) {
+  const out = {};
+  rows.filter(r => !storeName || r.store_name === storeName).forEach(r => {
+    const dstr = r.date;
+    if (!dstr) return;
+    if (!out[dstr]) out[dstr] = {};
+    HOUR_ORDER.forEach(h => {
+      const v = r[h] !== undefined ? r[h] : r[String(h)];
+      out[dstr][h] = (v === null || v === undefined || v === '') ? 0 : Number(v);
+    });
+  });
+  return out;
+}
+
+function quantile(arr, q) {
+  if (!arr.length) return 0;
+  if (q === 'max') return Math.max(...arr);
+  if (q === 'mean') return arr.reduce((a, b) => a + b, 0) / arr.length;
+  const sorted = arr.slice().sort((a, b) => a - b);
+  const p = q === 'p90' ? 0.9 : q === 'p75' ? 0.75 : 0.5;
+  const idx = (sorted.length - 1) * p;
+  const lo = Math.floor(idx), hi = Math.ceil(idx);
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+}
+
+// ────────────────────────────────────────────────
+// COMPUTE PER STORE
+// ────────────────────────────────────────────────
+function computeStore(storeName) {
+  const x = Number(document.getElementById('set-x').value);
+  const weekdayDays = document.getElementById('set-weekday').value.split(',').map(Number);
+  const sizingMethod = document.getElementById('set-sizing').value;
+  const growthCap = Number(document.getElementById('set-cap').value);
+  const warnings = [];
+
+  const lm = parseWide(files.lm.rows, storeName);
+  const kt = parseWide(files.kt.rows, storeName);
+
+  // Demand source: hourly order history (per-day, per-hour order counts).
+  // The trip-components file no longer carries counts/dates, so all demand
+  // sizing, downtime uplift and the planned-day shape come from history.
+  const hist = parseWide(files.hist.rows, storeName);
+  const ordersByDayHour = hist;
+
+  // Trip components per store-hour — pre-aggregated averages (one row per hour):
+  // store_name, hour, avg_p2a, avg_a2d. Drives trip time and efficiency only.
+  const avgP2A = {}, avgA2D = {}, tripTime = {}, efficiency = {};
+  const tripByHour = {};
+  files.orders.rows.filter(r => !storeName || r.store_name === storeName).forEach(r => {
+    const h = Number(r.hour);
+    const p2a = Number(r.avg_p2a != null ? r.avg_p2a : r.p2a);
+    const a2d = Number(r.avg_a2d != null ? r.avg_a2d : r.a2d);
+    if (isNaN(h) || isNaN(p2a) || isNaN(a2d)) return;
+    if (!HOUR_ORDER.includes(h)) return;
+    tripByHour[h] = { p2a, a2d };   // one row per hour; last row wins if duplicated
+  });
+
+  const hasAnyTrip = Object.keys(tripByHour).length > 0;
+  HOUR_ORDER.forEach(h => {
+    const t = tripByHour[h];
+    if (!t) {
+      avgP2A[h] = null; avgA2D[h] = null; tripTime[h] = null; efficiency[h] = null;
+      // Only warn per-hour when the store HAS some trip data but is missing this hour.
+      if (hasAnyTrip) warnings.push('Hour ' + h + ': no trip components — efficiency unavailable.');
+    } else {
+      avgP2A[h] = t.p2a;
+      avgA2D[h] = t.a2d;
+      tripTime[h] = x + 2 * t.p2a + t.a2d;
+      efficiency[h] = 60 / tripTime[h];
+    }
+  });
+  if (!hasAnyTrip) {
+    warnings.push('No trip components found for this store — riders/efficiency unavailable (shown as —). Demand-side figures are still computed.');
+  }
+
+  // Demand dates (from order history), grouped Mon–Thu vs Fri–Sun.
+  // Also compute per-hour LM uplift and kitchen uplift (separately).
+  const allOrderDates = Object.keys(ordersByDayHour).sort();
+  const groupDates = { 'Mon-Thu': [], 'Fri-Sun': [] };
+  allOrderDates.forEach(dstr => {
+    const dow = dayOfWeek(dstr);
+    const isWkd = weekdayDays.includes(dow);
+    if (isWkd) groupDates['Mon-Thu'].push(dstr);
+    else groupDates['Fri-Sun'].push(dstr);
+  });
+
+  // For each day, for each hour: compute the LM and Kitchen uplift separately
+  const lmUpliftByDayHour = {}, ktUpliftByDayHour = {};
+  allOrderDates.forEach(dstr => {
+    lmUpliftByDayHour[dstr] = {};
+    ktUpliftByDayHour[dstr] = {};
+    HOUR_ORDER.forEach(h => {
+      const o = ordersByDayHour[dstr][h] || 0;
+      const lmDT = Math.min((lm[dstr] && lm[dstr][h]) || 0, 59);
+      const ktDT = Math.min((kt[dstr] && kt[dstr][h]) || 0, 59);
+      // LM uplift: how many orders were suppressed by LM downtime alone
+      let lmUplift = 0, ktUplift = 0;
+      if (lmDT > 0 && o > 0) {
+        const usable = 60 - lmDT;
+        if (usable > 0) lmUplift = o * (60 / usable) - o;
+      }
+      if (ktDT > 0 && o > 0) {
+        const usable = 60 - ktDT;
+        if (usable > 0) ktUplift = o * (60 / usable) - o;
+      }
+      lmUpliftByDayHour[dstr][h] = lmUplift;
+      ktUpliftByDayHour[dstr][h] = ktUplift;
+    });
+  });
+
+  // Sizing: pick the peak / percentile raw demand per group per hour
+  const plan = { 'Mon-Thu': {}, 'Fri-Sun': {} };
+
+  HOUR_ORDER.forEach(h => {
+    ['Mon-Thu', 'Fri-Sun'].forEach(grp => {
+      const daysInGroup = groupDates[grp];
+      const rawDemands = daysInGroup.map(d => ordersByDayHour[d][h] || 0);
+      const lmUplifts  = daysInGroup.map(d => lmUpliftByDayHour[d][h] || 0);
+      const ktUplifts  = daysInGroup.map(d => ktUpliftByDayHour[d][h] || 0);
+
+      // Peak = raw historical max across sizing window
+      const peakDemand = quantile(rawDemands, sizingMethod);
+      // For the peak day (the one driving sizing), get its uplifts
+      // Use the same sizing method applied to uplifts for consistency
+      const lmUplift = quantile(lmUplifts, sizingMethod);
+      const ktUplift = quantile(ktUplifts, sizingMethod);
+
+      plan[grp][h] = {
+        avg_p2a: avgP2A[h],
+        avg_a2d: avgA2D[h],
+        trip_time: tripTime[h],
+        efficiency: efficiency[h],
+        peak_demand: peakDemand,
+        lm_uplift: lmUplift,
+        kt_uplift: ktUplift,
+        // growth applied below
+      };
+    });
+  });
+
+  // Growth from 3-week history (hist already parsed above as the demand source)
+  const histDates = Object.keys(hist).sort();
+  const weekTotals = {};
+  histDates.forEach(d => {
+    const dt = new Date(d + 'T12:00:00');
+    const monday = new Date(dt);
+    monday.setDate(dt.getDate() - ((dt.getDay() + 6) % 7));
+    const wkLabel = monday.toISOString().slice(0, 10);
+    if (!weekTotals[wkLabel]) weekTotals[wkLabel] = { all: 0, weekday: 0, weekend: 0 };
+    const dow = dt.getDay();
+    const isWk = weekdayDays.includes(dow);
+    let dayTotal = 0;
+    HOUR_ORDER.forEach(h => { dayTotal += hist[d][h] || 0; });
+    weekTotals[wkLabel].all += dayTotal;
+    if (isWk) weekTotals[wkLabel].weekday += dayTotal;
+    else weekTotals[wkLabel].weekend += dayTotal;
+  });
+  const weekKeys = Object.keys(weekTotals).sort();
+  let growthRate = { 'Mon-Thu': 0, 'Fri-Sun': 0 };
+
+  if (weekKeys.length >= 2) {
+    const geomGrowth = arr => {
+      if (arr.some(v => v <= 0)) return 0;
+      const ratios = [];
+      for (let i = 1; i < arr.length; i++) ratios.push(arr[i] / arr[i - 1]);
+      const product = ratios.reduce((a, b) => a * b, 1);
+      return Math.pow(product, 1 / ratios.length) - 1;
+    };
+    growthRate['Mon-Thu'] = geomGrowth(weekKeys.map(k => weekTotals[k].weekday));
+    growthRate['Fri-Sun'] = geomGrowth(weekKeys.map(k => weekTotals[k].weekend));
+    ['Mon-Thu', 'Fri-Sun'].forEach(k => {
+      if (growthCap < 999) growthRate[k] = Math.max(-growthCap, Math.min(growthCap, growthRate[k]));
+    });
+  } else {
+    warnings.push('Less than 2 weeks of order history — growth rate set to 0%.');
+  }
+
+  // Final plan computation
+  HOUR_ORDER.forEach(h => {
+    ['Mon-Thu', 'Fri-Sun'].forEach(grp => {
+      const p = plan[grp][h];
+      const recoveredDemand = p.peak_demand + p.lm_uplift + p.kt_uplift;
+      const growthUplift = recoveredDemand * growthRate[grp];
+      const plannedDemand = recoveredDemand + growthUplift;
+      const eff = p.efficiency;
+      const riders = eff ? Math.ceil(plannedDemand / eff) : null;
+      plan[grp][h] = { ...p, growth_uplift: growthUplift, planned_demand: plannedDemand, riders };
+    });
+  });
+
+  const mtTotal = HOUR_ORDER.reduce((s, h) => s + (plan['Mon-Thu'][h].riders || 0), 0);
+  const fsTotal = HOUR_ORDER.reduce((s, h) => s + (plan['Fri-Sun'][h].riders || 0), 0);
+  const effVals = Object.values(efficiency).filter(e => e != null);
+  const minEff = effVals.length ? Math.min(...effVals) : 0;
+  const maxEff = effVals.length ? Math.max(...effVals) : 0;
+
+  // ── PLANNED-DAY PLAN (optional) ──────────────────
+  // Split a user-entered day total into hourly OPH using the historical
+  // demand shape, then derive riders required per hour from efficiency.
+  const basis = document.getElementById('set-basis').value;          // all | mt | fs
+  const plannedKey = storeName || 'All Stores';
+  const plannedDayTotal = Number(plannedOrders[plannedKey]) || 0;
+
+  const mtSet = new Set(groupDates['Mon-Thu']);
+  const totalsAll = {}, totalsMt = {}, totalsFs = {};
+  HOUR_ORDER.forEach(h => { totalsAll[h] = 0; totalsMt[h] = 0; totalsFs[h] = 0; });
+  allOrderDates.forEach(d => {
+    const inMt = mtSet.has(d);
+    HOUR_ORDER.forEach(h => {
+      const o = ordersByDayHour[d][h] || 0;
+      totalsAll[h] += o;
+      if (inMt) totalsMt[h] += o; else totalsFs[h] += o;
+    });
+  });
+  const pickTotals = basis === 'mt' ? totalsMt : basis === 'fs' ? totalsFs : totalsAll;
+  const sumTotals = HOUR_ORDER.reduce((s, h) => s + pickTotals[h], 0);
+
+  const plannedPlan = {};
+  HOUR_ORDER.forEach(h => {
+    const share = sumTotals > 0 ? pickTotals[h] / sumTotals : 0;
+    const oph = plannedDayTotal * share;
+    const eff = efficiency[h];
+    const riders = (plannedDayTotal > 0 && eff) ? Math.ceil(oph / eff) : null;
+    plannedPlan[h] = { share, oph, efficiency: eff, riders };
+  });
+  const plannedRidersTotal = HOUR_ORDER.reduce((s, h) => s + (plannedPlan[h].riders || 0), 0);
+  if (plannedDayTotal > 0 && sumTotals === 0) {
+    warnings.push('Planned orders entered but no historical demand shape — hourly split unavailable.');
+  }
+
+  return {
+    store: storeName, plan, growthRate, efficiency,
+    mtTotal, fsTotal, weeklyTotal: mtTotal * 4 + fsTotal * 3,
+    weekKeys, weekTotals, warnings, settings: { x, sizingMethod, growthCap },
+    minEff, maxEff,
+    plannedPlan, plannedDayTotal, plannedRidersTotal, plannedBasis: basis
+  };
+}
+
+// ────────────────────────────────────────────────
+// ENGINE ENTRY POINT
+// ────────────────────────────────────────────────
+function runEngine() {
+  setStatus('running', 'Computing…');
+  document.getElementById('btn-run').disabled = true;
+  document.getElementById('run-text').textContent = 'Computing…';
+  document.getElementById('run-pill').className = 'status-pill running';
+
+  setTimeout(() => {
+    try {
+      // Plan every store present in the order-history file (the demand source).
+      // Trip components / downtime are matched per store where available; stores
+      // missing those are still planned (with warnings) rather than dropped.
+      const histStores = [...new Set((files.hist.stores || []))].sort();
+
+      if (histStores.length === 0) {
+        // Fall back: if no store_name column, treat as single unnamed store
+        allResults = [computeStore(null)];
+        allResults[0].store = 'All Stores';
+      } else {
+        allResults = histStores.map(s => computeStore(s));
+      }
+
+      renderResults();
+      setStatus('done', 'Complete · ' + allResults.length + ' store(s)');
+      document.getElementById('run-pill').className = 'status-pill done';
+      document.getElementById('run-text').textContent = 'Done · ' + allResults.length + ' store(s)';
+      document.getElementById('btn-dl').disabled = false;
+      document.getElementById('btn-run').disabled = false;
+    } catch (err) {
+      setStatus('error', err.message);
+      document.getElementById('run-pill').className = 'status-pill error';
+      document.getElementById('run-text').textContent = 'Error: ' + err.message;
+      document.getElementById('btn-run').disabled = false;
+      console.error(err);
+    }
+  }, 60);
+}
+
+// ────────────────────────────────────────────────
+// FORMAT HELPERS
+// ────────────────────────────────────────────────
+function fmt(v, d) {
+  if (v == null) return '<span class="null-cell">—</span>';
+  return Number(v).toFixed(d ?? 1);
+}
+function fmtInt(v) {
+  if (v == null) return '<span class="null-cell">—</span>';
+  return Math.round(v).toLocaleString('en-IN');
+}
+function fmtPlus(v) {
+  if (v == null) return '<span class="null-cell">—</span>';
+  const n = Math.round(v);
+  return (n >= 0 ? '+' : '') + n.toLocaleString('en-IN');
+}
+
+// ────────────────────────────────────────────────
+// RENDER
+// ────────────────────────────────────────────────
+function renderResults() {
+  document.getElementById('results').classList.add('visible');
+
+  // Global metrics strip
+  const totalMt = allResults.reduce((s, r) => s + r.mtTotal, 0);
+  const totalFs = allResults.reduce((s, r) => s + r.fsTotal, 0);
+  const totalWk = allResults.reduce((s, r) => s + r.weeklyTotal, 0);
+  const avgMtGrowth = allResults.reduce((s, r) => s + r.growthRate['Mon-Thu'], 0) / allResults.length;
+
+  document.getElementById('metrics-strip').innerHTML = `
+    <div class="metric-cell volt">
+      <div class="metric-label">Mon–Thu riders / day</div>
+      <div class="metric-value">${totalMt}</div>
+      <div class="metric-sub">across ${allResults.length} store${allResults.length>1?'s':''}</div>
+    </div>
+    <div class="metric-cell aqua">
+      <div class="metric-label">Fri–Sun riders / day</div>
+      <div class="metric-value">${totalFs}</div>
+      <div class="metric-sub">across ${allResults.length} store${allResults.length>1?'s':''}</div>
+    </div>
+    <div class="metric-cell amber">
+      <div class="metric-label">Weekly rider-hours</div>
+      <div class="metric-value">${totalWk.toLocaleString('en-IN')}</div>
+      <div class="metric-sub">Mon–Thu × 4 + Fri–Sun × 3</div>
+    </div>
+    <div class="metric-cell sky">
+      <div class="metric-label">Avg WoW growth applied</div>
+      <div class="metric-value">${(avgMtGrowth*100>=0?'+':'')}${(avgMtGrowth*100).toFixed(1)}%</div>
+      <div class="metric-sub">weekday average across stores</div>
+    </div>
+  `;
+
+  document.getElementById('result-meta').innerHTML =
+    allResults.length + ' store' + (allResults.length>1?'s':'') + ' · Mon–Thu & Fri–Sun<br>' +
+    '<span class="accent" style="font-family:var(--ff-mono);font-size:11px;">' +
+    allResults.reduce((s,r) => s + r.warnings.length, 0) + ' warning(s) total</span>';
+
+  // Per-store blocks
+  const container = document.getElementById('store-blocks');
+  container.innerHTML = '';
+
+  allResults.forEach((r, idx) => {
+    const blockId = 'store-' + idx;
+    const block = document.createElement('div');
+    block.className = 'store-block';
+    block.id = blockId;
+
+    const pctMt = (r.growthRate['Mon-Thu']*100).toFixed(1);
+    const pctFs = (r.growthRate['Fri-Sun']*100).toFixed(1);
+
+    block.innerHTML = `
+      <div class="store-block-header">
+        <div class="store-block-title">
+          <span class="store-badge">${String(idx+1).padStart(2,'0')}</span>
+          ${r.store}
+        </div>
+        <div class="store-kpis">
+          <div class="kv"><div class="kv-val" style="color:var(--volt)">${r.mtTotal}</div><div class="kv-key">Mon–Thu / day</div></div>
+          <div class="kv"><div class="kv-val" style="color:var(--aqua)">${r.fsTotal}</div><div class="kv-key">Fri–Sun / day</div></div>
+          <div class="kv"><div class="kv-val">${r.weeklyTotal.toLocaleString('en-IN')}</div><div class="kv-key">Weekly hrs</div></div>
+          <div class="kv"><div class="kv-val" style="color:var(--sky)">${pctMt>=0?'+':''}${pctMt}% / ${pctFs>=0?'+':''}${pctFs}%</div><div class="kv-key">WoW growth</div></div>
+          ${r.plannedDayTotal>0 ? `<div class="kv"><div class="kv-val" style="color:var(--sky)">${r.plannedRidersTotal}</div><div class="kv-key">Planned riders / day</div></div>` : ''}
+          <div class="kv"><div class="kv-val">${r.minEff.toFixed(1)}–${r.maxEff.toFixed(1)}</div><div class="kv-key">Eff range</div></div>
+        </div>
+      </div>
+      ${r.warnings.length ? `<div class="warn-box"><span class="warn-title">⚠ ${r.warnings.length} warning(s)</span>${r.warnings.join('<br>')}</div>` : ''}
+      <div class="col-legend">
+        <div class="col-legend-item"><div class="col-legend-swatch" style="background:var(--amber)"></div>Peak Demand (historical max)</div>
+        <div class="col-legend-item"><div class="col-legend-swatch" style="background:#2FC974"></div>LM Downtime Uplift (abs orders)</div>
+        <div class="col-legend-item"><div class="col-legend-swatch" style="background:#179A57"></div>Kitchen Downtime Uplift (abs orders)</div>
+        <div class="col-legend-item"><div class="col-legend-swatch" style="background:var(--sky)"></div>Growth Uplift (abs orders)</div>
+        <div class="col-legend-item"><div class="col-legend-swatch" style="background:var(--white)"></div>Planned Demand (sum)</div>
+        <div class="col-legend-item"><div class="col-legend-swatch" style="background:var(--volt)"></div>Riders Required</div>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" data-store="${idx}" data-view="mt" onclick="setStoreView(${idx},'mt')">Mon–Thu</button>
+        <button class="tab-btn" data-store="${idx}" data-view="fs" onclick="setStoreView(${idx},'fs')">Fri–Sun</button>
+        <button class="tab-btn" data-store="${idx}" data-view="both" onclick="setStoreView(${idx},'both')">Side-by-side</button>
+        ${r.plannedDayTotal>0 ? `<button class="tab-btn" data-store="${idx}" data-view="planned" onclick="setStoreView(${idx},'planned')" style="color:var(--sky)">Planned Day</button>` : ''}
+      </div>
+      <div class="table-outer" id="table-outer-${idx}"></div>
+      <div class="chart-panel">
+        <div class="chart-title">
+          Riders per hour
+          <span class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--volt)"></div>Mon–Thu</span>
+          <span class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--aqua)"></div>Fri–Sun</span>
+          ${r.plannedDayTotal>0 ? `<span class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--sky)"></div>Planned Day</span>` : ''}
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="chart-${idx}"></canvas>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(block);
+    renderStoreTable(idx, 'mt');
+    renderStoreChart(idx);
+  });
+
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function setStoreView(idx, view) {
+  const block = document.getElementById('store-' + idx);
+  block.querySelectorAll('.tab-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.view === view)
+  );
+  renderStoreTable(idx, view);
+}
+
+function renderStoreTable(idx, view) {
+  const r = allResults[idx];
+  const outer = document.getElementById('table-outer-' + idx);
+
+  if (view === 'both') {
+    outer.innerHTML = buildBothTable(r);
+    return;
+  }
+
+  if (view === 'planned') {
+    outer.innerHTML = buildPlannedTable(r);
+    return;
+  }
+
+  const grp = view === 'mt' ? 'Mon-Thu' : 'Fri-Sun';
+  const isMt = view === 'mt';
+  const ridersClass = isMt ? 'riders-mt' : 'riders-fs';
+  const groupHeader = isMt
+    ? '<tr><th class="col-hour group-mt" colspan="99">Mon–Thu Plan</th></tr>'
+    : '<tr><th class="col-hour group-fs" colspan="99">Fri–Sun Plan</th></tr>';
+
+  const rows = HOUR_ORDER.map(h => {
+    const p = r.plan[grp][h];
+    const hLabel = String(h).padStart(2, '0') + ':00';
+    return `<tr>
+      <td class="col-hour">${hLabel}</td>
+      <td>${fmt(p.avg_p2a, 1)}</td>
+      <td>${fmt(p.avg_a2d, 1)}</td>
+      <td>${fmt(p.trip_time, 1)}</td>
+      <td>${fmt(p.efficiency, 2)}</td>
+      <td class="peak-demand">${fmtInt(p.peak_demand)}</td>
+      <td class="lm-uplift">${fmtPlus(p.lm_uplift)}</td>
+      <td class="kt-uplift">${fmtPlus(p.kt_uplift)}</td>
+      <td class="growth-uplift">${fmtPlus(p.growth_uplift)}</td>
+      <td class="planned-demand">${fmtInt(p.planned_demand)}</td>
+      <td class="${ridersClass}">${p.riders == null ? '—' : p.riders}</td>
+    </tr>`;
+  }).join('');
+
+  const total = HOUR_ORDER.reduce((s, h) => s + (r.plan[grp][h].riders || 0), 0);
+  const totalRow = `<tr class="total-row">
+    <td class="col-hour">Total · rider-hrs / day</td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    <td class="${ridersClass}">${total}</td>
+  </tr>`;
+
+  outer.innerHTML = `
+    <table class="plan">
+      <thead>
+        <tr>
+          <th class="col-hour ${isMt ? 'group-mt' : 'group-fs'}" colspan="11">${isMt ? 'Mon–Thu' : 'Fri–Sun'} Plan</th>
+        </tr>
+        <tr>
+          <th class="col-hour">Hour</th>
+          <th>Avg P2A</th>
+          <th>Avg A2D</th>
+          <th>Trip time</th>
+          <th>Efficiency</th>
+          <th class="peak-demand" style="color:var(--amber)">Peak Demand</th>
+          <th class="lm-uplift" style="color:#2FC974">LM Uplift</th>
+          <th class="kt-uplift" style="color:#179A57">Kitchen Uplift</th>
+          <th class="growth-uplift" style="color:var(--sky)">Growth Uplift</th>
+          <th class="planned-demand">Planned Demand</th>
+          <th class="${ridersClass}">Riders</th>
+        </tr>
+      </thead>
+      <tbody>${rows}${totalRow}</tbody>
+    </table>
+  `;
+}
+
+function buildBothTable(r) {
+  const rows = HOUR_ORDER.map(h => {
+    const mt = r.plan['Mon-Thu'][h];
+    const fs = r.plan['Fri-Sun'][h];
+    const hLabel = String(h).padStart(2, '0') + ':00';
+    return `<tr>
+      <td class="col-hour">${hLabel}</td>
+      <td>${fmt(mt.avg_p2a,1)}</td>
+      <td>${fmt(mt.avg_a2d,1)}</td>
+      <td>${fmt(mt.trip_time,1)}</td>
+      <td>${fmt(mt.efficiency,2)}</td>
+      <td class="peak-demand">${fmtInt(mt.peak_demand)}</td>
+      <td class="lm-uplift">${fmtPlus(mt.lm_uplift)}</td>
+      <td class="kt-uplift">${fmtPlus(mt.kt_uplift)}</td>
+      <td class="growth-uplift">${fmtPlus(mt.growth_uplift)}</td>
+      <td class="planned-demand">${fmtInt(mt.planned_demand)}</td>
+      <td class="riders-mt sep-left">${mt.riders == null ? '—' : mt.riders}</td>
+      <td class="sep-left">${fmt(fs.avg_p2a,1)}</td>
+      <td>${fmt(fs.avg_a2d,1)}</td>
+      <td>${fmt(fs.trip_time,1)}</td>
+      <td>${fmt(fs.efficiency,2)}</td>
+      <td class="peak-demand">${fmtInt(fs.peak_demand)}</td>
+      <td class="lm-uplift">${fmtPlus(fs.lm_uplift)}</td>
+      <td class="kt-uplift">${fmtPlus(fs.kt_uplift)}</td>
+      <td class="growth-uplift">${fmtPlus(fs.growth_uplift)}</td>
+      <td class="planned-demand">${fmtInt(fs.planned_demand)}</td>
+      <td class="riders-fs">${fs.riders == null ? '—' : fs.riders}</td>
+    </tr>`;
+  }).join('');
+
+  const mtT = HOUR_ORDER.reduce((s, h) => s + (r.plan['Mon-Thu'][h].riders || 0), 0);
+  const fsT = HOUR_ORDER.reduce((s, h) => s + (r.plan['Fri-Sun'][h].riders || 0), 0);
+
+  return `<table class="plan">
+    <thead>
+      <tr>
+        <th class="col-hour" rowspan="2">Hour</th>
+        <th class="group-mt" colspan="11">Mon–Thu</th>
+        <th class="group-fs sep-left" colspan="10">Fri–Sun</th>
+      </tr>
+      <tr>
+        <th>Avg P2A</th><th>Avg A2D</th><th>Trip time</th><th>Efficiency</th>
+        <th style="color:var(--amber)">Peak</th>
+        <th style="color:#2FC974">LM+</th>
+        <th style="color:#179A57">Kit+</th>
+        <th style="color:var(--sky)">Growth+</th>
+        <th>Planned</th>
+        <th class="riders-mt sep-left">Riders</th>
+        <th class="sep-left">Avg P2A</th><th>Avg A2D</th><th>Trip time</th><th>Efficiency</th>
+        <th style="color:var(--amber)">Peak</th>
+        <th style="color:#2FC974">LM+</th>
+        <th style="color:#179A57">Kit+</th>
+        <th style="color:var(--sky)">Growth+</th>
+        <th>Planned</th>
+        <th class="riders-fs">Riders</th>
+      </tr>
+    </thead>
+    <tbody>${rows}
+      <tr class="total-row">
+        <td class="col-hour">Total</td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="riders-mt sep-left">${mtT}</td>
+        <td class="sep-left"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        <td class="riders-fs">${fsT}</td>
+      </tr>
+    </tbody>
+  </table>`;
+}
+
+function buildPlannedTable(r) {
+  const basisLabel = r.plannedBasis === 'mt' ? 'Mon–Thu profile'
+    : r.plannedBasis === 'fs' ? 'Fri–Sun profile' : 'All-days profile';
+
+  if (!r.plannedDayTotal) {
+    return `<div class="warn-box" style="border-left-color:var(--sky);background:var(--sky-dim);">
+      <span class="warn-title" style="color:var(--sky)">No planned target</span>
+      Enter a planned daily order count for this store in Section 02 to see hourly OPH and riders required.</div>`;
+  }
+
+  const rows = HOUR_ORDER.map(h => {
+    const p = r.plannedPlan[h];
+    const hLabel = String(h).padStart(2, '0') + ':00';
+    const ridersClass = 'riders-planned' + (p.riders == null ? ' null-cell' : '');
+    return `<tr>
+      <td class="col-hour">${hLabel}</td>
+      <td>${(p.share * 100).toFixed(1)}%</td>
+      <td class="oph-cell">${fmtInt(p.oph)}</td>
+      <td>${fmt(p.efficiency, 2)}</td>
+      <td class="${ridersClass}">${p.riders == null ? '—' : p.riders}</td>
+    </tr>`;
+  }).join('');
+
+  const ophTotal = HOUR_ORDER.reduce((s, h) => s + r.plannedPlan[h].oph, 0);
+  const totalRow = `<tr class="total-row">
+    <td class="col-hour">Total · planned day</td>
+    <td></td>
+    <td class="oph-cell">${fmtInt(ophTotal)}</td>
+    <td></td>
+    <td class="riders-planned">${r.plannedRidersTotal}</td>
+  </tr>`;
+
+  return `<table class="plan">
+    <thead>
+      <tr>
+        <th class="col-hour" colspan="5" style="color:var(--sky);border-bottom:2px solid var(--sky)">
+          Planned Day · ${fmtInt(r.plannedDayTotal)} orders · ${basisLabel}
+        </th>
+      </tr>
+      <tr>
+        <th class="col-hour">Hour</th>
+        <th>Demand share</th>
+        <th>Planned OPH</th>
+        <th>Efficiency</th>
+        <th class="riders-planned">Riders Required</th>
+      </tr>
+    </thead>
+    <tbody>${rows}${totalRow}</tbody>
+  </table>`;
+}
+
+function renderStoreChart(idx) {
+  const r = allResults[idx];
+  if (chartInstances[idx]) { chartInstances[idx].destroy(); delete chartInstances[idx]; }
+  const ctx = document.getElementById('chart-' + idx);
+  if (!ctx) return;
+
+  chartInstances[idx] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: HOUR_ORDER.map(h => String(h).padStart(2, '0')),
+      datasets: [
+        {
+          label: 'Mon–Thu',
+          data: HOUR_ORDER.map(h => r.plan['Mon-Thu'][h].riders || 0),
+          backgroundColor: 'rgba(40,192,110,0.8)',
+          borderWidth: 0, borderRadius: 2, barPercentage: 0.82, categoryPercentage: 0.75
+        },
+        {
+          label: 'Fri–Sun',
+          data: HOUR_ORDER.map(h => r.plan['Fri-Sun'][h].riders || 0),
+          backgroundColor: 'rgba(107,184,214,0.65)',
+          borderWidth: 0, borderRadius: 2, barPercentage: 0.82, categoryPercentage: 0.75
+        },
+        ...(r.plannedDayTotal > 0 ? [{
+          label: 'Planned Day',
+          data: HOUR_ORDER.map(h => r.plannedPlan[h].riders || 0),
+          backgroundColor: 'rgba(90,168,255,0.6)',
+          borderWidth: 0, borderRadius: 2, barPercentage: 0.82, categoryPercentage: 0.75
+        }] : [])
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#242C28', borderColor: '#3A463F', borderWidth: 1, padding: 12,
+          titleColor: '#EDF1EE', bodyColor: '#A4B0AA',
+          titleFont: { family: 'JetBrains Mono', size: 11, weight: '600' },
+          bodyFont: { family: 'JetBrains Mono', size: 12 },
+          callbacks: { title: c => 'Hour ' + c[0].label + ':00' }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { autoSkip: false, maxRotation: 0, font: { family: 'JetBrains Mono', size: 10 }, color: '#74827B' },
+          grid: { display: false }, border: { color: 'rgba(255,255,255,0.06)' }
+        },
+        y: {
+          ticks: { font: { family: 'JetBrains Mono', size: 10 }, color: '#74827B' },
+          grid: { color: 'rgba(255,255,255,0.04)' }, border: { display: false },
+          title: { display: true, text: 'RIDERS', font: { family: 'JetBrains Mono', size: 9, weight: '500' }, color: '#74827B' }
+        }
+      }
+    }
+  });
+}
+
+// ────────────────────────────────────────────────
+// PLANNED CALCULATOR — interactive formula tab
+// Pre-loaded with each store's real hourly demand share + efficiency.
+// User edits "Planned orders / day"; OPH & riders recompute via formulas.
+// Roster columns (G–N) appended inline — same row as demand table.
+// Roster is only solved & filled when plannedDayTotal > 0.
+// ────────────────────────────────────────────────
+
+// Shift coverage: each shift starts at given hour, runs 10 hours inclusive.
+// Shift 08 → covers hours 8,9,10,11,12,13,14,15,16,17
+// Shift 10 → covers hours 10,11,12,13,14,15,16,17,18,19
+// Shift 12 → covers hours 12,13,14,15,16,17,18,19,20,21
+// Shift 14 → covers hours 14,15,16,17,18,19,20,21,22,23
+// Shift 16 → covers hours 16,17,18,19,20,21,22,23,0,1
+const SHIFTS = [8, 10, 12, 14, 16];
+function buildShiftCovers() {
+  const sc = {};
+  SHIFTS.forEach(start => {
+    sc[start] = new Set();
+    for (let i = 0; i < 10; i++) {
+      const h = (start + i) % 24;
+      if (HOUR_ORDER.includes(h)) sc[start].add(h);
+    }
+  });
+  return sc;
+}
+
+// Solve optimal riders per shift: meet hourly requirement with minimal excess.
+// Returns { riders: {shift: count}, hourlyTotal: {h: cov}, hourlyExcess: {h: excess}, shiftCovers }
+function solveRoster(ridersRequired) {
+  const shiftCovers = buildShiftCovers();
+  const req = {};
+  HOUR_ORDER.forEach(h => { req[h] = ridersRequired[h] || 0; });
+
+  // For each hour, which shifts cover it
+  const hourShifts = {};
+  HOUR_ORDER.forEach(h => {
+    hourShifts[h] = SHIFTS.filter(s => shiftCovers[s].has(h));
+  });
+
+  // Step 1: initial allocation — for each shift, take max (req[h] / #competing_shifts) across its hours
+  const riders = {};
+  SHIFTS.forEach(s => {
+    let load = 0;
+    shiftCovers[s].forEach(h => {
+      if (hourShifts[h].length > 0) load = Math.max(load, req[h] / hourShifts[h].length);
+    });
+    riders[s] = Math.ceil(load);
+  });
+
+  // Step 2: fix any hours still under-covered
+  for (let iter = 0; iter < 100; iter++) {
+    let allMet = true;
+    HOUR_ORDER.forEach(h => {
+      const cov = hourShifts[h].reduce((s, sh) => s + (riders[sh] || 0), 0);
+      if (cov < req[h]) {
+        allMet = false;
+        const deficit = req[h] - cov;
+        // Add to the shift covering this hour that has the fewest total riders (cheapest)
+        const cheapest = hourShifts[h].reduce((best, sh) =>
+          (riders[sh] || 0) < (riders[best] || 0) ? sh : best, hourShifts[h][0]);
+        riders[cheapest] = (riders[cheapest] || 0) + deficit;
+      }
+    });
+    if (allMet) break;
+  }
+
+  // Step 3: trim — reduce each shift by 1 as long as all hours remain covered
+  let improved = true;
+  while (improved) {
+    improved = false;
+    SHIFTS.forEach(s => {
+      if ((riders[s] || 0) <= 0) return;
+      riders[s] -= 1;
+      let ok = true;
+      shiftCovers[s].forEach(h => {
+        const cov = hourShifts[h].reduce((sum, sh) => sum + (riders[sh] || 0), 0);
+        if (cov < req[h]) ok = false;
+      });
+      if (!ok) { riders[s] += 1; }
+      else { improved = true; }
+    });
+  }
+
+  // Hourly totals & excess
+  const hourlyTotal = {}, hourlyExcess = {};
+  HOUR_ORDER.forEach(h => {
+    const cov = hourShifts[h].reduce((s, sh) => s + (riders[sh] || 0), 0);
+    hourlyTotal[h] = cov;
+    hourlyExcess[h] = cov - req[h];
+  });
+
+  return { riders, hourlyTotal, hourlyExcess, shiftCovers };
+}
+
+function appendPlannedCalculator(wb) {
+  const U = XLSX.utils;
+  const ws = {};
+  const merges = [];
+  const A1 = (r, c) => U.encode_cell({ r, c });
+  const ABS = (r, c) => '$' + U.encode_col(c) + '$' + (r + 1);
+  const setS = (r, c, v) => { ws[A1(r, c)] = { t: 's', v: String(v) }; };
+  const setN = (r, c, v, z) => { const cell = { t: 'n', v: Number(v) }; if (z) cell.z = z; ws[A1(r, c)] = cell; };
+  const setF = (r, c, f, z, v) => { const cell = { t: 'n', f: String(f).replace(/^=/, '') }; if (z) cell.z = z; if (v != null) cell.v = v; ws[A1(r, c)] = cell; };
+
+  // Column layout (0-indexed):
+  // A=0  Hour
+  // B=1  Demand share
+  // C=2  Efficiency
+  // D=3  Planned OPH
+  // E=4  Riders required
+  // F=5  (blank separator)
+  // G=6  Shift 08:00 riders (blank if hour not in shift)
+  // H=7  Shift 10:00 riders
+  // I=8  Shift 12:00 riders
+  // J=9  Shift 14:00 riders
+  // K=10 Shift 16:00 riders
+  // L=11 (blank separator)
+  // M=12 Hourly (total coverage)
+  // N=13 Delta (coverage − required)
+  const COL = { hour:0, share:1, eff:2, oph:3, req:4, sep1:5, s08:6, s10:7, s12:8, s14:9, s16:10, sep2:11, hourly:12, delta:13 };
+  const SHIFT_COLS = { 8:COL.s08, 10:COL.s10, 12:COL.s12, 14:COL.s14, 16:COL.s16 };
+  const MAX_COL = 13;
+
+  let R = 0;
+  setS(R, 0, 'PLANNED CALCULATOR  ·  edit the "Planned orders / day" value for each store — Planned OPH and Riders recompute automatically');
+  merges.push({ s: { r: R, c: 0 }, e: { r: R, c: MAX_COL } });
+  R += 2;
+
+  allResults.forEach(r => {
+    const basisLabel = r.plannedBasis === 'mt' ? 'Mon–Thu profile'
+      : r.plannedBasis === 'fs' ? 'Fri–Sun profile' : 'All-days profile';
+
+    const ddMt = HOUR_ORDER.reduce((s, h) => s + (r.plan['Mon-Thu'][h].planned_demand || 0), 0);
+    const ddFs = HOUR_ORDER.reduce((s, h) => s + (r.plan['Fri-Sun'][h].planned_demand || 0), 0);
+    const defByBasis = r.plannedBasis === 'fs' ? ddFs : r.plannedBasis === 'mt' ? ddMt : (ddMt + ddFs) / 2;
+    const defaultPlanned = Math.round(r.plannedDayTotal > 0 ? r.plannedDayTotal : defByBasis);
+    const hasPlanned = r.plannedDayTotal > 0;
+
+    const tableStart = R + 3;
+    const tableEnd = tableStart + HOUR_ORDER.length - 1;
+    const inputR = R + 1, inputC = COL.share;
+    const ridersRange = A1(tableStart, COL.req) + ':' + A1(tableEnd, COL.req);
+    const shareRange  = A1(tableStart, COL.share) + ':' + A1(tableEnd, COL.share);
+    const ophRange    = A1(tableStart, COL.oph) + ':' + A1(tableEnd, COL.oph);
+
+    // ── Row 0: store header ──
+    setS(R, COL.hour, 'STORE: ' + r.store);
+    merges.push({ s: { r: R, c: COL.hour }, e: { r: R, c: COL.eff } });
+    setS(R, COL.req - 1, 'Profile: ' + basisLabel);
+    merges.push({ s: { r: R, c: COL.req - 1 }, e: { r: R, c: COL.req } });
+    R += 1;
+
+    // ── Row 1: planned orders input + riders required total ──
+    setS(R, COL.hour, 'Planned orders / day  (EDIT):');
+    setN(R, inputC, defaultPlanned, '#,##0');
+    setS(R, COL.req - 1, 'Riders required / day:');
+    const cachedTotal = HOUR_ORDER.reduce((s, h) => {
+      const eff = r.plannedPlan[h].efficiency;
+      const oph = defaultPlanned * r.plannedPlan[h].share;
+      return s + (eff && eff > 0 ? Math.ceil(oph / eff) : 0);
+    }, 0);
+    setF(R, COL.req, '=SUM(' + ridersRange + ')', '#,##0', cachedTotal);
+
+    // Roster: if no planned orders, show shift allocations as blank in header row
+    // If planned, solve and put rider counts in the header row (matching example format)
+    let roster = null;
+    if (hasPlanned) {
+      const ridersReq = {};
+      HOUR_ORDER.forEach(h => {
+        const eff = r.plannedPlan[h].efficiency;
+        const oph = defaultPlanned * r.plannedPlan[h].share;
+        ridersReq[h] = (eff && eff > 0) ? Math.ceil(oph / eff) : 0;
+      });
+      roster = solveRoster(ridersReq);
+      // Put shift rider counts in the header/input row (cols G–K), matching example
+      SHIFTS.forEach(sh => {
+        setN(R, SHIFT_COLS[sh], roster.riders[sh] || 0, '#,##0');
+      });
+    }
+    R += 1;
+
+    // ── Row 2: column headers ──
+    setS(R, COL.hour,  'Hour');
+    setS(R, COL.share, 'Demand share');
+    setS(R, COL.eff,   'Efficiency (OPH/rider)');
+    setS(R, COL.oph,   'Planned OPH');
+    setS(R, COL.req,   'Riders required');
+    // Roster headers only if planned
+    if (hasPlanned && roster) {
+      SHIFTS.forEach(sh => {
+        setS(R, SHIFT_COLS[sh], String(sh).padStart(2,'0') + ':00');
+      });
+      setS(R, COL.hourly, 'Hourly');
+      setS(R, COL.delta,  'Delta');
+    }
+    R += 1;
+
+    // ── Hour rows ──
+    HOUR_ORDER.forEach((h, i) => {
+      const rr = tableStart + i;
+      const share = r.plannedPlan[h].share || 0;
+      const eff   = r.plannedPlan[h].efficiency;
+      const effV  = (eff && eff > 0) ? eff : 0;
+      const ophV  = defaultPlanned * share;
+      const ridV  = effV > 0 ? Math.ceil(ophV / effV) : 0;
+
+      setS(rr, COL.hour, String(h).padStart(2, '0') + ':00');
+      setN(rr, COL.share, share, '0.0%');
+      setN(rr, COL.eff,   effV,  '0.00');
+      setF(rr, COL.oph, '=' + ABS(inputR, inputC) + '*' + A1(rr, COL.share), '#,##0.0', ophV);
+      setF(rr, COL.req, '=IF(' + A1(rr, COL.eff) + '>0,CEILING(' + A1(rr, COL.oph) + '/' + A1(rr, COL.eff) + ',1),0)', '#,##0', ridV);
+
+      if (hasPlanned && roster) {
+        // For each shift column: show rider count if this shift covers this hour, else blank cell
+        SHIFTS.forEach(sh => {
+          if (roster.shiftCovers[sh].has(h)) {
+            setN(rr, SHIFT_COLS[sh], roster.riders[sh] || 0, '#,##0');
+          }
+          // else leave cell empty (no setN call = blank)
+        });
+        // Hourly total = sum of shift cols that are active this hour (formula referencing same row)
+        const activeCols = SHIFTS.filter(sh => roster.shiftCovers[sh].has(h)).map(sh => A1(rr, SHIFT_COLS[sh]));
+        const hourlyCached = roster.hourlyTotal[h] || 0;
+        const deltaCached  = roster.hourlyExcess[h] || 0;
+        if (activeCols.length > 0) {
+          setF(rr, COL.hourly, '=' + activeCols.join('+'), '#,##0', hourlyCached);
+        } else {
+          setN(rr, COL.hourly, 0, '#,##0');
+        }
+        setF(rr, COL.delta, '=' + A1(rr, COL.hourly) + '-' + A1(rr, COL.req), '+#,##0;-#,##0;0', deltaCached);
+      }
+    });
+
+    // ── Totals row ──
+    const tr = tableEnd + 1;
+    setS(tr, COL.hour, 'TOTAL');
+    setF(tr, COL.share, '=SUM(' + shareRange + ')',  '0.0%',   HOUR_ORDER.reduce((s, h) => s + (r.plannedPlan[h].share || 0), 0));
+    setF(tr, COL.oph,  '=SUM(' + ophRange + ')',     '#,##0.0', defaultPlanned);
+    setF(tr, COL.req,  '=SUM(' + ridersRange + ')',  '#,##0',   cachedTotal);
+    if (hasPlanned && roster) {
+      // Totals for Hourly and Delta columns
+      const hourlyRange = A1(tableStart, COL.hourly) + ':' + A1(tableEnd, COL.hourly);
+      const deltaRange  = A1(tableStart, COL.delta)  + ':' + A1(tableEnd, COL.delta);
+      const totalHourly = HOUR_ORDER.reduce((s, h) => s + (roster.hourlyTotal[h] || 0), 0);
+      const totalDelta  = HOUR_ORDER.reduce((s, h) => s + (roster.hourlyExcess[h] || 0), 0);
+      setF(tr, COL.hourly, '=SUM(' + hourlyRange + ')', '#,##0', totalHourly);
+      setF(tr, COL.delta,  '=SUM(' + deltaRange + ')',  '+#,##0;-#,##0;0', totalDelta);
+    }
+
+    R = tr + 2;
+  });
+
+  ws['!ref'] = U.encode_range({ s: { r: 0, c: 0 }, e: { r: R, c: MAX_COL } });
+  ws['!cols'] = [
+    { wch: 22 }, // A Hour
+    { wch: 16 }, // B Demand share
+    { wch: 22 }, // C Efficiency
+    { wch: 14 }, // D Planned OPH
+    { wch: 16 }, // E Riders required
+    { wch: 4  }, // F separator
+    { wch: 10 }, // G 08:00
+    { wch: 10 }, // H 10:00
+    { wch: 10 }, // I 12:00
+    { wch: 10 }, // J 14:00
+    { wch: 10 }, // K 16:00
+    { wch: 4  }, // L separator
+    { wch: 12 }, // M Hourly
+    { wch: 10 }, // N Delta
+  ];
+  ws['!merges'] = merges;
+  U.book_append_sheet(wb, ws, 'Planned Calculator');
+}
+
+// ────────────────────────────────────────────────
+// XLSX DOWNLOAD — one combined sheet
+// ────────────────────────────────────────────────
+function downloadXLSX() {
+  if (!allResults.length) return;
+  const wb = XLSX.utils.book_new();
+
+  // Combined plan sheet
+  const headers = [
+    'Store', 'Group', 'Hour',
+    'Avg P2A', 'Avg A2D', 'Trip Time', 'Efficiency',
+    'Peak Demand', 'LM Uplift', 'Kitchen Uplift', 'Growth Uplift',
+    'Planned Demand', 'Riders Required'
+  ];
+  const allRows = [headers];
+
+  allResults.forEach(r => {
+    ['Mon-Thu', 'Fri-Sun'].forEach(grp => {
+      HOUR_ORDER.forEach(h => {
+        const p = r.plan[grp][h];
+        const hLabel = String(h).padStart(2, '0') + ':00';
+        allRows.push([
+          r.store, grp, hLabel,
+          p.avg_p2a == null ? null : Number(p.avg_p2a.toFixed(2)),
+          p.avg_a2d == null ? null : Number(p.avg_a2d.toFixed(2)),
+          p.trip_time == null ? null : Number(p.trip_time.toFixed(2)),
+          p.efficiency == null ? null : Number(p.efficiency.toFixed(3)),
+          Math.round(p.peak_demand),
+          Math.round(p.lm_uplift),
+          Math.round(p.kt_uplift),
+          Math.round(p.growth_uplift),
+          Math.round(p.planned_demand),
+          p.riders
+        ]);
+      });
+      // Subtotal row
+      const total = HOUR_ORDER.reduce((s, h) => s + (r.plan[grp][h].riders || 0), 0);
+      allRows.push([r.store, grp, 'TOTAL', '', '', '', '', '', '', '', '', '', total]);
+    });
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(allRows);
+  ws['!cols'] = [
+    {wch:20},{wch:10},{wch:7},{wch:9},{wch:9},{wch:10},{wch:11},
+    {wch:14},{wch:12},{wch:16},{wch:14},{wch:16},{wch:16}
+  ];
+  XLSX.utils.book_append_sheet(wb, ws, 'Rider Plan');
+
+  // Planned Day Plan sheet (only stores with a target entered)
+  const plannedStores = allResults.filter(r => r.plannedDayTotal > 0);
+  if (plannedStores.length) {
+    const pHeaders = ['Store', 'Planned Day Total', 'Distribution Basis', 'Hour',
+      'Demand Share %', 'Planned OPH', 'Efficiency (OPH/rider)', 'Riders Required'];
+    const pRows = [pHeaders];
+    plannedStores.forEach(r => {
+      const basisLabel = r.plannedBasis === 'mt' ? 'Mon-Thu' : r.plannedBasis === 'fs' ? 'Fri-Sun' : 'All days';
+      HOUR_ORDER.forEach(h => {
+        const p = r.plannedPlan[h];
+        pRows.push([
+          r.store, r.plannedDayTotal, basisLabel,
+          String(h).padStart(2, '0') + ':00',
+          Number((p.share * 100).toFixed(2)),
+          Math.round(p.oph),
+          p.efficiency == null ? null : Number(p.efficiency.toFixed(3)),
+          p.riders
+        ]);
+      });
+      const ophTotal = HOUR_ORDER.reduce((s, h) => s + r.plannedPlan[h].oph, 0);
+      pRows.push([r.store, r.plannedDayTotal, basisLabel, 'TOTAL', '', Math.round(ophTotal), '', r.plannedRidersTotal]);
+    });
+    const wsP = XLSX.utils.aoa_to_sheet(pRows);
+    wsP['!cols'] = [{wch:20},{wch:16},{wch:16},{wch:8},{wch:14},{wch:12},{wch:18},{wch:16}];
+    XLSX.utils.book_append_sheet(wb, wsP, 'Planned Day Plan');
+  }
+
+  // Interactive planned calculator tab (live formulas, every store)
+  appendPlannedCalculator(wb);
+
+  // Summary sheet
+  const summaryRows = [
+    ['Rider Planning — Export'],
+    ['Generated', new Date().toISOString()],
+    ['Stores', allResults.map(r => r.store).join(', ')],
+    [],
+    ['Store', 'Mon-Thu / day', 'Fri-Sun / day', 'Weekly hrs', 'MT Growth%', 'FS Growth%', 'Eff min', 'Eff max', 'Planned/day orders', 'Planned riders/day', 'Warnings']
+  ];
+  allResults.forEach(r => {
+    summaryRows.push([
+      r.store, r.mtTotal, r.fsTotal, r.weeklyTotal,
+      (r.growthRate['Mon-Thu']*100).toFixed(2) + '%',
+      (r.growthRate['Fri-Sun']*100).toFixed(2) + '%',
+      r.minEff.toFixed(2), r.maxEff.toFixed(2),
+      r.plannedDayTotal > 0 ? r.plannedDayTotal : '',
+      r.plannedDayTotal > 0 ? r.plannedRidersTotal : '',
+      r.warnings.join(' | ')
+    ]);
+  });
+  const ws2 = XLSX.utils.aoa_to_sheet(summaryRows);
+  ws2['!cols'] = [{wch:22},{wch:16},{wch:16},{wch:14},{wch:12},{wch:12},{wch:10},{wch:10},{wch:18},{wch:18},{wch:60}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'Summary');
+
+  XLSX.writeFile(wb, 'rider_plan_' + new Date().toISOString().slice(0, 10) + '.xlsx');
+}
+%%ENDSCRIPT%%>
+</body>
+</html>
+</script>
+<script type="text/html" id="src-zones"><!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zone Details Extractor</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js">%%ENDSCRIPT%%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js">%%ENDSCRIPT%%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">%%ENDSCRIPT%%>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+ :root{
+  --bg:#1B211E;--surface:#242C28;--surface2:#2C342F;--raise:#333D37;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.15);
+  --text:#EDF1EE;--text2:#A4B0AA;--muted:#74827B;
+  --accent:#28C06E;--accent2:#2FC974;--accent-soft:rgba(40,192,110,.16);--ring:rgba(40,192,110,.55);
+  --warn:#E2AE4D;--err:#e5616f;
+  --body:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+ }
+ *{box-sizing:border-box}html,body{height:100%;margin:0}
+ body{font-family:var(--body);color:var(--text);overflow:hidden;background:var(--bg);
+  -webkit-font-smoothing:antialiased;letter-spacing:-.003em}
+ #map{position:fixed;inset:0;z-index:0;background:#1B211E}
+ #aurora{position:fixed;top:-30%;left:50%;transform:translateX(-50%);width:1100px;height:520px;z-index:0;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(40,192,110,.18),transparent 70%),radial-gradient(closest-side,rgba(160,110,210,.10),transparent 70%);filter:blur(20px);opacity:.7}
+ ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:5px}
+ button{font-family:var(--body);cursor:pointer;border:none;transition:.14s ease}
+ a{color:inherit}
+
+ .topbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:54px;display:flex;align-items:center;gap:14px;padding:0 16px;
+  background:rgba(8,9,10,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+ .brand{display:flex;align-items:center;gap:10px}
+ .logo{width:26px;height:26px;border-radius:7px;background:linear-gradient(150deg,var(--accent),#9a6cd6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;letter-spacing:-.04em}
+ .brand .nm{font-weight:600;font-size:14px;letter-spacing:-.01em}
+ .brand .sub{font-size:11px;color:var(--muted);margin-left:2px}
+ .search{flex:1;max-width:440px;margin:0 auto;position:relative}
+ #searchBox{width:100%;height:34px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);
+  padding:0 66px 0 36px;font-family:var(--body);font-size:13px;outline:none;transition:.14s}
+ #searchBox:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);background:var(--surface)}
+ .search .ic{position:absolute;left:11px;top:9px;width:15px;height:15px;opacity:.5;pointer-events:none}
+ .search .kbd{position:absolute;right:9px;top:7px;font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--border);border-radius:5px;padding:2px 6px}
+ .tabs{display:flex;gap:2px}
+ .tab{font-size:12.5px;font-weight:500;color:var(--text2);padding:7px 11px;border-radius:7px;background:none}
+ .tab:hover{color:var(--text);background:var(--surface2)} .tab.on{color:var(--text);background:var(--accent-soft)}
+ .status{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:7px;white-space:nowrap}
+ .status .pin{width:6px;height:6px;border-radius:50%;background:var(--muted)}
+ .status.busy .pin{background:var(--accent2);box-shadow:0 0 0 3px var(--accent-soft);animation:pp 1.3s infinite}
+ @keyframes pp{0%,100%{opacity:1}50%{opacity:.3}}
+
+ .panel{position:fixed;top:66px;left:14px;width:392px;max-height:calc(100vh - 80px);z-index:900;border-radius:14px;
+  background:rgba(13,14,17,.94);backdrop-filter:blur(8px);border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.5);
+  display:flex;flex-direction:column;overflow:hidden}
+ .panel-body{overflow-y:auto;padding:17px}
+ .page{display:none}.page.on{display:block;animation:f .2s ease}@keyframes f{from{opacity:0}to{opacity:1}}
+ .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 11px;display:flex;justify-content:space-between;align-items:center}
+ .lbl .hint{text-transform:none;letter-spacing:0;color:var(--muted)}
+
+ .field{margin-bottom:11px}.field label{display:block;font-size:11.5px;color:var(--text2);margin-bottom:6px}
+ textarea,input[type=text]{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:9px 10px;font-family:var(--mono);font-size:11px;outline:none;transition:.14s}
+ textarea{height:74px;resize:vertical;line-height:1.5;color:var(--text2)}
+ textarea:focus,input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);color:var(--text)}
+ .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 0}
+ .btn{background:var(--surface2);color:var(--text);border:1px solid var(--border);font-weight:500;font-size:12.5px;padding:10px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:7px}
+ .btn:hover{border-color:var(--border2);background:var(--raise)}
+ .btn.full{grid-column:1 / -1}
+ .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+ .btn.primary:hover{background:#6b77e0} .btn.primary:disabled{background:var(--surface2);color:var(--muted);border-color:var(--border);cursor:wait}
+ .log{font-family:var(--mono);font-size:10px;line-height:1.7;background:#060708;border:1px solid var(--border);border-radius:9px;padding:9px 10px;max-height:96px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;margin-top:12px}
+ .log:empty::before{content:"Ready.";color:#74827B}
+ .log .ok{color:var(--accent2)}.log .warn{color:var(--warn)}.log .err{color:var(--err)}.log .dim{color:#74827B}
+
+ .kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+ .kpi{border:1px solid var(--border);border-radius:11px;padding:13px;background:var(--surface)}
+ .kpi .n{font-size:23px;font-weight:600;letter-spacing:-.03em;line-height:1}
+ .kpi .n.a{color:var(--accent2)} .kpi .k{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:7px}
+ .meta{display:flex;gap:8px;margin-bottom:16px}
+ .meta .m{flex:1;border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--surface)}
+ .meta .m .mk{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+ .meta .m .mv{font-size:13px;font-weight:600;margin-top:4px;letter-spacing:-.01em}
+
+ .finding{font-size:12.6px;line-height:1.55;color:var(--text2);padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:11px}
+ .finding:last-child{border-bottom:none}.finding .ix{font-family:var(--mono);color:var(--accent2);flex-shrink:0}.finding b{color:var(--text);font-weight:600}
+ .rec{margin-top:14px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:13px}
+ .rec .rh{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:6px}
+ .rec .rb{font-size:12.6px;line-height:1.5}.rec .rb b{color:#fff}
+ .chartwrap{margin-top:16px;border:1px solid var(--border);border-radius:12px;padding:14px;background:var(--surface)}
+ .chartwrap h4{margin:0 0 10px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+
+ .toggle{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:10px;margin-bottom:7px;cursor:pointer;background:var(--surface)}
+ .toggle .tl{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500}.toggle .tl .sw{width:10px;height:10px;border-radius:3px}
+ .toggle .sb{width:32px;height:18px;border-radius:10px;background:rgba(255,255,255,.12);position:relative;transition:.14s;flex-shrink:0}
+ .toggle.on .sb{background:var(--accent)}.toggle .sb::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:.14s}.toggle.on .sb::after{left:16px}
+ .legend{margin-top:12px;border:1px solid var(--border);border-radius:11px;padding:12px;background:var(--surface)}
+ .legend h4{margin:0 0 9px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+ .ramp{height:9px;border-radius:5px;background:linear-gradient(90deg,#ffffcc,#fed976,#fd8d3c,#f03b20,#bd0026)}
+ .ramp-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:5px}
+
+ .hs{border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:9px;cursor:pointer;background:var(--surface)}
+ .hs:hover{border-color:var(--accent)}.hs .hrow{display:flex;align-items:center;gap:11px}
+ .hs .rank{font-weight:700;font-size:14px;width:29px;height:29px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--raise);color:var(--text);flex-shrink:0;border:1.5px solid}
+ .hs .htitle{font-weight:600;font-size:13px}.hs .hsub{font-family:var(--mono);font-size:10px;color:var(--text2);margin-top:2px}
+ .hs .play{font-size:11.5px;color:var(--text2);line-height:1.45;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}.hs .play b{color:var(--accent2);font-weight:600}
+ .covbar{margin:2px 0 14px;border:1px solid var(--border);border-radius:11px;padding:13px;background:var(--surface)}
+ .covbar .ch{display:flex;justify-content:space-between;align-items:baseline} .covbar .cn{font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--accent2)} .covbar .ck{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+ .covbar .track{height:7px;border-radius:4px;background:var(--raise);margin-top:10px;overflow:hidden}.covbar .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px}
+
+ .catctl{display:flex;gap:7px;margin-bottom:10px}
+ .catctl button{flex:1;font-size:11.5px;font-weight:500;color:var(--text2);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px}
+ .catctl button:hover{border-color:var(--border2);color:var(--text)}
+ .chips{display:flex;flex-direction:column;gap:6px}
+ .chip{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid var(--border);border-radius:9px;cursor:pointer;font-size:12px;user-select:none;background:var(--surface)}
+ .chip.off{opacity:.32}.chip .sw{width:10px;height:10px;border-radius:3px}.chip .nm{flex:1;font-weight:500}.chip .ct{font-family:var(--mono);font-size:11px;color:var(--text2)}
+
+ .exp button{width:100%;margin-bottom:9px}
+ details.assume summary{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;list-style:none;margin-top:8px}
+ details.assume summary::-webkit-details-marker{display:none}details.assume summary::before{content:"+ "}details.assume[open] summary::before{content:"- "}
+ .arow{display:flex;align-items:center;justify-content:space-between;margin-top:9px;font-size:11.5px;color:var(--text2)}.arow input{width:66px;text-align:right}
+ .empty{font-size:12.5px;color:var(--muted);line-height:1.6;padding:8px 0}
+
+ .hs-pin{background:var(--bg);color:#fff;border:2px solid;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+ .sr-pin{width:16px;height:16px;border-radius:50%;background:var(--accent);border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.5)}
+ .v-dot{width:14px;height:14px;border-radius:50%;background:#fff;border:2.5px solid var(--accent);box-shadow:0 1px 5px rgba(0,0,0,.55);cursor:grab}
+ .v-dot.first{background:var(--accent);border-color:#fff}
+ .v-mid{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.5);border:1.5px solid var(--accent);cursor:crosshair}
+ .v-mid:hover{background:#fff}
+ .leaflet-popup-content-wrapper{background:var(--surface2);color:var(--text);border:1px solid var(--border2);border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.55)}
+ .leaflet-tooltip{background:var(--surface2);color:var(--text);border:1px solid var(--border2);box-shadow:0 4px 14px rgba(0,0,0,.45);font-family:var(--body);font-size:11px;font-weight:600}
+ .leaflet-tooltip:before{display:none}
+ .leaflet-popup-tip{background:var(--surface2);border:1px solid var(--border2)}.leaflet-popup-content{font-family:var(--body);margin:12px 14px}
+ .pop .pn{font-weight:600;font-size:13.5px;margin-bottom:3px;letter-spacing:-.01em}.pop .pc{font-family:var(--mono);font-size:11px;color:var(--text2)}
+ .pop .coord{font-family:var(--mono);font-size:11px;color:var(--text);margin-top:9px;padding:5px 8px;background:var(--raise);border:1px solid var(--border);border-radius:7px;user-select:all;display:inline-block}
+ .leaflet-control-attribution{background:rgba(8,9,10,.7)!important;color:#5b626b!important}.leaflet-control-attribution a{color:#74827B!important}
+ .leaflet-bar a{background:var(--surface2)!important;color:var(--text)!important;border-color:var(--border)!important}
+
+ @media(max-width:880px){.topbar{flex-wrap:wrap;height:auto;padding:9px 12px}.search{order:3;max-width:none;flex-basis:100%;margin:6px 0 0}.panel{left:8px;right:8px;width:auto;top:auto;bottom:8px;max-height:48vh}.status{display:none}}
+h1,h2,h3,.nm{font-family:'Space Grotesk',sans-serif}
+</style></head>
+<body>
+<div id="map"></div><div id="aurora"></div>
+
+<div class="topbar">
+ <div class="brand"><div class="logo">ZD</div><div class="nm">Zone Details Extractor</div></div>
+ <div class="search">
+  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+  <input id="searchBox" type="text" placeholder="Search an address, place, or lat, lon" autocomplete="off">
+  <span class="kbd">Enter</span>
+ </div>
+ <div class="tabs">
+  <button class="tab on" data-tab="find">Findings</button>
+  <button class="tab" data-tab="map">Map</button>
+  <button class="tab" data-tab="hot">Hotspots</button>
+  <button class="tab" data-tab="cat">Categories</button>
+  <button class="tab" data-tab="export">Export</button>
+ </div>
+ <div class="status" id="statChip"><span class="pin"></span><span id="statTxt">No zone scanned</span></div>
+</div>
+
+<div class="panel"><div class="panel-body">
+ <div class="page on" id="pFind">
+  <p class="lbl">Define a zone</p>
+  <div class="field"><label>Paste a WKT polygon</label><textarea id="wkt" spellcheck="false" placeholder="POLYGON ((lon lat, lon lat, lon lat, …))"></textarea></div>
+  <div class="btns">
+   <button class="btn full" id="drawBtn">Draw on map</button>
+   <button class="btn primary full" id="scan">Scan zone</button>
+  </div>
+  <div class="log" id="log"></div>
+  <div id="findResults" style="display:none">
+   <p class="lbl" style="margin-top:18px">Zone</p>
+   <div class="meta">
+    <div class="m"><div class="mk">Pincode</div><div class="mv" id="mPin">—</div></div>
+    <div class="m"><div class="mk">Area</div><div class="mv" id="mArea">—</div></div>
+   </div>
+   <div class="kpis">
+    <div class="kpi"><div class="n a" id="kVen">0</div><div class="k">TG venues</div></div>
+    <div class="kpi"><div class="n" id="kReach">0</div><div class="k">Est. reach</div></div>
+    <div class="kpi"><div class="n" id="kHot">0</div><div class="k">Hotspots</div></div>
+    <div class="kpi"><div class="n" id="kCov">0%</div><div class="k">Hotspot coverage</div></div>
+   </div>
+   <p class="lbl">Findings</p><div id="findings"></div>
+   <div class="rec" id="recBox" style="display:none"><div class="rh">Lead recommendation</div><div class="rb" id="recBody"></div></div>
+   <div class="chartwrap"><h4 id="chartTitle">Addressable reach by target group</h4><canvas id="tgChart" height="180"></canvas></div>
+  </div>
+ </div>
+
+ <div class="page" id="pMap">
+  <p class="lbl">Map layers</p>
+  <div id="layerToggles">
+   <div class="toggle on" data-layer="grid"><div class="tl"><span class="sw" style="background:#fd8d3c"></span>Demand surface</div><div class="sb"></div></div>
+   <div class="toggle on" data-layer="tg"><div class="tl"><span class="sw" style="background:#28C06E"></span>TG venues</div><div class="sb"></div></div>
+   <div class="toggle" data-layer="poi"><div class="tl"><span class="sw" style="background:#74827B"></span>All categorized places</div><div class="sb"></div></div>
+   <div class="toggle" data-layer="hot"><div class="tl"><span class="sw" style="background:#2FC974"></span>Hotspots</div><div class="sb"></div></div>
+  </div>
+  <div class="legend"><h4>Demand surface · est. reach per ~250m cell</h4><div class="ramp"></div><div class="ramp-lbl"><span>Low</span><span>High</span></div></div>
+  <p class="empty">Switch basemaps bottom-right. Draw a zone from the Findings tab, or paste a WKT polygon.</p>
+ </div>
+
+ <div class="page" id="pHot">
+  <p class="lbl">Hotspot coverage</p>
+  <div class="covbar"><div class="ch"><span class="cn" id="covPct">0%</span><span class="ck">of geofence within 350m of a hotspot</span></div><div class="track"><div class="fill" id="covFill" style="width:0%"></div></div></div>
+  <p class="lbl">Activation hotspots <span class="hint">audience × footfall</span></p>
+  <div id="hotList"><p class="empty">Run a scan. Hotspots rank the corners where target groups and street footfall overlap.</p></div>
+ </div>
+
+ <div class="page" id="pCat">
+  <p class="lbl">Every place, uniquely categorized <span class="hint" id="catCount"></span></p>
+  <div class="catctl" id="catCtl" style="display:none"><button id="catAll">Select all</button><button id="catNone">Clear all</button></div>
+  <div class="chartwrap" id="catChartWrap" style="display:none"><h4>Places by category</h4><canvas id="catChart" height="230"></canvas></div>
+  <div id="catChips"><p class="empty">After a scan, every mapped place in the boundary is sorted into a single category.</p></div>
+ </div>
+
+ <div class="page" id="pExport">
+  <p class="lbl">Export</p>
+  <div class="exp">
+   <button class="btn full" id="dlPng" disabled>Map snapshot (.png)</button>
+   <button class="btn full" id="dlXlsx" disabled>Workbook (.xlsx)</button>
+  </div>
+  <details class="assume"><summary>Reach model · tune to market</summary><div id="arows"></div>
+   <p class="empty" style="margin-top:10px">Reach is modeled for a cold launch, not measured. Societies refine off building floors where known. Re-scan after editing.</p></details>
+  <p class="empty">Data: OpenStreetMap (Overpass + Photon). Open data under-maps some venues — treat counts as a floor.</p>
+ </div>
+</div></div>
+
+<script>
+var TG=[
+ {name:"Tech Parks",color:"#a78bfa",reach:6000,play:"Food-court kiosk, desk drops, lunch-hour sampling, parking-gate banners."},
+ {name:"Colleges & Campuses",color:"#fb7185",reach:3500,play:"Fest sponsorship, campus ambassadors, canteen branding, first-order coupons."},
+ {name:"Malls",color:"#f472b6",reach:8000,play:"Atrium kiosk, escalator branding, weekend sampling drives."},
+ {name:"Societies & Flats",color:"#38bdf8",reach:480,play:"RWA tie-up, lobby & lift standees, clubhouse weekend activation."},
+ {name:"Offices",color:"#60a5fa",reach:250,play:"Reception standee, pantry tie-up, lift branding, lunch sampling."},
+ {name:"Gyms",color:"#2dd4bf",reach:350,play:"Reception standee, trainer referral, post-workout sampling."},
+ {name:"Hostels",color:"#34d399",reach:120,play:"Warden tie-up, common-room posters, mess-hall sampling."},
+ {name:"PGs & Co-living",color:"#f59e0b",reach:45,play:"Owner/warden tie-up, notice-board posters, welcome-kit inserts."}
+];
+var TG_BY={};TG.forEach(t=>TG_BY[t.name]=t);
+var POI_PAL={"Cafe & Bakery":"#b45309","Restaurants & Food":"#e11d48","Bars & Nightlife":"#7c3aed","Grocery & Daily":"#f97316","Retail & Shopping":"#f59e0b","Pharmacy":"#14b8a6","Healthcare":"#dc2626","Education":"#6366f1","Banking & ATM":"#0891b2","Offices & Corporate":"#2563eb","Hotels & Stay":"#db2777","Fitness & Sports":"#0d9488","Leisure & Culture":"#8b5cf6","Parks & Open":"#65a30d","Worship":"#a16207","Government & Civic":"#94a3b8","Transport & Mobility":"#0ea5e9","Fuel & Auto":"#78716c","Residential":"#84cc16","Other":"#64748b"};
+var ANCHOR_CATS=new Set(["Cafe & Bakery","Restaurants & Food","Bars & Nightlife","Grocery & Daily","Retail & Shopping","Transport & Mobility","Leisure & Culture"]);
+
+function inc(a,x){return a.indexOf(x)>=0;}
+function classifyPOI(t){var a=t.amenity,sh=t.shop,off=t.office,le=t.leisure,to=t.tourism,hc=t.healthcare,bu=t.building,lu=t.landuse,pl=t.place,pt=t.public_transport,rw=t.railway,hw=t.highway;
+ if(a==="cafe"||inc(["bakery","pastry","confectionery"],sh))return"Cafe & Bakery";
+ if(inc(["restaurant","fast_food","food_court","canteen","ice_cream"],a))return"Restaurants & Food";
+ if(inc(["bar","pub","nightclub","biergarten"],a))return"Bars & Nightlife";
+ if(inc(["supermarket","convenience","greengrocer","general","kiosk","dairy","deli"],sh))return"Grocery & Daily";
+ if(a==="pharmacy"||sh==="chemist")return"Pharmacy";
+ if(inc(["hospital","clinic","doctors","dentist","veterinary","nursing_home"],a)||hc)return"Healthcare";
+ if(inc(["school","college","university","kindergarten","library","language_school"],a))return"Education";
+ if(inc(["bank","atm","bureau_de_change"],a))return"Banking & ATM";
+ if(a==="fuel"||a==="charging_station"||a==="car_wash"||inc(["car","car_repair","tyres","motorcycle"],sh))return"Fuel & Auto";
+ if(inc(["hotel","guest_house","hostel","motel"],to)||a==="hotel")return"Hotels & Stay";
+ if(le==="fitness_centre"||le==="sports_centre"||le==="pitch"||le==="stadium"||a==="gym")return"Fitness & Sports";
+ if(le==="park"||le==="garden"||le==="playground"||le==="nature_reserve")return"Parks & Open";
+ if(inc(["cinema","theatre","arts_centre"],a)||inc(["attraction","museum","gallery","zoo","theme_park"],to)||le)return"Leisure & Culture";
+ if(a==="place_of_worship")return"Worship";
+ if(inc(["townhall","courthouse","police","fire_station","post_office","community_centre","public_building"],a)||off==="government")return"Government & Civic";
+ if(pt||inc(["station","halt","tram_stop"],rw)||hw==="bus_stop"||inc(["bus_station","taxi","parking"],a))return"Transport & Mobility";
+ if(off||inc(["office","commercial"],bu))return"Offices & Corporate";
+ if(sh||a==="marketplace")return"Retail & Shopping";
+ if(inc(["apartments","residential","dormitory"],bu)||lu==="residential"||inc(["neighbourhood","suburb","quarter"],pl)||t.residential)return"Residential";
+ if(a)return"Other";var ks=["shop","tourism","leisure","building","landuse","place"];for(var i=0;i<ks.length;i++)if(t[ks[i]])return"Other";return null;}
+function classifyTG(t){var a=t.amenity,sh=t.shop,off=t.office,le=t.leisure,to=t.tourism,bu=t.building,lu=t.landuse,pl=t.place,nm=(t.name||"").toLowerCase();
+ if(/tech park|it park|software park|sez/.test(nm)||(inc(["it","research","company"],off)&&/park/.test(nm)))return"Tech Parks";
+ if(a==="university"||a==="college")return"Colleges & Campuses";if(sh==="mall")return"Malls";
+ if(le==="fitness_centre"||a==="gym")return"Gyms";if(to==="hostel")return"Hostels";
+ if(to==="guest_house"||/paying guest|co.?living|\bpg\b/.test(nm))return"PGs & Co-living";
+ if(off||inc(["office","commercial"],bu))return"Offices";
+ if(inc(["apartments","residential","dormitory"],bu)||lu==="residential"||inc(["neighbourhood","suburb","quarter","residential"],pl)||t.residential)return"Societies & Flats";
+ return null;}
+
+function parseWKT(w){var m=String(w).match(/\(([^()]+)\)/);if(!m)throw new Error("No coordinate ring found in that WKT.");
+ var r=m[1].split(",").map(s=>{var p=s.trim().split(/\s+/).map(Number);return[p[0],p[1]];}).filter(p=>isFinite(p[0])&&isFinite(p[1]));
+ if(r.length<3)throw new Error("Need at least 3 valid coordinate pairs.");return r;}
+function ringToWKT(r){var pts=r.map(c=>c[0]+" "+c[1]);if(pts[0]!==pts[pts.length-1])pts.push(pts[0]);return"POLYGON (("+pts.join(", ")+"))";}
+function bbox(r){var n=-90,s=90,e=-180,w=180;for(var i=0;i<r.length;i++){var c=r[i];n=Math.max(n,c[1]);s=Math.min(s,c[1]);e=Math.max(e,c[0]);w=Math.min(w,c[0]);}return{north:n,south:s,east:e,west:w};}
+function pip(lo,la,r){var i,j,c=false;for(i=0,j=r.length-1;i<r.length;j=i++){var xi=r[i][0],yi=r[i][1],xj=r[j][0],yj=r[j][1];if(((yi>la)!==(yj>la))&&(lo<(xj-xi)*(la-yi)/(yj-yi)+xi))c=!c;}return c;}
+function metres(a,b){var R=6371000,d=x=>x*Math.PI/180,dla=d(b.lat-a.lat),dlo=d(b.lon-a.lon);var h=Math.sin(dla/2)**2+Math.cos(d(a.lat))*Math.cos(d(b.lat))*Math.sin(dlo/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+function polyCentroid(r){var x=0,y=0;r.forEach(c=>{x+=c[0];y+=c[1];});return{lon:x/r.length,lat:y/r.length};}
+function reachCentroid(vs){var x=0,y=0,w=0;vs.forEach(v=>{x+=v.lon*v._reach;y+=v.lat*v._reach;w+=v._reach;});return w?{lon:x/w,lat:y/w}:null;}
+function ringAreaKm2(r){var R=6378137,a=0;for(var i=0,j=r.length-1;i<r.length;j=i++){var xi=r[i][0]*Math.PI/180,yi=r[i][1]*Math.PI/180,xj=r[j][0]*Math.PI/180,yj=r[j][1]*Math.PI/180;a+=(xj-xi)*(2+Math.sin(yi)+Math.sin(yj));}return Math.abs(a*R*R/2)/1e6;}
+function hotspotCoverage(ring,bb,hs,radius){if(!hs.length)return 0;var stepLat=0.0009,stepLon=0.0009/Math.cos(((bb.north+bb.south)/2)*Math.PI/180);var total=0,cov=0;
+ for(var la=bb.south;la<bb.north;la+=stepLat)for(var lo=bb.west;lo<bb.east;lo+=stepLon){if(!pip(lo,la,ring))continue;total++;for(var k=0;k<hs.length;k++){if(metres({lat:la,lon:lo},hs[k])<=radius){cov++;break;}}}
+ return total?Math.round(cov/total*100):0;}
+
+function assumptions(){var o={};TG.forEach(t=>{var el=document.getElementById("a_"+t.name.replace(/\W/g,""));o[t.name]=el?(+el.value||t.reach):t.reach;});return o;}
+function estReach(tg,tags,A){if(tg==="Societies & Flats"){var lv=parseInt(tags["building:levels"]);if(lv>0)return Math.round(lv*8*3);}return A[tg]||0;}
+
+async function fetchOSM(ring,log){
+ var ps=ring.map(c=>c[1]+" "+c[0]).join(" ");var P='(poly:"'+ps+'")';
+ var q="[out:json][timeout:90];(nwr[\"amenity\"]"+P+";nwr[\"shop\"]"+P+";nwr[\"office\"]"+P+";nwr[\"leisure\"]"+P+";nwr[\"tourism\"]"+P+";nwr[\"healthcare\"]"+P+";nwr[\"public_transport\"]"+P+";nwr[\"railway\"~\"^(station|halt)$\"]"+P+";node[\"highway\"=\"bus_stop\"]"+P+";nwr[\"building\"~\"^(office|commercial|apartments|residential|dormitory)$\"][\"name\"]"+P+";nwr[\"landuse\"=\"residential\"][\"name\"]"+P+";nwr[\"place\"~\"^(neighbourhood|suburb|quarter)$\"][\"name\"]"+P+";nwr[\"name\"~\"tech park|it park|software park|paying guest|co.?living\",i]"+P+";);out center tags;";
+ var ms=["https://overpass-api.de/api/interpreter","https://overpass.kumi.systems/api/interpreter","https://overpass.private.coffee/api/interpreter"];
+ for(var mi=0;mi<ms.length;mi++){var url=ms[mi];try{log("osm · "+new URL(url).host,"dim");var t=performance.now();
+   var ctrl=new AbortController();var to=setTimeout(function(){ctrl.abort();},100000);
+   var r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"data="+encodeURIComponent(q),signal:ctrl.signal});clearTimeout(to);
+   if(!r.ok){log("  "+r.status+(r.status===429?" rate-limited":"")+", next mirror","warn");continue;}
+   var d=await r.json();log("  osm "+d.elements.length+" raw · "+((performance.now()-t)/1000).toFixed(1)+"s","ok");
+   var seen={},out=[];
+   for(var ei=0;ei<d.elements.length;ei++){var el=d.elements[ei],lat,lon;if(el.type==="node"){lat=el.lat;lon=el.lon;}else if(el.center){lat=el.center.lat;lon=el.center.lon;}
+     if(lat==null||lon==null)continue;var k=el.type+el.id;if(seen[k])continue;seen[k]=1;var tags=el.tags||{};
+     out.push({name:tags.name||tags["name:en"]||null,lat:lat,lon:lon,tags:tags});}
+   return out;
+ }catch(e){var msg=(e&&e.name==="AbortError")?"timed out (zone may be too large)":e.message;log("  "+msg+", next mirror","warn");}}
+ log("OSM returned nothing — the zone is likely too large for the free servers, or they're busy. Try a tighter polygon or retry.","err");return [];
+}
+async function getPincodes(pts){var codes=new Set();
+ for(var i=0;i<pts.length;i++){try{var r=await fetch("https://photon.komoot.io/reverse?lat="+pts[i].lat+"&lon="+pts[i].lon);var d=await r.json();var pc=d.features&&d.features[0]&&d.features[0].properties&&d.features[0].properties.postcode;if(pc)codes.add(String(pc));}catch(e){}await new Promise(r=>setTimeout(r,160));}
+ return Array.from(codes);}
+
+function computeHotspots(tg,anchors){var R=350,SEP=420,MAX=6,AEQ=200;
+ var scored=tg.map(c=>{var score=0,reachSum=0,vC=0,aC=0,byTG={};
+   tg.forEach(v=>{if(metres(c,v)<=R){score+=v._reach;reachSum+=v._reach;vC++;byTG[v.tg]=(byTG[v.tg]||0)+v._reach;}});
+   anchors.forEach(a=>{if(metres(c,a)<=R){score+=AEQ;aC++;}});
+   var dom=Object.entries(byTG).sort((x,y)=>y[1]-x[1])[0];
+   return{lat:c.lat,lon:c.lon,score:score,reachSum:reachSum,vC:vC,aC:aC,dom:dom?dom[0]:null};}).sort((x,y)=>y.score-x.score);
+ var picked=[];for(var i=0;i<scored.length;i++){var s=scored[i];if(picked.every(p=>metres(p,s)>=SEP)){picked.push(s);if(picked.length>=MAX)break;}}return picked;}
+
+var RAMP=["#ffffcc","#fed976","#fd8d3c","#f03b20","#bd0026"];
+function hx(h){h=h.replace("#","");return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function lerpHex(a,b,f){var pa=hx(a),pb=hx(b);return"#"+[0,1,2].map(k=>{var v=Math.round(pa[k]+(pb[k]-pa[k])*f).toString(16);return v.length<2?"0"+v:v;}).join("");}
+function ramp(t){t=Math.max(0,Math.min(1,t));var n=RAMP.length-1,x=t*n,i=Math.floor(x),f=x-i;if(i>=n)return RAMP[n];return lerpHex(RAMP[i],RAMP[i+1],f);}
+function buildGridCells(ring,bb,venues){var stepLat=0.00225,stepLon=0.00225/Math.cos(((bb.north+bb.south)/2)*Math.PI/180),bins={};
+ venues.forEach(v=>{var i=Math.floor((v.lat-bb.south)/stepLat),j=Math.floor((v.lon-bb.west)/stepLon),key=i+"_"+j;if(!bins[key])bins[key]={i:i,j:j,reach:0,cnt:0};bins[key].reach+=v._reach;bins[key].cnt++;});
+ var cells=[];Object.keys(bins).forEach(k=>{var c=bins[k],s=bb.south+c.i*stepLat,w=bb.west+c.j*stepLon,n=s+stepLat,e=w+stepLon;if(!pip((w+e)/2,(s+n)/2,ring))return;cells.push({s:s,w:w,n:n,e:e,reach:c.reach,cnt:c.cnt});});return cells;}
+
+var map,layers={},tgVenues=[],poiAll=[],hotspots=[],activeTG=null,catOff=new Set(),tgChart=null,catChart=null,zoneRing=null,zoneBB=null,gridCells=[],gridMax=1,searchMk=null,drawing=false,drawPts=[],drawLayer=null;
+var jobRunning=false;
+var esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+var fmt=n=>n>=1000?(n/1000).toFixed(n>=10000?0:1)+"k":String(Math.round(n));
+function meta(lat,lon){return '<div class="coord">'+lat.toFixed(6)+", "+lon.toFixed(6)+'</div>';}
+
+function initMap(){
+ var voy=L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{maxZoom:20,attribution:"© OpenStreetMap, © CARTO"});
+ var streets=L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:20,attribution:"© OpenStreetMap, © CARTO"});
+ var sat=L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,attribution:"© Esri"});
+ map=L.map("map",{zoomControl:true,layers:[voy],preferCanvas:true}).setView([12.95,77.6],12);
+ L.control.layers({"Dark":voy,"Streets":streets,"Satellite":sat},null,{position:"bottomright"}).addTo(map);
+}
+var drawShape=null;
+function startDraw(){
+ if(drawing){cancelDraw();return;}
+ drawing=true;drawPts=[];if(drawLayer)map.removeLayer(drawLayer);drawLayer=L.layerGroup().addTo(map);drawShape=null;
+ map.doubleClickZoom.disable();document.getElementById("map").style.cursor="crosshair";
+ var b=document.getElementById("drawBtn");b.textContent="Finish & scan";b.classList.add("primary");
+ busy(false,"Click to drop points · drag a point or midpoint to adjust · click the first point or Finish to close");
+ map.on("click",onDrawClick);
+}
+function onDrawClick(e){if(!drawing)return;drawPts.push([e.latlng.lng,e.latlng.lat]);redrawDraw();}
+function vIcon(first){return L.divIcon({className:"",html:'<div class="v-dot'+(first?" first":"")+'"></div>',iconSize:[14,14],iconAnchor:[7,7]});}
+function mIcon(){return L.divIcon({className:"",html:'<div class="v-mid"></div>',iconSize:[12,12],iconAnchor:[6,6]});}
+function updateShape(){if(drawShape)drawShape.setLatLngs(drawPts.map(p=>[p[1],p[0]]));}
+function redrawDraw(){if(!drawLayer)return;drawLayer.clearLayers();var ll=drawPts.map(p=>[p[1],p[0]]);
+ if(drawPts.length>=2)drawShape=L.polyline(ll,{color:"#28C06E",weight:2.5,interactive:false}).addTo(drawLayer);
+ else drawShape=null;
+ if(drawPts.length>=2){var edges=[];for(var i=0;i<drawPts.length-1;i++)edges.push(i);
+  edges.forEach(ai=>{var a=drawPts[ai],b=drawPts[ai+1],mid=[(a[1]+b[1])/2,(a[0]+b[0])/2];
+   var mm=L.marker(mid,{icon:mIcon(),draggable:true,zIndexOffset:50});mm._after=ai;
+   mm.on("dragstart",function(){var ins=this._after+1;var ll=this.getLatLng();drawPts.splice(ins,0,[ll.lng,ll.lat]);this._ins=ins;});
+   mm.on("drag",function(){var ll=this.getLatLng();drawPts[this._ins]=[ll.lng,ll.lat];updateShape();});
+   mm.on("dragend",function(){redrawDraw();});mm.addTo(drawLayer);});}
+ drawPts.forEach(function(p,i){var vm=L.marker([p[1],p[0]],{icon:vIcon(i===0),draggable:true,zIndexOffset:100});vm._i=i;
+   vm.on("drag",function(){var ll=this.getLatLng();drawPts[this._i]=[ll.lng,ll.lat];updateShape();});
+   vm.on("dragend",function(){redrawDraw();});
+   vm.on("click",function(ev){L.DomEvent.stop(ev);if(this._i===0&&drawPts.length>=3)finishDraw();});
+   vm.on("contextmenu",function(ev){L.DomEvent.stop(ev);if(drawPts.length>3){drawPts.splice(this._i,1);redrawDraw();}});
+   vm.addTo(drawLayer);});
+ busy(false,drawPts.length+" point"+(drawPts.length===1?"":"s")+" · drag to adjust · right-click a point to delete · click first point or Finish to close");
+}
+function finishDraw(){
+ var ring=[];drawPts.forEach(p=>{if(!ring.length||metres({lat:ring[ring.length-1][1],lon:ring[ring.length-1][0]},{lat:p[1],lon:p[0]})>5)ring.push(p);});
+ if(ring.length<3){busy(false,"Need at least 3 points — keep clicking");return;}
+ stopDraw();ring.push(ring[0]);document.getElementById("wkt").value=ringToWKT(ring);scan();
+}
+function stopDraw(){drawing=false;map.off("click",onDrawClick);map.doubleClickZoom.enable();
+ document.getElementById("map").style.cursor="";if(drawLayer){map.removeLayer(drawLayer);drawLayer=null;}drawShape=null;
+ var b=document.getElementById("drawBtn");b.textContent="Draw on map";b.classList.remove("primary");}
+function cancelDraw(){stopDraw();busy(false,zoneRing?(tgVenues.length+" venues"):"No zone scanned");}
+function undoPoint(){if(drawing&&drawPts.length){drawPts.pop();redrawDraw();}}
+function log(m,c){var el=document.getElementById("log");var d=document.createElement("div");if(c)d.className=c;d.textContent=m;el.appendChild(d);el.scrollTop=el.scrollHeight;}
+function busy(on,txt){var ch=document.getElementById("statChip");ch.classList.toggle("busy",on);document.getElementById("statTxt").textContent=txt;}
+function clearLayers(){Object.keys(layers).forEach(k=>{if(layers[k]&&map.hasLayer(layers[k]))map.removeLayer(layers[k]);});layers={};}
+
+async function analyzeRing(ring,lg){var bb=bbox(ring),A=assumptions();
+ var raw=await fetchOSM(ring,lg||function(){});var poi=[],tgRaw=[];
+ raw.forEach(o=>{if(!pip(o.lon,o.lat,ring))return;var cat=classifyPOI(o.tags);if(cat)poi.push(Object.assign({},o,{cat:cat}));var tg=classifyTG(o.tags);if(tg)tgRaw.push(Object.assign({},o,{tg:tg}));});
+ tgRaw.forEach(v=>v._reach=estReach(v.tg,v.tags,A));
+ var anchors=poi.filter(p=>ANCHOR_CATS.has(p.cat));var hs=computeHotspots(tgRaw,anchors);
+ return{bb:bb,poi:poi,venues:tgRaw,hotspots:hs,coverage:hotspotCoverage(ring,bb,hs,350),area:ringAreaKm2(ring),anchors:anchors};}
+
+async function scan(){
+ if(jobRunning){log("A scan is already running — let it finish first.","warn");return;}
+ var btn=document.getElementById("scan");document.getElementById("log").innerHTML="";
+ var raw=document.getElementById("wkt").value.trim();
+ if(!raw){log("Add a zone first — paste a WKT polygon or draw one on the map.","warn");busy(false,"No zone yet");return;}
+ var ring;try{ring=parseWKT(raw);}catch(e){log(e.message,"err");return;}
+ var areaKm2=ringAreaKm2(ring);if(areaKm2>60)log("Heads up: this zone is "+areaKm2.toFixed(0)+" km² — large areas can overload the free OSM servers. A tighter polygon scans faster and more reliably.","warn");
+ clearLayers();activeTG=null;catOff=new Set();zoneRing=ring;jobRunning=true;
+ btn.disabled=true;btn.textContent="Scanning…";busy(true,"Scanning zone…");
+ try{
+   var res=await analyzeRing(ring,log);zoneBB=res.bb;poiAll=res.poi;tgVenues=res.venues;hotspots=res.hotspots;
+   log(tgVenues.length+" TG · "+poiAll.length+" places · "+hotspots.length+" hotspots · "+res.coverage+"% coverage","ok");
+   buildLayers(ring,res.bb);buildFindings(res);buildHot(res.coverage);buildCats();
+   document.getElementById("findResults").style.display="block";
+   document.getElementById("dlXlsx").disabled=false;document.getElementById("dlPng").disabled=false;
+   busy(false,tgVenues.length+" venues · "+fmt(tgVenues.reduce((s,v)=>s+v._reach,0))+" reach");
+   showTab(document.querySelector(".tab.on").dataset.tab);
+   var c=polyCentroid(ring);log("resolving pincode…","dim");
+   getPincodes([c,{lat:res.bb.south+(res.bb.north-res.bb.south)*0.72,lon:c.lon},{lat:res.bb.south+(res.bb.north-res.bb.south)*0.28,lon:c.lon}]).then(codes=>{document.getElementById("mPin").textContent=codes.length?codes.join(", "):"—";log(codes.length?"pincode "+codes.join(", "):"pincode not found","ok");});
+ }catch(e){log(e.message,"err");busy(false,"Scan failed");}
+ finally{btn.disabled=false;btn.textContent="Scan zone";jobRunning=false;}
+}
+
+function buildLayers(ring,bb){
+ layers.poly=L.polygon(ring.map(c=>[c[1],c[0]]),{color:"#2FC974",weight:2,fillOpacity:.03,dashArray:"5 5"});
+ map.addLayer(layers.poly);map.fitBounds(layers.poly.getBounds(),{padding:[40,40]});
+ gridCells=buildGridCells(ring,bb,tgVenues);gridMax=Math.max.apply(null,gridCells.map(c=>c.reach).concat([1]));var lm=Math.log(gridMax+1);
+ layers.grid=L.layerGroup();gridCells.forEach(c=>{var t=Math.log(c.reach+1)/lm;L.rectangle([[c.s,c.w],[c.n,c.e]],{stroke:false,fillColor:ramp(t),fillOpacity:.5}).bindPopup('<div class="pop"><div class="pn">Demand cell</div><div class="pc">≈ '+fmt(c.reach)+' reach · '+c.cnt+' venues</div></div>').addTo(layers.grid);});
+ layers.tg=L.layerGroup();tgVenues.forEach(v=>{var c=TG_BY[v.tg].color;v._mk=L.circleMarker([v.lat,v.lon],{radius:5,color:"#1B211E",weight:1.2,fillColor:c,fillOpacity:.95}).bindPopup('<div class="pop"><div class="pn">'+esc(v.name||"Unnamed "+v.tg)+'</div><div class="pc">'+esc(v.tg)+'</div>'+meta(v.lat,v.lon)+'</div>');v._mk._tg=v.tg;v._mk.addTo(layers.tg);});
+ layers.poi=L.layerGroup();poiAll.forEach(p=>{var c=POI_PAL[p.cat]||"#64748b";p._mk=L.circleMarker([p.lat,p.lon],{radius:4,color:"#1B211E",weight:1,fillColor:c,fillOpacity:.9}).bindPopup('<div class="pop"><div class="pn">'+esc(p.name||"("+p.cat+")")+'</div><div class="pc">'+esc(p.cat)+'</div>'+meta(p.lat,p.lon)+'</div>');p._mk._cat=p.cat;p._mk.addTo(layers.poi);});
+ layers.hot=L.layerGroup();hotspots.forEach((h,i)=>{var col=h.dom?TG_BY[h.dom].color:"#2FC974";L.marker([h.lat,h.lon],{icon:L.divIcon({className:"",html:'<div class="hs-pin" style="border-color:'+col+'">'+(i+1)+'</div>',iconSize:[28,28],iconAnchor:[14,14]})}).bindPopup('<div class="pop"><div class="pn">Hotspot '+(i+1)+(h.dom?" · "+esc(h.dom):"")+'</div><div class="pc">'+h.vC+" venues · "+h.aC+' anchors · ≈'+fmt(h.reachSum)+' reach</div>'+meta(h.lat,h.lon)+'</div>').addTo(layers.hot);});
+ layers.ring=L.layerGroup();
+}
+
+function buildFindings(res){
+ var ct=document.getElementById("chartTitle");if(ct)ct.textContent="Addressable reach by target group";
+ var reach=tgVenues.reduce((s,v)=>s+v._reach,0);
+ document.getElementById("kVen").textContent=tgVenues.length;document.getElementById("kReach").textContent=fmt(reach);
+ document.getElementById("kHot").textContent=hotspots.length;document.getElementById("kCov").textContent=res.coverage+"%";
+ document.getElementById("mArea").textContent=res.area.toFixed(2)+" km²";document.getElementById("mPin").textContent="…";
+ var agg=TG.map(t=>{var vs=tgVenues.filter(v=>v.tg===t.name);return{name:t.name,color:t.color,count:vs.length,reach:vs.reduce((s,v)=>s+v._reach,0)};}).filter(a=>a.count).sort((a,b)=>b.reach-a.reach);
+ var bullets=[];
+ if(agg.length){var top=agg[0],share=reach?Math.round(top.reach/reach*100):0;
+   bullets.push("<b>"+top.name+"</b> anchor the zone, contributing roughly <b>"+share+"%</b> of modelled addressable reach across "+top.count+" venue"+(top.count>1?"s":"")+".");
+   if(agg[1]){var two=Math.round((agg[0].reach+agg[1].reach)/reach*100);bullets.push("The top two groups — "+top.name+" and <b>"+agg[1].name+"</b> — make up about <b>"+two+"%</b> of reach, so a focused two-format plan covers most of it.");}
+   bullets.push("The zone spans <b>"+agg.length+"</b> distinct target-group types across <b>"+tgVenues.length+"</b> venues.");
+ }else bullets.push("No target-group venues resolved inside this boundary.");
+ var rc=reachCentroid(tgVenues),pc=polyCentroid(zoneRing);
+ if(rc){var sL=zoneBB.north-zoneBB.south,sO=zoneBB.east-zoneBB.west;var ns=(rc.lat-pc.lat)>sL*0.08?"north":(rc.lat-pc.lat)<-sL*0.08?"south":"";var ew=(rc.lon-pc.lon)>sO*0.08?"east":(rc.lon-pc.lon)<-sO*0.08?"west":"";var dir=(ns&&ew)?ns+"-"+ew:(ns||ew);
+   bullets.push(dir?"Demand skews to the <b>"+dir+"</b> of the polygon — concentrate the first wave there.":"Demand is <b>fairly even</b> across the zone, so prioritise by hotspot rank.");}
+ bullets.push("<b>"+res.anchors.length+"</b> street-level footfall anchors sit inside the zone — "+(res.anchors.length>=30?"strong":"modest")+" support for kiosk and sampling formats.");
+ bullets.push("Hotspots cover <b>"+res.coverage+"%</b> of the geofence within a 350m activation radius"+(res.coverage<40?" — large pockets sit outside any hotspot, so a single activation point won't blanket the zone.":"."));
+ var fw=document.getElementById("findings");fw.innerHTML="";bullets.forEach((b,i)=>{var el=document.createElement("div");el.className="finding";el.innerHTML='<span class="ix">'+(i+1<10?"0":"")+(i+1)+'</span><span>'+b+'</span>';fw.appendChild(el);});
+ var rec=document.getElementById("recBox");
+ if(hotspots.length){var h=hotspots[0],dom=h.dom?TG_BY[h.dom]:null;rec.style.display="block";document.getElementById("recBody").innerHTML="Lead with <b>Hotspot 1</b> — a "+(dom?h.dom:"mixed")+" cluster carrying ≈ "+fmt(h.reachSum)+" reach within 350m, alongside "+h.aC+" footfall anchors. Open with: "+(dom?dom.play:"a kiosk plus sampling.")+" Then work down the ranking.";}else rec.style.display="none";
+ if(tgChart)tgChart.destroy();Chart.defaults.color="#A4B0AA";Chart.defaults.font.family="Inter";
+ tgChart=new Chart(document.getElementById("tgChart"),{type:"bar",data:{labels:agg.map(a=>a.name),datasets:[{data:agg.map(a=>a.reach),backgroundColor:agg.map(a=>a.color),borderRadius:5}]},options:{indexAxis:"y",plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>" "+fmt(c.parsed.x)+" reach"}}},scales:{x:{grid:{color:"rgba(255,255,255,.06)"},ticks:{callback:v=>fmt(v)}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+}
+
+function buildHot(cov){document.getElementById("covPct").textContent=cov+"%";document.getElementById("covFill").style.width=cov+"%";
+ var wrap=document.getElementById("hotList");
+ if(!hotspots.length){wrap.innerHTML='<p class="empty">No clear hotspot — venues are too sparse or scattered. Widen the polygon.</p>';return;}
+ wrap.innerHTML="";hotspots.forEach((h,i)=>{var dom=h.dom?TG_BY[h.dom]:null,col=dom?dom.color:"#2FC974";var el=document.createElement("div");el.className="hs";
+  el.innerHTML='<div class="hrow"><div class="rank" style="border-color:'+col+'">'+(i+1)+'</div><div><div class="htitle">'+(dom?esc(h.dom)+" cluster":"Mixed cluster")+'</div><div class="hsub">≈ '+fmt(h.reachSum)+' reach · '+h.vC+' venues · '+h.aC+' anchors</div></div></div><div class="play"><b>Play:</b> '+(dom?esc(dom.play):"Mixed audience — kiosk plus sampling.")+'</div>';
+  el.onclick=function(){map.flyTo([h.lat,h.lon],16,{duration:.6});layers.ring.clearLayers();L.circle([h.lat,h.lon],{radius:350,color:col,weight:1.5,dashArray:"5 5",fill:false}).addTo(layers.ring);if(!map.hasLayer(layers.ring))map.addLayer(layers.ring);};
+  wrap.appendChild(el);});}
+
+function buildCats(){var wrap=document.getElementById("catChips");var counts={};poiAll.forEach(p=>counts[p.cat]=(counts[p.cat]||0)+1);
+ var cats=Object.keys(POI_PAL).filter(c=>counts[c]).sort((a,b)=>counts[b]-counts[a]);
+ document.getElementById("catCount").textContent=poiAll.length+" places · "+cats.length+" categories";
+ if(!cats.length){wrap.innerHTML='<p class="empty">Nothing else tagged in this boundary.</p>';document.getElementById("catChartWrap").style.display="none";document.getElementById("catCtl").style.display="none";return;}
+ document.getElementById("catCtl").style.display="flex";wrap.innerHTML="";
+ cats.forEach(c=>{var el=document.createElement("div");el.className="chip"+(catOff.has(c)?" off":"");el.dataset.cat=c;
+   el.innerHTML='<span class="sw" style="background:'+POI_PAL[c]+'"></span><span class="nm">'+esc(c)+'</span><span class="ct">'+counts[c]+'</span>';
+   el.onclick=function(){if(catOff.has(c))catOff.delete(c);else catOff.add(c);el.classList.toggle("off");applyCatFilter();};wrap.appendChild(el);});
+ document.getElementById("catChartWrap").style.display="block";if(catChart)catChart.destroy();
+ catChart=new Chart(document.getElementById("catChart"),{type:"bar",data:{labels:cats,datasets:[{data:cats.map(c=>counts[c]),backgroundColor:cats.map(c=>POI_PAL[c]),borderRadius:4}]},options:{indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{grid:{color:"rgba(255,255,255,.06)"}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});}
+function applyCatFilter(){if(!layers.poi)return;layers.poi.eachLayer(m=>{var show=!catOff.has(m._cat);m.setStyle({opacity:show?1:0,fillOpacity:show?.9:0});});}
+function setAllCats(on){var counts={};poiAll.forEach(p=>counts[p.cat]=(counts[p.cat]||0)+1);catOff=on?new Set():new Set(Object.keys(counts));
+ document.querySelectorAll("#catChips .chip").forEach(ch=>ch.classList.toggle("off",!on));applyCatFilter();}
+
+var mapToggleState={grid:true,tg:true,poi:false,hot:false};
+function setLayer(n,on){var l=layers[n];if(!l)return;if(on&&!map.hasLayer(l))map.addLayer(l);if(!on&&map.hasLayer(l))map.removeLayer(l);}
+function showTab(tab){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));document.querySelectorAll(".page").forEach(p=>p.classList.remove("on"));
+ var ids={find:"pFind",map:"pMap",hot:"pHot",cat:"pCat",export:"pExport"};if(ids[tab])document.getElementById(ids[tab]).classList.add("on");
+ if(!layers.poly)return;setLayer("poly",true);
+ if(tab==="map"){Object.keys(mapToggleState).forEach(k=>setLayer(k,mapToggleState[k]));}
+ else if(tab==="find"||tab==="export"){setLayer("grid",true);setLayer("tg",true);setLayer("poi",false);setLayer("hot",false);}
+ else if(tab==="hot"){setLayer("grid",false);setLayer("tg",true);setLayer("poi",false);setLayer("hot",true);}
+ else if(tab==="cat"){setLayer("grid",false);setLayer("tg",false);setLayer("poi",true);setLayer("hot",false);}
+ if(tab!=="hot"&&layers.ring)layers.ring.clearLayers();}
+
+async function doSearch(q){q=(q||"").trim();if(!q)return;var m=q.match(/^\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*$/);
+ if(m){flyResult(+m[1],+m[2],"Pin "+(+m[1]).toFixed(4)+", "+(+m[2]).toFixed(4));return;}
+ try{var c=map.getCenter();var r=await fetch("https://photon.komoot.io/api/?q="+encodeURIComponent(q)+"&limit=1&lat="+c.lat+"&lon="+c.lng);var d=await r.json();
+   if(d.features&&d.features[0]){var f=d.features[0],co=f.geometry.coordinates,nm=[f.properties.name,f.properties.city,f.properties.state].filter(Boolean).join(", ");flyResult(co[1],co[0],nm||q);}else busy(false,"No match for \u201c"+q+"\u201d");}
+ catch(e){busy(false,"Search failed");}}
+function flyResult(la,lo,label){map.flyTo([la,lo],16,{duration:.7});if(searchMk)map.removeLayer(searchMk);
+ searchMk=L.marker([la,lo],{icon:L.divIcon({className:"",html:'<div class="sr-pin"></div>',iconSize:[16,16],iconAnchor:[8,8]})}).addTo(map).bindPopup('<div class="pop"><div class="pn">'+esc(label)+'</div>'+meta(la,lo)+'</div>').openPopup();}
+
+function exportXlsx(){if(!tgVenues.length)return;var A=assumptions();
+ var venues=tgVenues.slice().sort((a,b)=>a.tg.localeCompare(b.tg)||b._reach-a._reach).map(v=>({Name:v.name||"","Target Group":v.tg,"Est. Reach":v._reach,"Suggested Activation":TG_BY[v.tg].play,Latitude:+v.lat.toFixed(6),Longitude:+v.lon.toFixed(6)}));
+ var sum=TG.map(t=>{var vs=tgVenues.filter(v=>v.tg===t.name);return{"Target Group":t.name,Venues:vs.length,"Est. Reach":vs.reduce((s,v)=>s+v._reach,0)};}).filter(r=>r.Venues);
+ sum.push({"Target Group":"TOTAL",Venues:tgVenues.length,"Est. Reach":tgVenues.reduce((s,v)=>s+v._reach,0)});
+ var hs=hotspots.map((h,i)=>({Rank:i+1,"Dominant TG":h.dom||"Mixed","Reach <=350m":h.reachSum,Venues:h.vC,Anchors:h.aC,"Suggested Activation":h.dom?TG_BY[h.dom].play:"Mixed",Latitude:+h.lat.toFixed(6),Longitude:+h.lon.toFixed(6)}));
+ var pc={};poiAll.forEach(p=>pc[p.cat]=(pc[p.cat]||0)+1);var catSum=Object.keys(pc).sort((a,b)=>pc[b]-pc[a]).map(c=>({Category:c,Count:pc[c]}));
+ var pois=poiAll.map(p=>({Name:p.name||"",Category:p.cat,Latitude:+p.lat.toFixed(6),Longitude:+p.lon.toFixed(6)}));
+ var wb=XLSX.utils.book_new();var add=(d,n,w)=>{var ws=XLSX.utils.json_to_sheet(d.length?d:[{Note:"none"}]);if(w)ws["!cols"]=w;XLSX.utils.book_append_sheet(wb,ws,n);};
+ add(venues,"TG Venues",[{wch:34},{wch:20},{wch:11},{wch:52},{wch:12},{wch:12}]);add(sum,"TG Summary");add(hs,"Hotspots");add(catSum,"Category Summary");add(pois,"All Places",[{wch:34},{wch:20},{wch:12},{wch:12}]);
+ XLSX.writeFile(wb,"Zone_Details_"+new Date().toISOString().slice(0,10)+".xlsx");log("workbook exported","ok");}
+
+
+function buildAssume(){var wrap=document.getElementById("arows");TG.forEach(t=>{var r=document.createElement("div");r.className="arow";r.innerHTML='<span><span style="display:inline-block;width:9px;height:9px;border-radius:3px;background:'+t.color+';margin-right:7px"></span>'+t.name+'</span><input type="text" id="a_'+t.name.replace(/\W/g,"")+'" value="'+t.reach+'">';wrap.appendChild(r);});}
+window.addEventListener("DOMContentLoaded",function(){
+ initMap();buildAssume();
+ document.getElementById("scan").onclick=scan;
+ document.getElementById("dlXlsx").onclick=exportXlsx;document.getElementById("dlPng").onclick=function(){exportPng();};
+ document.getElementById("drawBtn").onclick=function(){drawing?finishDraw():startDraw();};
+ document.addEventListener("keydown",function(e){if(!drawing)return;var t=e.target.tagName;if(t==="INPUT"||t==="TEXTAREA")return;
+   if(e.key==="Escape")cancelDraw();else if(e.key==="Backspace"){e.preventDefault();undoPoint();}});
+ document.getElementById("searchBox").addEventListener("keydown",function(e){if(e.key==="Enter")doSearch(this.value);});
+ document.getElementById("catAll").onclick=function(){setAllCats(true);};document.getElementById("catNone").onclick=function(){setAllCats(false);};
+ document.querySelectorAll(".tab").forEach(b=>b.onclick=function(){showTab(b.dataset.tab);});
+ document.querySelectorAll(".toggle").forEach(t=>t.onclick=function(){var n=t.dataset.layer;mapToggleState[n]=!mapToggleState[n];t.classList.toggle("on",mapToggleState[n]);setLayer(n,mapToggleState[n]);});
+});
+
+function exportPng(){if(!zoneBB){return;}var W=1240,H=1480,cv=document.createElement("canvas");cv.width=W;cv.height=H;var x=cv.getContext("2d");
+ x.fillStyle="#1B211E";x.fillRect(0,0,W,H);var rg=x.createRadialGradient(150,40,30,150,40,560);rg.addColorStop(0,"rgba(40,192,110,.18)");rg.addColorStop(1,"rgba(40,192,110,0)");x.fillStyle=rg;x.fillRect(0,0,W,H);
+ x.fillStyle="#2FC974";x.font="700 17px Inter, sans-serif";x.fillText("ZONE DETAILS EXTRACTOR",40,54);x.fillStyle="#74827B";x.font="500 12px 'JetBrains Mono', monospace";x.fillText("ZONE SNAPSHOT · "+new Date().toISOString().slice(0,10),40,76);
+ var reach=tgVenues.reduce((s,v)=>s+v._reach,0);var kp=[["TG VENUES",tgVenues.length],["EST. REACH",fmt(reach)],["HOTSPOTS",hotspots.length],["MAPPED PLACES",poiAll.length]];
+ kp.forEach((k,i)=>{var kx=40+i*295;x.fillStyle="#EDF1EE";x.font="600 29px Inter, sans-serif";x.fillText(String(k[1]),kx,126);x.fillStyle="#74827B";x.font="500 10px 'JetBrains Mono', monospace";x.fillText(k[0],kx,146);});
+ var mx=40,my=172,mw=W-80,mh=1090;x.fillStyle="rgba(255,255,255,.02)";x.fillRect(mx,my,mw,mh);x.strokeStyle="rgba(255,255,255,.08)";x.strokeRect(mx,my,mw,mh);
+ var cLat=(zoneBB.north+zoneBB.south)/2,cLon=(zoneBB.east+zoneBB.west)/2,lonAdj=Math.cos(cLat*Math.PI/180),pad=0.08;
+ var latSpan=(zoneBB.north-zoneBB.south)*(1+pad*2),lonSpan=(zoneBB.east-zoneBB.west)*(1+pad*2),sc=Math.min(mw/(lonSpan*lonAdj),mh/latSpan);
+ function P(lat,lon){return[mx+mw/2+((lon-cLon)*lonAdj)*sc,my+mh/2-(lat-cLat)*sc];}
+ var lm=Math.log(gridMax+1);gridCells.forEach(c=>{var a=P(c.n,c.w),b=P(c.s,c.e);x.fillStyle=ramp(Math.log(c.reach+1)/lm);x.globalAlpha=.5;x.fillRect(a[0],a[1],b[0]-a[0],b[1]-a[1]);x.globalAlpha=1;});
+ x.beginPath();zoneRing.forEach((pt,i)=>{var q=P(pt[1],pt[0]);i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]);});x.closePath();x.strokeStyle="#2FC974";x.lineWidth=2;x.setLineDash([6,5]);x.stroke();x.setLineDash([]);
+ tgVenues.forEach(v=>{var q=P(v.lat,v.lon);x.beginPath();x.arc(q[0],q[1],4,0,7);x.fillStyle=TG_BY[v.tg].color;x.fill();x.lineWidth=1;x.strokeStyle="#1B211E";x.stroke();});
+ hotspots.forEach((h,i)=>{var q=P(h.lat,h.lon),col=h.dom?TG_BY[h.dom].color:"#2FC974";x.beginPath();x.arc(q[0],q[1],14,0,7);x.fillStyle="#1B211E";x.fill();x.lineWidth=3;x.strokeStyle=col;x.stroke();x.fillStyle="#fff";x.font="700 15px Inter, sans-serif";x.textAlign="center";x.textBaseline="middle";x.fillText(String(i+1),q[0],q[1]);x.textAlign="start";x.textBaseline="alphabetic";});
+ var ly=my+mh+34;x.fillStyle="#74827B";x.font="500 10px 'JetBrains Mono', monospace";x.fillText("TARGET GROUPS",40,ly);
+ var ag=TG.filter(t=>tgVenues.some(v=>v.tg===t.name));ag.forEach((t,i)=>{var lx=40+(i%4)*295,lyy=ly+24+Math.floor(i/4)*24;x.fillStyle=t.color;x.beginPath();x.arc(lx+5,lyy-4,5,0,7);x.fill();x.fillStyle="#A4B0AA";x.font="500 12px Inter, sans-serif";x.fillText(t.name,lx+16,lyy);});
+ x.fillStyle="#74827B";x.font="500 11px 'JetBrains Mono', monospace";x.fillText("Reach is modeled, not measured · source: OpenStreetMap",40,H-38);
+ cv.toBlob(function(bl){var a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="Zone_Details_snapshot_"+new Date().toISOString().slice(0,10)+".png";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000);});log("snapshot exported","ok");}
+%%ENDSCRIPT%%>
+</body></html>
+</script>
+<script>
+  var TITLES = {cpo:"CPO Calculator", rider:"Rider Planning", zones:"Zone Details Extractor"};
+  function getDoc(id){ return document.getElementById(id).textContent.split("%%ENDSCRIPT%%").join("</"+"script"); }
+  var loaded = {};
+  function open(tool){
+    var f = document.getElementById("frame-"+tool);
+    if(!loaded[tool]){ f.srcdoc = getDoc("src-"+tool); loaded[tool] = true; }
+    var frames = document.querySelectorAll(".frame");
+    for(var i=0;i<frames.length;i++) frames[i].classList.remove("show");
+    f.classList.add("show");
+    var items = document.querySelectorAll(".navitem");
+    for(var j=0;j<items.length;j++) items[j].classList.toggle("active", items[j].dataset.tool===tool);
+    document.title = "Swish Last Mile · " + TITLES[tool];
+  }
+  document.querySelectorAll(".navitem").forEach(function(b){ b.addEventListener("click", function(){ open(b.dataset.tool); }); });
+  open("cpo");
 </script>
 </body>
 </html>
