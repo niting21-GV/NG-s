@@ -3739,7 +3739,11 @@ function exportPng(){if(!zoneBB){return;}var W=1240,H=1480,cv=document.createEle
   var loaded = {};
   function open(tool){
     var f = document.getElementById("frame-"+tool);
-    if(!loaded[tool]){ f.srcdoc = getDoc("src-"+tool); loaded[tool] = true; }
+    if(!loaded[tool]){
+      var blob = new Blob([getDoc("src-"+tool)], {type:"text/html"});
+      f.src = URL.createObjectURL(blob);
+      loaded[tool] = true;
+    }
     var frames = document.querySelectorAll(".frame");
     for(var i=0;i<frames.length;i++) frames[i].classList.remove("show");
     f.classList.add("show");
