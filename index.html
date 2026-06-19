@@ -3,287 +3,320 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CPO Calculator — Last-Mile Operations</title>
+<title>Swish Last Mile — CPO Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root{
-    --bg:#0B0F0D;
-    --surface:#111714;
-    --surface-2:#161D19;
-    --line:rgba(255,255,255,0.08);
-    --line-strong:rgba(255,255,255,0.14);
-    --txt:#E8EDE9;
-    --muted:#8A968F;
-    --faint:#5C6863;
-    --accent:#1FA855;
-    --accent-dim:#14633a;
-    --amber:#C9A227;
-    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --bg:#1B211E;
+    --ink:#EDF1EE; --muted:#A4B0AA; --faint:#74827B;
+    --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.17);
+    --card:#242C28; --card-2:#2C342F;
+    --brand:#28C06E; --brand-2:#179A57; --brand-ink:#062418;
+    --teal:#6BB8D6; --amber:#E2AE4D;
+    --grad:linear-gradient(135deg,#2FC974,#179A57);
+    --grad-soft:rgba(40,192,110,.12);
+    --shadow:0 1px 2px rgba(0,0,0,.25),0 10px 22px -14px rgba(0,0,0,.5);
+    --glow:0 6px 16px -8px rgba(40,192,110,.4);
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     --display:"Space Grotesk",var(--sans);
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+    --r:16px;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
-  body{
-    background:var(--bg);
-    color:var(--txt);
-    font-family:var(--sans);
-    font-size:15px;
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:1080px;margin:0 auto;padding:40px 28px 96px}
-  /* Header */
-  .eyebrow{
-    font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--accent);margin:0 0 10px;font-weight:500;
-  }
-  h1{
-    font-family:var(--display);font-weight:600;font-size:34px;letter-spacing:-.01em;
-    margin:0 0 6px;
-  }
-  .sub{color:var(--muted);font-size:14px;margin:0 0 32px;max-width:60ch}
-  /* Upload */
-  .drop{
-    border:1px dashed var(--line-strong);border-radius:10px;background:var(--surface);
-    padding:34px 28px;text-align:center;transition:border-color .15s,background .15s;cursor:pointer;
-  }
-  .drop:hover,.drop.over{border-color:var(--accent);background:var(--surface-2)}
-  .drop h2{font-family:var(--display);font-weight:500;font-size:17px;margin:0 0 6px}
-  .drop p{color:var(--muted);font-size:13px;margin:0}
-  .drop .cols{font-family:var(--mono);font-size:12px;color:var(--faint);margin-top:14px}
-  .drop .cols b{color:var(--muted);font-weight:500}
-  input[type=file]{display:none}
-  .fname{font-family:var(--mono);font-size:12px;color:var(--accent);margin-top:14px}
-  /* Summary strip */
-  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);
-    border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:28px 0 8px}
-  .stat{background:var(--surface);padding:18px 18px 16px}
-  .stat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
-  .stat .v{font-family:var(--mono);font-weight:600;font-size:21px;letter-spacing:-.01em}
-  .stat.hero{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
-  .stat.hero .k{color:var(--accent)}
-  .stat.hero .v{color:var(--accent)}
-  /* Banner */
-  .banner{border:1px solid rgba(201,162,39,.4);background:rgba(201,162,39,.07);
-    border-radius:8px;padding:13px 16px;margin:18px 0 0;font-size:13px;color:#E9D9A4}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .hidden{display:none !important}
+
+  .aurora{position:fixed;inset:0;z-index:-2;background:
+    radial-gradient(70% 50% at 80% -10%,rgba(40,192,110,.06),transparent 60%),var(--bg)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{animation:fadeUp .5s cubic-bezier(.2,.7,.2,1) both}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none !important}}
+
+  .nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:15px 30px;background:rgba(27,33,30,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand .spark{width:24px;height:24px;color:var(--brand)}
+  .brand .wm{font-family:var(--display);font-weight:700;font-size:22px;color:var(--brand);letter-spacing:-.03em}
+  .brand .sep{width:1px;height:16px;background:var(--line-2)}
+  .brand .wm2{font-family:var(--sans);font-weight:500;font-size:13.5px;color:var(--muted)}
+  .nav-actions{display:flex;align-items:center;gap:14px}
+  .fname{font-family:var(--mono);font-size:11.5px;color:var(--muted);max-width:32vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .btn{font-family:var(--sans);font-weight:600;font-size:13.5px;border:none;border-radius:10px;cursor:pointer;transition:transform .14s,filter .14s}
+  .btn-primary{color:#fff;background:var(--brand-2);padding:10px 18px}
+  .btn-primary:hover{filter:brightness(1.08)}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:30px 30px 110px}
+
+  .seg{display:inline-flex;gap:2px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:26px;flex-wrap:wrap}
+  .tab{font-family:var(--sans);font-weight:600;font-size:13.5px;color:var(--muted);background:transparent;border:none;border-radius:9px;padding:9px 16px;cursor:pointer;transition:.16s;white-space:nowrap}
+  .tab:hover{color:var(--ink)}
+  .tab.active{color:#fff;background:var(--brand-2)}
+
+  .hero{display:grid;grid-template-columns:1fr;gap:40px;align-items:center;
+    background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:54px 52px}
+  .eyebrow{display:block;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin-bottom:18px}
+  .hero h1{font-family:var(--display);font-weight:700;font-size:46px;line-height:1.05;letter-spacing:-.035em;margin:0 0 16px;color:var(--ink)}
+  .hero h1 .g{color:var(--brand)}
+  .hero p{color:var(--muted);font-size:16px;margin:0 0 28px;max-width:40ch}
+  .drop{display:block;border:1.5px dashed var(--line-2);border-radius:14px;background:rgba(255,255,255,.02);padding:22px;text-align:center;cursor:pointer;transition:.18s}
+  .drop:hover,.drop.over{border-color:var(--brand);background:var(--grad-soft)}
+  .drop .big{font-family:var(--sans);font-weight:600;font-size:15px;margin-bottom:5px}
+  .drop .small{color:var(--muted);font-size:12.5px;font-family:var(--mono)}
+
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:26px}
+  .kpi{display:flex;gap:13px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;transition:border-color .16s}
+  .kpi:hover{border-color:var(--line-2)}
+  .kpi .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--grad-soft);color:var(--brand);flex:none}
+  .kpi-k{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:4px}
+  .kpi-v{font-family:var(--mono);font-weight:600;font-size:21px;letter-spacing:-.02em;white-space:nowrap}
+  .kpi.hero-kpi{background:var(--brand-2);border-color:transparent}
+  .kpi.hero-kpi .ic{background:rgba(255,255,255,.16);color:#fff}
+  .kpi.hero-kpi .kpi-k{color:rgba(255,255,255,.8)}
+  .kpi.hero-kpi .kpi-v{color:#fff}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:22px;overflow:hidden}
+  .card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 20px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:600;font-size:15px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .chart-wrap{padding:18px 20px;height:300px}
+  .chart-wrap.tall{height:392px}
+
+  .toolbar{display:flex;gap:11px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+  .ctl{font-family:var(--sans);font-size:13.5px;color:var(--ink);background:var(--card-2);border:1px solid var(--line-2);border-radius:12px;padding:10px 13px;outline:none;transition:.14s}
+  .ctl::placeholder{color:var(--faint)}
+  .ctl:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(43,211,125,.14)}
+  .ctl.search{flex:1;min-width:200px}
+  select.ctl{cursor:pointer}
+  select.ctl option{background:#10201A;color:var(--ink)}
+  .filters{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .chips .lab{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-right:3px}
+  .chip-btn{font-family:var(--sans);font-weight:600;font-size:12.5px;color:var(--muted);background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:7px 13px;cursor:pointer;transition:.14s}
+  .chip-btn:hover{color:var(--ink);border-color:var(--line-2)}
+  .chip-btn.active{color:#fff;background:var(--brand-2);border-color:transparent}
+
+  .sumbar{display:flex;gap:11px;flex-wrap:wrap;margin-bottom:14px}
+  .sumcell{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 18px;min-width:104px}
+  .sumcell .k{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:3px}
+  .sumcell .v{font-family:var(--mono);font-weight:600;font-size:17px;letter-spacing:-.01em}
+  .sumcell.accent{background:var(--brand-2);border-color:transparent}
+  .sumcell.accent .k{color:rgba(255,255,255,.8)}
+  .sumcell.accent .v{color:#fff}
+
+  .selbar{margin-bottom:16px}
+  .selbar-inner{display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:rgba(91,200,232,.08);border:1px solid rgba(91,200,232,.24);border-radius:16px;padding:13px 18px}
+  .seltag{font-weight:700;font-size:12.5px;color:var(--teal);display:flex;align-items:center;gap:7px}
+  .seltag .d{width:7px;height:7px;border-radius:50%;background:var(--teal)}
+  .selx{display:flex;flex-direction:column}
+  .selx .k{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .selx .v{font-family:var(--mono);font-weight:600;font-size:15px}
+  .selx .v.cpo{color:var(--teal)}
+  .selbar .clearbtn{margin-left:auto;font-family:var(--sans);font-weight:600;font-size:12.5px;color:var(--muted);background:transparent;border:1px solid var(--line-2);border-radius:999px;padding:7px 14px;cursor:pointer}
+  .selbar .clearbtn:hover{color:var(--ink)}
+
+  .table-wrap{overflow-x:auto}
+  table.grid{width:100%;border-collapse:collapse;min-width:660px}
+  table.grid thead th{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:600;text-align:right;padding:14px 16px;border-bottom:1px solid var(--line);white-space:nowrap;background:rgba(255,255,255,.02);position:sticky;top:0;backdrop-filter:blur(8px)}
+  table.grid thead th.l{text-align:left}
+  table.grid thead th.chk,table.grid td.chk{width:42px;text-align:center;padding-left:14px;padding-right:0}
+  table.grid tbody td{padding:13px 16px;border-bottom:1px solid var(--line);font-size:14px}
+  table.grid td.num{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  table.grid td.l{text-align:left}
+  td.store{font-weight:600}
+  td.cpo{color:var(--brand);font-weight:700}
+  tr.srow{cursor:pointer;transition:background .12s}
+  tr.srow:hover td{background:rgba(43,211,125,.05)}
+  tr.srow.open td{background:rgba(43,211,125,.09)}
+  .chev{display:inline-block;width:12px;color:var(--faint);transition:transform .18s;font-size:10px;margin-right:4px}
+  tr.srow.open .chev{transform:rotate(90deg);color:var(--brand)}
+  input.rowchk,input.allchk{accent-color:var(--brand);width:16px;height:16px;cursor:pointer}
+  .citytag{font-family:var(--mono);font-weight:600;font-size:10.5px;color:var(--brand);background:rgba(43,211,125,.12);border:1px solid rgba(43,211,125,.22);border-radius:7px;padding:2px 8px}
+  .typetag{font-weight:600;font-size:10px;letter-spacing:.04em;border-radius:7px;padding:2px 9px}
+  .typetag.old{color:var(--amber);background:rgba(242,193,78,.12);border:1px solid rgba(242,193,78,.24)}
+  .typetag.new{color:var(--teal);background:rgba(91,200,232,.12);border:1px solid rgba(91,200,232,.24)}
+  tr.combined td{border-top:1.5px solid var(--line-2);border-bottom:none;background:var(--grad-soft);font-weight:700}
+  tr.combined td.l{font-family:var(--display)}
+  tr.drow td{background:rgba(255,255,255,.02);padding:0 16px 16px}
+  .basis-line{font-family:var(--mono);font-size:11px;color:var(--faint);margin:12px 0 8px}
+  .detail-h{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:600;margin:12px 0 9px}
+  table.mini{width:100%;border-collapse:collapse;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.mini th{font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);font-weight:600;text-align:right;padding:9px 13px;border-bottom:1px solid var(--line)}
+  table.mini th.l{text-align:left}
+  table.mini td{padding:8px 13px;border-bottom:1px solid var(--line);font-size:13px}
+  table.mini td.num{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+  table.mini td.mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  table.mini tr:last-child td{border-bottom:none}
+
+  .placeholder{padding:70px 20px;text-align:center;color:var(--faint);font-size:14px}
+  .banner{display:flex;gap:11px;align-items:flex-start;border:1px solid rgba(242,193,78,.3);background:rgba(242,193,78,.08);border-radius:14px;padding:14px 16px;margin-bottom:22px;font-size:13px;color:#E7C672}
   .banner b{color:var(--amber)}
-  .banner code{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,.05);padding:1px 6px;border-radius:4px;margin:0 2px}
-  /* Date blocks */
-  .date-block{margin-top:34px}
-  .date-head{display:flex;align-items:baseline;justify-content:space-between;
-    padding-bottom:10px;border-bottom:1px solid var(--line-strong);margin-bottom:2px}
-  .date-head .d{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em}
-  .date-head .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
-  table{width:100%;border-collapse:collapse}
-  thead th{
-    font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--faint);font-weight:500;text-align:right;padding:12px 14px 10px;border-bottom:1px solid var(--line)}
-  thead th.l{text-align:left}
-  tbody td{padding:11px 14px;border-bottom:1px solid var(--line);font-size:14px}
-  tbody td.num{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
-  tbody td.store{font-weight:500}
-  tbody td.basis{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:left}
-  tbody tr:hover td{background:rgba(255,255,255,.018)}
-  td.cpo{color:var(--accent);font-weight:600}
-  tr.combined td{border-top:1px solid var(--line-strong);border-bottom:none;
-    padding-top:13px;background:rgba(31,168,85,.05)}
-  tr.combined td.store{font-family:var(--display);font-weight:600;letter-spacing:.01em}
-  tr.combined td.cpo{font-size:15px}
-  /* Footer actions */
-  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:38px;align-items:center}
-  button.act{
-    font-family:var(--sans);font-size:13.5px;font-weight:500;color:var(--txt);
-    background:var(--surface-2);border:1px solid var(--line-strong);border-radius:8px;
-    padding:10px 18px;cursor:pointer;transition:border-color .15s,background .15s}
-  button.act:hover{border-color:var(--accent);background:var(--surface)}
-  button.act.primary{background:var(--accent-dim);border-color:var(--accent)}
-  button.act.primary:hover{background:#19794a}
-  button.act:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  /* Methodology */
-  .method{margin-top:30px;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
-  .method summary{list-style:none;cursor:pointer;padding:16px 20px;font-family:var(--display);
-    font-weight:500;font-size:15px;display:flex;justify-content:space-between;align-items:center}
-  .method summary::-webkit-details-marker{display:none}
-  .method summary .chev{color:var(--faint);font-family:var(--mono);font-size:12px}
-  .method[open] summary{border-bottom:1px solid var(--line)}
-  .method .body{padding:6px 20px 20px;color:var(--muted);font-size:13.5px}
-  .method .body ul{margin:10px 0 0;padding-left:18px}
-  .method .body li{margin:7px 0}
-  .method .body code{font-family:var(--mono);font-size:12px;color:var(--txt);background:var(--surface-2);padding:1px 6px;border-radius:4px}
-  .hidden{display:none}
-  .err{color:#E58B8B;font-size:13px;margin-top:14px;font-family:var(--mono)}
-  @media (max-width:720px){
-    .strip{grid-template-columns:repeat(2,1fr)}
-    h1{font-size:27px}
-    .basis,thead th.basis-h{display:none}
-  }
-  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-  /* Tabs */
-  .tabs{display:flex;gap:4px;margin:0 0 8px;border-bottom:1px solid var(--line)}
-  .tab{font-family:var(--display);font-size:14px;font-weight:500;color:var(--muted);
-    background:transparent;border:none;border-bottom:2px solid transparent;
-    padding:10px 4px;margin-right:18px;cursor:pointer;transition:color .15s,border-color .15s}
-  .tab:hover{color:var(--txt)}
-  .tab.active{color:var(--txt);border-bottom-color:var(--accent)}
-  .tab:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-  /* Logic panel */
-  .logic-intro{color:var(--muted);font-size:13.5px;margin:22px 0 4px;max-width:70ch}
-  .lgroup{margin-top:30px}
-  .lgroup-h{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--accent);padding-bottom:9px;border-bottom:1px solid var(--line-strong);margin-bottom:2px}
-  table.logic{width:100%;border-collapse:collapse;table-layout:fixed}
-  table.logic th{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--faint);font-weight:500;text-align:left;padding:11px 14px 9px;border-bottom:1px solid var(--line)}
-  table.logic td{padding:13px 14px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
-  table.logic td.s{font-family:var(--mono);font-weight:600;color:var(--txt);width:21%;font-size:13px}
-  table.logic td.pr{width:50%;color:var(--txt)}
+  .banner code{font-family:var(--mono);font-size:12px;background:rgba(0,0,0,.25);border:1px solid rgba(242,193,78,.2);padding:1px 6px;border-radius:5px;margin:0 2px}
+  .err{color:#FCA5A5;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:14px;padding:13px 16px;font-size:13px;margin-bottom:20px;font-family:var(--mono)}
+  .btn-ghost{font-family:var(--sans);font-weight:600;font-size:13px;color:var(--brand);background:var(--grad-soft);border:1px solid rgba(43,211,125,.2);border-radius:999px;padding:8px 16px;cursor:pointer;transition:.14s}
+  .btn-ghost:hover{filter:brightness(1.08)}
+
+  .logic-intro{color:var(--muted);font-size:14px;margin:2px 0 8px;max-width:76ch}
+  .lgroup{margin-top:24px}
+  .lgroup-h{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--brand);font-weight:700;padding-bottom:9px;border-bottom:2px solid rgba(43,211,125,.18);margin-bottom:4px}
+  table.logic{width:100%;border-collapse:collapse;table-layout:fixed;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);margin-top:10px}
+  table.logic th{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:600;text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+  table.logic td{padding:14px 16px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
+  table.logic td.s{font-family:var(--mono);font-weight:600;width:21%;font-size:13px}
+  table.logic td.pr{width:50%}
   table.logic td.sl{width:29%;color:var(--muted)}
-  table.logic tr:hover td{background:rgba(255,255,255,.018)}
   .bands{margin:0;padding:0;list-style:none}
-  .bands li{font-family:var(--mono);font-size:12px;color:var(--txt);padding:1px 0;white-space:nowrap}
-  .bands li .r{color:var(--accent)}
-  .pr .lead{display:block;margin-bottom:5px}
-  table.logic code,.sl code{font-family:var(--mono);font-size:12px;color:var(--txt);
-    background:var(--surface-2);padding:1px 5px;border-radius:4px}
+  .bands li{font-family:var(--mono);font-size:12px;padding:1px 0;white-space:nowrap}
+  .r{color:var(--brand);font-weight:600}
+  .pr .lead{display:block;margin-bottom:5px;color:var(--muted)}
+  .sl code,table.logic code{font-family:var(--mono);font-size:12px;color:var(--ink);background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px}
+
+  @media (max-width:920px){
+    .grid2{grid-template-columns:1fr}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .hero{grid-template-columns:1fr;padding:34px 26px}
+    .hero h1{font-size:36px}
+    table.logic{table-layout:auto}
+  }
+  @media (max-width:560px){.wrap{padding:20px 16px 90px}.nav{padding:12px 16px}.fname{display:none}.hero h1{font-size:30px}}
+  .foot{margin:54px 2px 8px;padding-top:22px;border-top:1px solid var(--line);text-align:center;font-size:12px;letter-spacing:.04em;color:var(--faint)}
+  .foot span{color:var(--muted);font-weight:600}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <p class="eyebrow">Last-Mile Operations</p>
-  <h1>CPO Calculator</h1>
-  <p class="sub">Upload a daily rider sheet to compute total cost, total orders and cost per order for every store and the combined network(live).</p>
+<div class="aurora"></div>
 
-  <div class="tabs" role="tablist">
-    <button class="tab active" id="tab-calc"  role="tab" aria-selected="true">Calculator</button>
-    <button class="tab"        id="tab-logic" role="tab" aria-selected="false">Calculation logic</button>
+<header class="nav">
+  <div class="brand">
+    <span class="spark"><svg viewBox="-12 -12 24 24"><path d="M0,-11 C1.6,-3.2 3.2,-1.6 11,0 C3.2,1.6 1.6,3.2 0,11 C-1.6,3.2 -3.2,1.6 -11,0 C-3.2,-1.6 -1.6,-3.2 0,-11 Z" fill="currentColor"/></svg></span>
+    <span class="wm">swish</span><span class="sep"></span><span class="wm2">Last Mile</span>
+  </div>
+  <div class="nav-actions">
+    <span class="fname hidden" id="fname"></span>
+    <button class="btn btn-primary" id="uploadBtn">Upload sheet</button>
+    <input type="file" id="file" accept=".xlsx,.xls,.csv" hidden />
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="err" class="err hidden"></div>
+
+  <div class="seg" id="tabs">
+    <button class="tab active" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="bydate">By date</button>
+    <button class="tab" data-tab="bystore">By store</button>
+    <button class="tab" data-tab="logic">Calculation logic</button>
   </div>
 
-  <section id="panel-calc">
-    <label class="drop" id="drop">
-      <h2>Drop your sheet here, or click to browse</h2>
-      <p>Accepts .xlsx, .xls, or .csv — one row per rider × store × date</p>
-      <div class="cols">required columns&nbsp;&nbsp;<b>date</b>&nbsp;·&nbsp;<b>store_name</b>&nbsp;·&nbsp;<b>rider_id</b>&nbsp;·&nbsp;<b>total_orders</b></div>
-      <div class="fname hidden" id="fname"></div>
-      <input type="file" id="file" accept=".xlsx,.xls,.csv" />
-    </label>
-    <div class="err hidden" id="err"></div>
-    <div id="results" class="hidden"></div>
+  <div class="kpis hidden" id="kpis"></div>
+
+  <section id="panel-overview" class="panel">
+    <div id="empty">
+      <div class="hero reveal">
+        <div>
+          <span class="eyebrow">Last-mile CPO</span>
+          <h1>Store-wise <span class="g">CPO</span>.</h1>
+          <p>Drop a rider sheet — get cost, orders and CPO across the network.</p>
+          <label class="drop" id="drop" for="file">
+            <div class="big">Drop your sheet, or click to browse</div>
+            <div class="small">.xlsx · .xls · .csv</div>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div id="ovContent" class="hidden"></div>
   </section>
 
-  <section id="panel-logic" class="hidden"></section>
-</div>
+  <section id="panel-bydate" class="panel hidden"></section>
+  <section id="panel-bystore" class="panel hidden"></section>
+  <section id="panel-logic" class="panel hidden"></section>
+
+  <footer class="foot">Built by <span>NG</span></footer>
+</main>
 
 <script>
 "use strict";
 
-/* ------------------------------------------------------------------ */
-/*  STORE RULES — keyed by normalized (UPPERCASE, trimmed) store name  */
-/* ------------------------------------------------------------------ */
 const RULES = {
-  // 1800 group — literal markup as specified: x = subtotal + 1800; final = x + x*1.07 + x*0.07*0.18
-  "BELLANDUR-2":      {kind:"tier", band:900,  bp:22, post:"g1800"},
-  "HSR-1":            {kind:"tier", band:900,  bp:22, post:"g1800"},
-  "HSR-3":            {kind:"tier", band:900,  bp:22, post:"g1800"},
-  "TAVAREKERE-1":     {kind:"tier", band:900,  bp:22, post:"g1800"},
-  "BLR-WHITE-05":     {kind:"tier", band:900,  bp:22, post:"g1800", bonus:{ge:15, amt:100}},
-  "BLR-KUDLU-01":     {kind:"tier", band:900,  bp:20, post:"none"},          // band 900, no markup/tax
-
-  "BLR-KORA-02":      {kind:"tier", band:950,  bp:20, post:"gst"},          // subtotal * 1.18
-  "BLR-MAHA-01":      {kind:"tier", band:900,  bp:22, post:"g1800", bonus:{gt:10, amt:100}}, // 1800-group markup; +100/rider>10
-  "KASAVANAHALLI":    {kind:"tier", band:920,  bp:21, post:"gst"},
-  "BLR-SARJ-04":      {kind:"tier", band:865,  bp:20, post:"gst"},
-
-  // Efficiency-based per-order rate — rate is set by the store's daily efficiency
-  "BLR-BTM-01":       {kind:"eff", scheme:"btm",  post:"gst"},
-  "BLR-MARA-03":      {kind:"eff", scheme:"btm",  post:"gst"},
-  "BLR-BELLA-05":     {kind:"eff", scheme:"kora", post:"gst"},
-  "KORAMANGALA-1":    {kind:"eff", scheme:"kora", post:"addGst", add:1800},
-  "BLR-WHITEFIELD-1": {kind:"tier", band:900,  bp:22, post:"g1800", bonus:{ge:15, amt:200}},
-
-  "GGN-SEC19-03":     {kind:"eff", scheme:"sec19", post:"none"},
-  "GGN-SEC53-01":     {kind:"perOrder", rate:70.8, post:"none", minOrders:500},
-  "GGN-SEC51-02":     {kind:"perOrder", rate:70.8, post:"none", minOrders:450},
-
-  // ---- In-house stores (no tax / no markup) ----
-  "BLR-SARJ-03":      {kind:"orderTier", post:"none"},   // whole-qty per-order rate tiers
-  "BLR-BELLA-03":     {kind:"cpo", base:40, post:"m107gst",
-                       table:[[20,45],[23,45.5],[26,46],[29,46.5],[32,47],[35,48],[38,49],[40,50]]},
-  "BLR-BTM-02":       {kind:"cpo", base:40, post:"none",
-                       table:[[10,47.5],[12,48],[14,48.5],[16,49],[18,49.5],[20,50],[23,51],[26,52],[29,53],[33,54],[37,54]]},
-  "BLR-INDI-02":      {kind:"tier", band:900, bp:22, post:"none"},
-  "BLR-INDIRANAGAR-1":{kind:"tier", band:900, lo:18, bp:20, post:"none", bonus:{gt:30, amt:100}},
-  "BLR-JAK-01":       {kind:"cpo", base:40, post:"none",
-                       table:[[8,40],[10,43],[12,48],[15,52],[17,54],[19,56],[21,58],[23,59],[26,61],[30,56],[34,58]]},
-  "BLR-MARA-01":      {kind:"cpo", base:40, post:"none",
-                       table:[[24,44],[28,45],[32,46],[36,47],[40,47]]},
-  "BLR-WHITE-03":     {kind:"cpo", base:40, post:"none",
-                       table:[[20,43.5],[24,44],[28,45],[32,46],[36,46],[40,47],[45,47]]},
-  "BLR-WHITE-06":     {kind:"cpo", base:40, post:"none",
-                       table:[[18,46],[22,47],[26,48],[30,49],[34,49],[38,50],[45,50]]},
-  "GGN-SEC24-04":     {kind:"bands", post:"none", bands:[
-                         {upTo:14, per:40},
-                         {upTo:17, flat:675},
-                         {upTo:20, flat:815},
-                         {upTo:23, flat:1000},
-                         {upTo:26, flat:1150},
-                         {upTo:29, flat:1340},
-                         {upTo:Infinity, per:50}
-                       ]},
-  "GGN-SEC61-08":     {kind:"cpo", base:40, post:"none",
-                       table:[[10,45],[13,45.384],[16,47.5],[20,48],[23,49.565],[25,50]]},
-  "BLR-YLK-01":       {kind:"flat", amount:900, post:"none"},
-  "GGN-SEC14-07":     {kind:"default800", post:"none"},  // <=20 -> 800; >20 -> 800 + (o-20)*40
+  "BELLANDUR-2":{kind:"tier",band:900,bp:22,post:"g1800"},
+  "HSR-1":{kind:"tier",band:900,bp:22,post:"g1800"},
+  "HSR-3":{kind:"tier",band:900,bp:22,post:"g1800"},
+  "TAVAREKERE-1":{kind:"tier",band:900,bp:22,post:"g1800"},
+  "BLR-WHITE-05":{kind:"tier",band:900,bp:22,post:"g1800",bonus:{ge:15,amt:100}},
+  "BLR-KUDLU-01":{kind:"tier",band:900,bp:20,post:"none"},
+  "BLR-KORA-02":{kind:"tier",band:950,bp:20,post:"gst"},
+  "BLR-MAHA-01":{kind:"tier",band:900,bp:22,post:"g1800",bonus:{gt:10,amt:100}},
+  "KASAVANAHALLI":{kind:"tier",band:920,bp:21,post:"gst"},
+  "BLR-SARJ-04":{kind:"tier",band:865,bp:20,post:"gst"},
+  "BLR-BTM-01":{kind:"eff",scheme:"btm",post:"gst"},
+  "BLR-MARA-03":{kind:"eff",scheme:"btm",post:"gst"},
+  "BLR-BELLA-05":{kind:"eff",scheme:"kora",post:"gst"},
+  "KORAMANGALA-1":{kind:"eff",scheme:"kora",post:"addGst",add:1800},
+  "BLR-WHITEFIELD-1":{kind:"tier",band:900,bp:22,post:"g1800",bonus:{ge:15,amt:200}},
+  "GGN-SEC19-03":{kind:"eff",scheme:"sec19",post:"none"},
+  "GGN-SEC53-01":{kind:"perOrder",rate:70.8,post:"none",minOrders:500},
+  "GGN-SEC51-02":{kind:"perOrder",rate:70.8,post:"none",minOrders:450},
+  "BLR-SARJ-03":{kind:"orderTier",post:"none"},
+  "BLR-BELLA-03":{kind:"cpo",base:40,post:"m107gst",table:[[20,45],[23,45.5],[26,46],[29,46.5],[32,47],[35,48],[38,49],[40,50]]},
+  "BLR-BTM-02":{kind:"cpo",base:40,post:"none",table:[[10,47.5],[12,48],[14,48.5],[16,49],[18,49.5],[20,50],[23,51],[26,52],[29,53],[33,54],[37,54]]},
+  "BLR-INDI-02":{kind:"tier",band:900,bp:22,post:"none"},
+  "BLR-INDIRANAGAR-1":{kind:"tier",band:900,lo:18,bp:20,post:"none",bonus:{gt:30,amt:100}},
+  "BLR-JAK-01":{kind:"cpo",base:40,post:"none",table:[[8,40],[10,43],[12,48],[15,52],[17,54],[19,56],[21,58],[23,59],[26,61],[30,56],[34,58]]},
+  "BLR-MARA-01":{kind:"cpo",base:40,post:"none",table:[[24,44],[28,45],[32,46],[36,47],[40,47]]},
+  "BLR-WHITE-03":{kind:"cpo",base:40,post:"none",table:[[20,43.5],[24,44],[28,45],[32,46],[36,46],[40,47],[45,47]]},
+  "BLR-WHITE-06":{kind:"cpo",base:40,post:"none",table:[[18,46],[22,47],[26,48],[30,49],[34,49],[38,50],[45,50]]},
+  "GGN-SEC24-04":{kind:"bands",post:"none",bands:[{upTo:14,per:40},{upTo:17,flat:675},{upTo:20,flat:815},{upTo:23,flat:1000},{upTo:26,flat:1150},{upTo:29,flat:1340},{upTo:Infinity,per:50}]},
+  "GGN-SEC61-08":{kind:"cpo",base:40,post:"none",table:[[10,45],[13,45.384],[16,47.5],[20,48],[23,49.565],[25,50]]},
+  "BLR-YLK-01":{kind:"flat",amount:900,post:"none"},
+  "GGN-SEC14-07":{kind:"default800",post:"none"},
 };
-const DEFAULT_RULE = {kind:"default800", post:"none"};
+const DEFAULT_RULE = {kind:"default800",post:"none"};
 
-/* Short human-readable label for the "Basis" column */
+const OLD_STORES = new Set(["BELLANDUR-2","BLR-BELLA-03","BLR-BELLA-05","BLR-BTM-01","BLR-BTM-02","BLR-INDI-02","BLR-INDIRANAGAR-1","BLR-KORA-02","BLR-KUDLU-01","BLR-MAHA-01","BLR-MARA-01","BLR-MARA-03","BLR-SARJ-03","BLR-SARJ-04","BLR-WHITE-03","BLR-WHITE-05","BLR-WHITE-06","BLR-WHITEFIELD-1","GGN-SEC19-03","GGN-SEC24-04","GGN-SEC51-02","GGN-SEC53-01","HSR-1","HSR-3","KASAVANAHALLI","KORAMANGALA-1","TAVAREKERE-1"]);
+
 function postTag(rule){
   switch(rule.post){
-    case "g1800":  return "+1800 ×1.0826";
-    case "gst":    return "×1.18";
+    case "g1800": return "+1800 ×1.0826";
+    case "gst": return "×1.18";
     case "addGst": return "+" + rule.add + " ×1.18";
-    default:       return "no tax";
+    default: return "no tax";
   }
 }
 function basisLabel(rule){
   switch(rule.post){
-    case "g1800":  return "1800 + 7% mkup + GST";
-    case "gst":    return "x1.18";
-    case "maha":   return "+1800  x1.07 x1.18";
-    case "addGst": return "+" + rule.add + "  x1.18";
-    case "m107gst": return "x1.07 x1.18";
-    default:       return rule.kind==="flat" ? "flat 900/rider" : "in-house / no tax";
+    case "g1800": return "1800 + 7% mkup + GST";
+    case "gst": return "×1.18";
+    case "addGst": return "+" + rule.add + " ×1.18";
+    case "m107gst": return "×1.07 ×1.18";
+    default: return rule.kind==="flat" ? "flat 900/rider" : "in-house / no tax";
   }
 }
-
-/* ---- per-rider amount ---- */
 function riderAmount(rule, o){
   switch(rule.kind){
     case "tier": {
       const bp = rule.bp != null ? rule.bp : 20;
       const lo = rule.lo != null ? rule.lo : 10;
-      const r  = rule.rate != null ? rule.rate : 40;
-      if (o < lo)   return o * r;
-      if (o <= bp)  return rule.band;
+      const r = rule.rate != null ? rule.rate : 40;
+      if (o < lo) return o * r;
+      if (o <= bp) return rule.band;
       return rule.band + (o - bp) * r;
     }
     case "perOrder": return o * rule.rate;
-    case "orderTier":                       // BLR-SARJ-03, whole quantity at tier rate
+    case "orderTier":
       if (o <= 10) return o * 40;
       if (o <= 15) return o * 45;
       if (o <= 20) return o * 50;
       return o * 55;
-    case "cpo": {                            // step / floor to highest threshold <= orders
+    case "cpo": {
       let rate = rule.base;
       for (const [thr, r] of rule.table) { if (o >= thr) rate = r; }
       return o * rate;
     }
-    case "flat":       return rule.amount;   // regardless of orders
-    case "bands": {                           // mixed per-order / flat-total bands
+    case "flat": return rule.amount;
+    case "bands": {
       for (const b of rule.bands){
         const cap = b.upTo != null ? b.upTo : Infinity;
         if (o <= cap) return b.flat != null ? b.flat : o * b.per;
@@ -291,16 +324,13 @@ function riderAmount(rule, o){
       return 0;
     }
     case "default800": return o <= 20 ? 800 : 800 + (o - 20) * 40;
-    case "eff":        return 0;             // handled at store-day level (needs efficiency)
+    case "eff": return 0;
   }
   return 0;
 }
-
-/* ---- efficiency -> per-order rate (efficiency = (orders/riders)/10) ----
-   Boundary convention: ">" is strict; band lower bounds are inclusive.        */
 function effRate(scheme, e){
   if (scheme === "btm"){
-    if (e > 3.2)  return 35;
+    if (e > 3.2) return 35;
     if (e >= 2.6) return 40;
     if (e >= 2.2) return 45;
     if (e >= 1.8) return 50;
@@ -308,83 +338,68 @@ function effRate(scheme, e){
     return 60;
   }
   if (scheme === "mara"){
-    if (e > 2.2)  return 45;
+    if (e > 2.2) return 45;
     if (e >= 1.8) return 50;
     if (e >= 1.5) return 55;
     return 60;
   }
   if (scheme === "sec19"){
-    if (e > 2.2)  return 59;
+    if (e > 2.2) return 59;
     if (e >= 1.8) return 64.9;
     if (e >= 1.5) return 70.8;
-    return 76.7;   // 0 to < 1.5
+    return 76.7;
   }
-  // "kora" — shared by Koramangala-1, BLR-BELLA-05, BLR-WHITEFIELD-01.
-  // No band was defined below 2.2; the lowest defined rate (45) is extended downward.
-  if (e > 3.2)  return 38;
+  if (e > 3.2) return 38;
   if (e >= 2.6) return 42;
   return 45;
 }
-
-/* ---- store-level post-processing on the subtotal S ---- */
 function applyPost(rule, S){
   switch(rule.post){
-    case "g1800":  { const x = S + 1800; return x*1.07 + x*0.07*0.18; }
-    case "gst":    return S * 1.18;
-    case "maha":   return (S + 1800) * 1.07 * 1.18;
+    case "g1800": { const x = S + 1800; return x*1.07 + x*0.07*0.18; }
+    case "gst": return S * 1.18;
     case "addGst": return (S + rule.add) * 1.18;
     case "m107gst": return S * 1.07 * 1.18;
-    default:       return S;
+    default: return S;
   }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Parsing helpers                                                    */
-/* ------------------------------------------------------------------ */
 const canon = h => String(h).toLowerCase().replace(/[^a-z0-9]/g,"");
-const DATE_KEYS  = ["date","businessdate","shiftdate","orderdate","bizdate"];
+const DATE_KEYS = ["date","businessdate","shiftdate","orderdate","bizdate"];
 const STORE_KEYS = ["storename","store"];
-const RIDER_KEYS = ["riderid","rider","riderid"];
+const RIDER_KEYS = ["riderid","rider"];
 const ORDER_KEYS = ["totalorders","orders","totalorder","order","ordercount","numorders","numorder","numoforders","orderscount","deliveredorders","completedorders"];
-
-function pickCol(headers, candidates){
-  for (const h of headers){ if (candidates.includes(canon(h))) return h; }
-  return null;
-}
-
+function pickCol(headers, candidates){ for (const h of headers){ if (candidates.includes(canon(h))) return h; } return null; }
 function pad2(n){ return String(n).padStart(2,"0"); }
-function fromSerial(serial){
-  // Excel serial day -> calendar date, timezone-independent (built on UTC midnight)
-  const d = new Date(Math.round((serial - 25569) * 86400000));
-  return d.getUTCFullYear() + "-" + pad2(d.getUTCMonth()+1) + "-" + pad2(d.getUTCDate());
-}
+function fromSerial(serial){ const d = new Date(Math.round((serial - 25569) * 86400000)); return d.getUTCFullYear() + "-" + pad2(d.getUTCMonth()+1) + "-" + pad2(d.getUTCDate()); }
 function dateKey(v){
   if (typeof v === "number" && isFinite(v)) return fromSerial(v);
-  if (v instanceof Date && !isNaN(v)){              // defensive: round to nearest day in UTC
-    const r = new Date(Math.round(v.getTime() / 86400000) * 86400000);
-    return r.getUTCFullYear() + "-" + pad2(r.getUTCMonth()+1) + "-" + pad2(r.getUTCDate());
-  }
+  if (v instanceof Date && !isNaN(v)){ const r = new Date(Math.round(v.getTime()/86400000)*86400000); return r.getUTCFullYear()+"-"+pad2(r.getUTCMonth()+1)+"-"+pad2(r.getUTCDate()); }
   return String(v).trim();
 }
-
 const inr = new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",minimumFractionDigits:2,maximumFractionDigits:2});
 const intf = new Intl.NumberFormat("en-IN");
+function fmt(n){ return Number(n).toLocaleString("en-IN",{maximumFractionDigits:2}); }
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function round2(n){ return Math.round(n*100)/100; }
+const cpoTxt = v => v==null ? "—" : inr.format(v);
 
-/* ------------------------------------------------------------------ */
-/*  Core compute                                                       */
-/* ------------------------------------------------------------------ */
+function cityOf(name){
+  const u = String(name).toUpperCase();
+  if (u.includes("NOI")) return "NOI";
+  if (u.includes("GGN")) return "GGN";
+  if (u.includes("DEL")) return "DEL";
+  if (u.includes("GZB")) return "GZB";
+  if (u.includes("BLR")) return "BLR";
+  return "BLR";
+}
+function typeOf(name){ return OLD_STORES.has(String(name).toUpperCase()) ? "OLD" : "NEW"; }
+
 function compute(rows){
   const headers = Object.keys(rows[0] || {});
-  const cDate  = pickCol(headers, DATE_KEYS);
-  const cStore = pickCol(headers, STORE_KEYS);
-  const cOrd   = pickCol(headers, ORDER_KEYS);
-  if (!cDate || !cStore || !cOrd)
-    throw new Error("Could not find required columns. Need date, store_name and total_orders. Found: " + headers.join(", "));
-
-  // date -> store -> {orders, subtotal, riders, displayName, rule}
+  const cDate = pickCol(headers, DATE_KEYS), cStore = pickCol(headers, STORE_KEYS), cOrd = pickCol(headers, ORDER_KEYS), cRider = pickCol(headers, RIDER_KEYS);
+  if (!cDate || !cStore || !cOrd) throw new Error("Could not find required columns. Need date, store_name and orders. Found: " + headers.join(", "));
   const byDate = new Map();
   const unmatched = new Set();
-
   for (const row of rows){
     const dRaw = row[cDate];
     if (dRaw === null || dRaw === undefined || String(dRaw).trim() === "") continue;
@@ -396,43 +411,33 @@ function compute(rows){
     if (!RULES[key]) unmatched.add(storeRaw);
     let o = Number(row[cOrd]);
     if (!isFinite(o) || o < 0) o = 0;
-
+    const rider = cRider != null ? String(row[cRider] == null ? "" : row[cRider]).trim() : "";
     if (!byDate.has(dk)) byDate.set(dk, new Map());
     const stores = byDate.get(dk);
-    if (!stores.has(storeRaw))
-      stores.set(storeRaw, {orders:0, subtotalFixed:0, riders:0, bonusTotal:0, name:storeRaw, rule});
+    if (!stores.has(storeRaw)) stores.set(storeRaw, {name:storeRaw, rule, orders:0, subtotalFixed:0, riders:0, bonusTotal:0, riderRows:[]});
     const s = stores.get(storeRaw);
-    s.orders        += o;
-    s.subtotalFixed += riderAmount(rule, o);   // used by non-efficiency rules
-    s.riders        += 1;
-    if (rule.bonus){
-      const b = rule.bonus;
-      const qualifies = b.ge != null ? (o >= b.ge) : (o > b.gt);
-      if (qualifies) s.bonusTotal += b.amt;
-    }
+    s.orders += o; s.subtotalFixed += riderAmount(rule, o); s.riders += 1;
+    let hit = false;
+    if (rule.bonus){ const b = rule.bonus; hit = b.ge != null ? (o >= b.ge) : (o > b.gt); if (hit) s.bonusTotal += b.amt; }
+    s.riderRows.push({rider, orders:o, hit});
   }
-
   const bonusTag = b => "+₹" + b.amt + "/rider" + (b.ge != null ? "≥" + b.ge : ">" + b.gt);
-
-  // finalize
   const dates = [];
   let gCost = 0, gOrders = 0;
   const allStoreNames = new Set();
+  const storeAgg = new Map();
   for (const dk of [...byDate.keys()].sort()){
     const stores = byDate.get(dk);
     const list = [];
     let dCost = 0, dOrders = 0;
     for (const s of stores.values()){
       const rule = s.rule;
-      let subtotal, basis, eff = null;
-
+      let subtotal, basis, eff = null, perRate = null;
       if (rule.kind === "eff"){
         eff = s.riders > 0 ? (s.orders / s.riders) / 10 : 0;
-        const rate = effRate(rule.scheme, eff);
-        subtotal = s.orders * rate + s.bonusTotal;
-        basis = "eff " + eff.toFixed(2) + " · ₹" + fmt(rate) + "/order"
-              + (rule.bonus ? " · " + bonusTag(rule.bonus) : "")
-              + " · " + postTag(rule);
+        perRate = effRate(rule.scheme, eff);
+        subtotal = s.orders * perRate + s.bonusTotal;
+        basis = "eff " + eff.toFixed(2) + " · ₹" + fmt(perRate) + "/order" + (rule.bonus ? " · " + bonusTag(rule.bonus) : "") + " · " + postTag(rule);
       } else if (rule.minOrders){
         subtotal = Math.max(s.orders, rule.minOrders) * rule.rate;
         basis = "₹" + fmt(rule.rate) + "/order · min " + rule.minOrders + " orders/day";
@@ -440,145 +445,270 @@ function compute(rows){
         subtotal = s.subtotalFixed + s.bonusTotal;
         basis = basisLabel(rule) + (rule.bonus ? " · " + bonusTag(rule.bonus) : "");
       }
-
       const finalCost = applyPost(rule, subtotal);
       const cpo = s.orders > 0 ? finalCost / s.orders : null;
-      list.push({name:s.name, orders:s.orders, cost:finalCost, cpo, riders:s.riders, eff, basis});
-      dCost += finalCost; dOrders += s.orders;
-      allStoreNames.add(s.name);
+      const ridersDetail = s.riderRows.map(rr => {
+        let amt;
+        if (rule.kind === "eff") amt = rr.orders * perRate;
+        else if (rule.minOrders) amt = rr.orders * rule.rate;
+        else amt = riderAmount(rule, rr.orders);
+        if (rr.hit && rule.bonus) amt += rule.bonus.amt;
+        return {rider: rr.rider, orders: rr.orders, amount: amt};
+      }).sort((a,b)=> b.orders - a.orders);
+      const rec = {name:s.name, city:cityOf(s.name), type:typeOf(s.name), orders:s.orders, riders:s.riders, cost:finalCost, cpo, eff, basis, ridersDetail, minFloored: !!(rule.minOrders && s.orders < rule.minOrders)};
+      list.push(rec);
+      dCost += finalCost; dOrders += s.orders; allStoreNames.add(s.name);
+      if (!storeAgg.has(s.name)) storeAgg.set(s.name, {name:s.name, city:cityOf(s.name), type:typeOf(s.name), orders:0, cost:0, riders:0, perDate:[]});
+      const ag = storeAgg.get(s.name);
+      ag.orders += s.orders; ag.cost += finalCost; ag.riders += s.riders;
+      ag.perDate.push({date:dk, orders:s.orders, cost:finalCost, cpo});
     }
     list.sort((a,b)=> a.name.localeCompare(b.name));
     dates.push({date:dk, stores:list, combined:{orders:dOrders, cost:dCost, cpo:dOrders>0?dCost/dOrders:null}});
     gCost += dCost; gOrders += dOrders;
   }
-
-  return {
-    dates, unmatched:[...unmatched],
-    grand:{cost:gCost, orders:gOrders, cpo:gOrders>0?gCost/gOrders:null,
-           nDates:dates.length, nStores:allStoreNames.size}
-  };
+  const byStore = [...storeAgg.values()].map(a => ({...a, cpo: a.orders>0 ? a.cost/a.orders : null})).sort((a,b)=> b.cost - a.cost);
+  const series = {labels: dates.map(d=>d.date), combinedCPO: dates.map(d=>d.combined.cpo)};
+  return {dates, byStore, grand:{cost:gCost, orders:gOrders, cpo:gOrders>0?gCost/gOrders:null, nDates:dates.length, nStores:allStoreNames.size}, unmatched:[...unmatched], series};
 }
 
-/* ------------------------------------------------------------------ */
-/*  Render                                                             */
-/* ------------------------------------------------------------------ */
-let LAST = null;
+let LAST = null, cTrend = null, cCost = null;
+const REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const state = {
+  bd:{ i:0, q:"", cities:new Set(), type:"All", sort:"name", selected:new Set() },
+  bs:{ q:"", cities:new Set(), type:"All", sort:"cost", selected:new Set() }
+};
+const view = { bd:{filtered:[]}, bs:{filtered:[]} };
 
-function render(model){
+const ICON = {
+  cal:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>',
+  store:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1.5-5h15L21 9M4 9h16v11H4zM9 20v-6h6v6"/></svg>',
+  box:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/></svg>',
+  rupee:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h12M6 9h12M16 4c0 5-4 7-9 7l8 9"/></svg>',
+  gauge:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 14a9 9 0 0 1 18 0M12 14l5-4"/></svg>'
+};
+
+function sourceList(scope){ return scope==="bd" ? LAST.dates[state.bd.i].stores : LAST.byStore; }
+function citiesPresent(){ return Array.from(new Set(LAST.byStore.map(s=>s.city))).sort(); }
+function sortOptionsHTML(sel){ return [["name","Store A–Z"],["cost","Cost (high→low)"],["orders","Orders (high→low)"],["cpo","CPO (high→low)"]].map(([v,l])=>`<option value="${v}" ${v===sel?"selected":""}>${l}</option>`).join(""); }
+function filterStores(scope){
+  const st = state[scope];
+  const q = st.q.toLowerCase();
+  let list = sourceList(scope).filter(s => (!q || s.name.toLowerCase().includes(q)) && (st.cities.size===0 || st.cities.has(s.city)) && (st.type==="All" || s.type===st.type));
+  const cmp = {name:(a,b)=>a.name.localeCompare(b.name), cost:(a,b)=>b.cost-a.cost, orders:(a,b)=>b.orders-a.orders, cpo:(a,b)=>(b.cpo||0)-(a.cpo||0)}[st.sort||"name"];
+  return list.slice().sort(cmp);
+}
+function agg(list){ let o=0,c=0; for (const s of list){ o+=s.orders; c+=s.cost; } return {orders:o, cost:c, cpo:o>0?c/o:null}; }
+
+function animateValue(el, to, kind){
+  if (REDUCE || to == null){ el.textContent = fmtKind(to, kind); return; }
+  const dur = 850, t0 = performance.now();
+  function step(now){ let p = Math.min(1,(now-t0)/dur); p = 1-Math.pow(1-p,3); el.textContent = fmtKind(to*p, kind); if (p<1) requestAnimationFrame(step); else el.textContent = fmtKind(to, kind); }
+  requestAnimationFrame(step);
+}
+function fmtKind(v, kind){ if (v==null) return "—"; return kind==="inr" ? inr.format(v) : kind==="int" ? intf.format(Math.round(v)) : String(Math.round(v)); }
+
+function renderAll(model){
   LAST = model;
-  const R = document.getElementById("results");
-  const cpoTxt = v => v==null ? "—" : inr.format(v);
-
-  let html = "";
-
-  // summary strip
   const g = model.grand;
-  html += `<div class="strip">
-    <div class="stat"><div class="k">Dates</div><div class="v">${g.nDates}</div></div>
-    <div class="stat"><div class="k">Stores</div><div class="v">${g.nStores}</div></div>
-    <div class="stat"><div class="k">Total orders</div><div class="v">${intf.format(g.orders)}</div></div>
-    <div class="stat"><div class="k">Total cost</div><div class="v">${inr.format(g.cost)}</div></div>
-    <div class="stat hero"><div class="k">Blended CPO</div><div class="v">${cpoTxt(g.cpo)}</div></div>
-  </div>`;
-
-  // unmatched banner
-  if (model.unmatched.length){
-    html += `<div class="banner"><b>Heads up —</b> ${model.unmatched.length} store name${model.unmatched.length>1?"s":""} didn't match a defined rule and used the default basis (≤20 → 800, &gt;20 → 800 + (orders−20)×40): `
-      + model.unmatched.map(s=>`<code>${esc(s)}</code>`).join("")
-      + ` &nbsp;Check for spelling or casing mismatches.</div>`;
-  }
-
-  // per-date blocks
-  for (const d of model.dates){
-    html += `<div class="date-block">
-      <div class="date-head">
-        <span class="d">${esc(d.date)}</span>
-        <span class="meta">${d.stores.length} stores · ${intf.format(d.combined.orders)} orders</span>
-      </div>
-      <table>
-        <thead><tr>
-          <th class="l">Store</th>
-          <th class="l basis-h">Basis</th>
-          <th>Orders</th>
-          <th>Total cost</th>
-          <th>CPO</th>
-        </tr></thead>
-        <tbody>`;
-    for (const s of d.stores){
-      html += `<tr>
-        <td class="store">${esc(s.name)}</td>
-        <td class="basis">${esc(s.basis)}</td>
-        <td class="num">${intf.format(s.orders)}</td>
-        <td class="num">${inr.format(s.cost)}</td>
-        <td class="num cpo">${cpoTxt(s.cpo)}</td>
-      </tr>`;
-    }
-    html += `<tr class="combined">
-        <td class="store">Combined — all stores</td>
-        <td class="basis"></td>
-        <td class="num">${intf.format(d.combined.orders)}</td>
-        <td class="num">${inr.format(d.combined.cost)}</td>
-        <td class="num cpo">${cpoTxt(d.combined.cpo)}</td>
-      </tr>`;
-    html += `</tbody></table></div>`;
-  }
-
-  // actions + methodology
-  html += `<div class="actions">
-    <button class="act primary" id="exp">Export results (.xlsx)</button>
-    <button class="act" id="reset">Load a different sheet</button>
-  </div>`;
-
-  html += `<details class="method"><summary>Calculation basis <span class="chev">view</span></summary>
-    <div class="body">Per-store rules are listed in full under the <b>Calculation logic</b> tab. General conventions:
-      <ul>
-        <li><b>Efficiency stores</b> (BTM-01, MARA-03, BELLA-05, Koramangala-1, Whitefield-01): daily efficiency = (store orders ÷ riders) ÷ 10 sets the per-order rate; the <em>Basis</em> cell shows the efficiency and rate used that day.</li>
-        <li><b>1800 group</b> (Bellandur-2, HSR-1/3, Tavarekere-1, BLR-WHITE-05, Maha-01): <code>x = subtotal + 1800</code>, final = <code>x×1.07 + x×0.07×0.18</code> (≈ ×1.0826).</li>
-        <li><b>×1.18 only where stated.</b> In-house stores, default stores, the 76.7/order GGN stores, and BLR-KUDLU-01 carry <b>no tax</b>.</li>
-        <li><b>GGN-SEC19-03 / SEC53-01</b>: ₹76.7/order, billed for a minimum of 500 orders/day.</li>
-        <li><b>CPO tables</b> use step/floor — rate of the highest listed order-threshold ≤ the rider's orders; cost = orders × rate.</li>
-        <li><b>Default / GGN-SEC14-07</b>: orders ≤ 20 → ₹800 (even at 0); &gt; 20 → 800 + (orders − 20) × 40.</li>
-        <li><b>CPO</b> = final cost (post markup/GST) ÷ total orders, per store and combined.</li>
-      </ul>
-    </div></details>`;
-
-  R.innerHTML = html;
-  R.classList.remove("hidden");
-  document.getElementById("exp").addEventListener("click", exportXlsx);
-  document.getElementById("reset").addEventListener("click", ()=>{
-    R.classList.add("hidden"); R.innerHTML="";
-    document.getElementById("fname").classList.add("hidden");
-    document.getElementById("file").value="";
-  });
-  R.scrollIntoView({behavior:"smooth", block:"start"});
+  document.getElementById("kpis").innerHTML =
+    kpiCard(ICON.cal,"Dates",g.nDates,"int") + kpiCard(ICON.store,"Stores",g.nStores,"int") +
+    kpiCard(ICON.box,"Total orders",g.orders,"int") + kpiCard(ICON.rupee,"Total cost",g.cost,"inr") +
+    kpiCard(ICON.gauge,"Blended CPO",g.cpo,"inr",true);
+  document.getElementById("kpis").classList.remove("hidden");
+  document.getElementById("empty").classList.add("hidden");
+  document.getElementById("ovContent").classList.remove("hidden");
+  document.querySelectorAll("#kpis .kpi-v").forEach(el => animateValue(el, +el.dataset.target, el.dataset.kind));
+  state.bd = {i:0, q:"", cities:new Set(), type:"All", sort:"name", selected:new Set()};
+  state.bs = {q:"", cities:new Set(), type:"All", sort:"cost", selected:new Set()};
+  renderOverview(model); renderScope("bd"); renderScope("bs");
+  showTab("overview");
+}
+function kpiCard(icon, label, val, kind, hero){
+  return `<div class="kpi${hero?" hero-kpi":""}"><span class="ic">${icon}</span><div><div class="kpi-k">${label}</div><div class="kpi-v" data-target="${val==null?"":val}" data-kind="${kind}">${val==null?"—":"0"}</div></div></div>`;
 }
 
-function esc(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function bannerHTML(model){
+  if (!model.unmatched.length) return "";
+  return `<div class="banner"><span>⚠︎</span><div><b>Heads up —</b> ${model.unmatched.length} store name${model.unmatched.length>1?"s":""} didn't match a rule and used the default basis (≤20 → ₹800, &gt;20 → 800 + (orders−20)×40): ` + model.unmatched.map(s=>`<code>${esc(s)}</code>`).join("") + ` &nbsp;Check spelling/casing.</div></div>`;
+}
+function renderOverview(m){
+  const sel = `<select id="trendStore" class="ctl"><option value="">Combined only</option>${m.byStore.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("")}</select>`;
+  let html = bannerHTML(m);
+  html += `<div class="grid2 reveal">
+    <div class="card"><div class="card-h"><span>Blended CPO by date</span>${sel}</div><div class="chart-wrap"><canvas id="chartTrend"></canvas></div></div>
+    <div class="card"><div class="card-h"><span>Highest CPO by store · top 12</span></div><div class="chart-wrap tall"><canvas id="chartCost"></canvas></div></div>
+  </div>
+  <div class="card reveal"><div class="card-h"><span>Daily combined</span><button class="btn-ghost" id="exp">Export .xlsx</button></div>
+    <div class="table-wrap"><table class="grid"><thead><tr><th class="l">Date</th><th>Orders</th><th>Total cost</th><th>CPO</th></tr></thead><tbody>
+    ${m.dates.map(d=>`<tr><td class="l">${esc(d.date)}</td><td class="num">${intf.format(d.combined.orders)}</td><td class="num">${inr.format(d.combined.cost)}</td><td class="num cpo">${cpoTxt(d.combined.cpo)}</td></tr>`).join("")}
+    <tr class="combined"><td class="l">All dates</td><td class="num">${intf.format(m.grand.orders)}</td><td class="num">${inr.format(m.grand.cost)}</td><td class="num cpo">${cpoTxt(m.grand.cpo)}</td></tr>
+    </tbody></table></div></div>`;
+  document.getElementById("ovContent").innerHTML = html;
+  document.getElementById("exp").addEventListener("click", exportXlsx);
+  document.getElementById("trendStore").addEventListener("change", e => drawTrend(m, e.target.value));
+  drawTrend(m, ""); drawCost(m);
+}
+const AXIS = {color:"#8DA197", font:{family:"Inter", size:11}};
+function tt(){ return {backgroundColor:"#0F1C16", borderColor:"rgba(255,255,255,.1)", borderWidth:1, titleColor:"#E9F1EC", bodyColor:"#B7C7BE", titleFont:{family:"Space Grotesk"}, bodyFont:{family:"JetBrains Mono"}, padding:11, cornerRadius:10, displayColors:false}; }
+function drawTrend(m, storeName){
+  const cv = document.getElementById("chartTrend"); if (cTrend) cTrend.destroy();
+  const ctx = cv.getContext("2d");
+  const grad = ctx.createLinearGradient(0,0,0,260);
+  grad.addColorStop(0,"rgba(40,192,110,.26)"); grad.addColorStop(1,"rgba(40,192,110,0)");
+  const ds = [{label:"Combined", data:m.series.combinedCPO, borderColor:"#28C06E", backgroundColor:grad, tension:.38, fill:true, pointRadius:4, pointBackgroundColor:"#28C06E", pointBorderColor:"#242C28", pointBorderWidth:2, borderWidth:3}];
+  if (storeName){ const s = m.byStore.find(x=>x.name===storeName); if (s){ const map = Object.fromEntries(s.perDate.map(p=>[p.date,p.cpo])); ds.push({label:storeName, data:m.series.labels.map(l=> map[l]!=null?map[l]:null), borderColor:"#6BB8D6", backgroundColor:"transparent", tension:.38, fill:false, pointRadius:4, pointBackgroundColor:"#6BB8D6", pointBorderColor:"#242C28", pointBorderWidth:2, borderWidth:3, spanGaps:true}); } }
+  cTrend = new Chart(cv, {type:"line", data:{labels:m.series.labels, datasets:ds}, options:{responsive:true, maintainAspectRatio:false, animation:{duration:REDUCE?0:700}, plugins:{legend:{labels:{color:"#B7C7BE", font:{family:"Inter",weight:"500"}, usePointStyle:true, boxWidth:8}}, tooltip:tt()}, scales:{x:{ticks:AXIS, grid:{display:false}, border:{display:false}}, y:{ticks:AXIS, grid:{color:"rgba(255,255,255,.06)"}, border:{display:false}}}}});
+}
+function drawCost(m){
+  const cv = document.getElementById("chartCost"); if (cCost) cCost.destroy();
+  const ctx = cv.getContext("2d");
+  const grad = ctx.createLinearGradient(0,0,520,0);
+  grad.addColorStop(0,"#2BC06E"); grad.addColorStop(1,"#149A55");
+  const top = [...m.byStore].filter(s=>s.cpo!=null).sort((a,b)=> b.cpo - a.cpo).slice(0,12);
+  const fmt = v => "₹" + Number(v).toLocaleString("en-IN",{minimumFractionDigits:0,maximumFractionDigits:2});
+  const tip = tt(); tip.callbacks = {label:c=> "CPO " + fmt(c.parsed.x)};
+  cCost = new Chart(cv, {type:"bar", data:{labels:top.map(s=>s.name), datasets:[{label:"CPO", data:top.map(s=>Math.round(s.cpo*100)/100), backgroundColor:grad, borderRadius:7, maxBarThickness:18}]}, options:{indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{duration:REDUCE?0:700}, plugins:{legend:{display:false}, tooltip:tip}, scales:{x:{ticks:{...AXIS, callback:v=>fmt(v)}, grid:{color:"rgba(255,255,255,.06)"}, border:{display:false}}, y:{ticks:{...AXIS, font:{family:"Inter",size:10}}, grid:{display:false}, border:{display:false}}}}});
+}
 
-/* ------------------------------------------------------------------ */
-/*  Export                                                             */
-/* ------------------------------------------------------------------ */
+const SCOPE_PANEL = {bd:"panel-bydate", bs:"panel-bystore"};
+function renderScope(scope){
+  const panel = document.getElementById(SCOPE_PANEL[scope]);
+  if (!LAST){ panel.innerHTML = `<div class="placeholder">Upload a sheet to view this.</div>`; return; }
+  const st = state[scope];
+  const dateSel = scope==="bd" ? `<select class="ctl" id="${scope}-date">${LAST.dates.map((d,idx)=>`<option value="${idx}" ${idx===st.i?"selected":""}>${esc(d.date)}</option>`).join("")}</select>` : "";
+  const cityChips = `<button class="chip-btn" data-all>All</button>` + citiesPresent().map(c=>`<button class="chip-btn" data-city="${c}">${c}</button>`).join("");
+  const typeChips = ["All","OLD","NEW"].map(t=>`<button class="chip-btn" data-type="${t}">${t}</button>`).join("");
+  panel.innerHTML = `
+    <div class="toolbar">${dateSel}<input class="ctl search" id="${scope}-q" placeholder="Search store…" value="${esc(st.q)}"><select class="ctl" id="${scope}-sort">${sortOptionsHTML(st.sort)}</select></div>
+    <div class="filters">
+      <div class="chips" id="${scope}-city"><span class="lab">City</span>${cityChips}</div>
+      <div class="chips" id="${scope}-type"><span class="lab">Type</span>${typeChips}</div>
+    </div>
+    <div class="sumbar" id="${scope}-sum"></div>
+    <div class="selbar hidden" id="${scope}-sel"></div>
+    <div class="card"><div class="table-wrap"><table class="grid"><thead><tr>
+      <th class="chk"><input type="checkbox" class="allchk" id="${scope}-all"></th>
+      <th class="l">Store</th><th class="l">City</th><th class="l">Type</th><th>Orders</th><th>Total cost</th><th>${scope==="bd"?"CPO":"Blended CPO"}</th>
+    </tr></thead><tbody id="${scope}-body"></tbody></table></div></div>`;
+
+  if (scope==="bd") document.getElementById(scope+"-date").addEventListener("change", e=>{ st.i = +e.target.value; renderScopeBody(scope); });
+  document.getElementById(scope+"-q").addEventListener("input", e=>{ st.q = e.target.value; renderScopeBody(scope); });
+  document.getElementById(scope+"-sort").addEventListener("change", e=>{ st.sort = e.target.value; renderScopeBody(scope); });
+  document.getElementById(scope+"-city").addEventListener("click", e=>{
+    const b = e.target.closest(".chip-btn"); if (!b) return;
+    if (b.hasAttribute("data-all")) st.cities.clear();
+    else { const c = b.dataset.city; if (st.cities.has(c)) st.cities.delete(c); else st.cities.add(c); }
+    refreshChips(scope); renderScopeBody(scope);
+  });
+  document.getElementById(scope+"-type").addEventListener("click", e=>{
+    const b = e.target.closest(".chip-btn"); if (!b) return;
+    st.type = b.dataset.type; refreshChips(scope); renderScopeBody(scope);
+  });
+  document.getElementById(scope+"-all").addEventListener("change", e=>{
+    const list = view[scope].filtered;
+    if (e.target.checked) list.forEach(s=>st.selected.add(s.name)); else list.forEach(s=>st.selected.delete(s.name));
+    renderScopeBody(scope);
+  });
+  panel.addEventListener("change", e=>{
+    if (!e.target.classList.contains("rowchk")) return;
+    const n = e.target.dataset.name;
+    if (e.target.checked) st.selected.add(n); else st.selected.delete(n);
+    renderScopeBody(scope);
+  });
+  refreshChips(scope);
+  renderScopeBody(scope);
+}
+function refreshChips(scope){
+  const st = state[scope];
+  document.querySelectorAll("#"+scope+"-city .chip-btn").forEach(b=>{
+    if (b.hasAttribute("data-all")) b.classList.toggle("active", st.cities.size===0);
+    else b.classList.toggle("active", st.cities.has(b.dataset.city));
+  });
+  document.querySelectorAll("#"+scope+"-type .chip-btn").forEach(b=> b.classList.toggle("active", b.dataset.type===st.type));
+}
+function renderScopeBody(scope){
+  const st = state[scope];
+  const list = filterStores(scope);
+  view[scope].filtered = list;
+  const a = agg(list);
+  document.getElementById(scope+"-sum").innerHTML =
+    sumCell("Stores", String(list.length)) + sumCell("Orders", intf.format(a.orders)) +
+    sumCell("Total cost", inr.format(a.cost)) + sumCell("Blended CPO", cpoTxt(a.cpo), true);
+
+  const selList = sourceList(scope).filter(s=>st.selected.has(s.name));
+  const selEl = document.getElementById(scope+"-sel");
+  if (selList.length){
+    const sa = agg(selList);
+    selEl.classList.remove("hidden");
+    selEl.innerHTML = `<div class="selbar-inner"><span class="seltag"><span class="d"></span>${selList.length} store${selList.length>1?"s":""} selected</span>
+      <div class="selx"><span class="k">Orders</span><span class="v">${intf.format(sa.orders)}</span></div>
+      <div class="selx"><span class="k">Total cost</span><span class="v">${inr.format(sa.cost)}</span></div>
+      <div class="selx"><span class="k">Blended CPO</span><span class="v cpo">${cpoTxt(sa.cpo)}</span></div>
+      <button class="clearbtn" id="${scope}-clear">Clear</button></div>`;
+    document.getElementById(scope+"-clear").addEventListener("click", ()=>{ st.selected.clear(); renderScopeBody(scope); });
+  } else { selEl.classList.add("hidden"); selEl.innerHTML = ""; }
+
+  let rows = list.map((s,i)=>rowHTML(scope,s,i,st.selected.has(s.name))).join("");
+  let cm;
+  if (scope==="bd"){ const d = LAST.dates[st.i].combined; cm = {label:"Combined — "+LAST.dates[st.i].date, orders:d.orders, cost:d.cost, cpo:d.cpo}; }
+  else { const g = LAST.grand; cm = {label:"All stores", orders:g.orders, cost:g.cost, cpo:g.cpo}; }
+  rows += `<tr class="combined"><td class="chk"></td><td class="l" colspan="3">${esc(cm.label)}</td><td class="num">${intf.format(cm.orders)}</td><td class="num">${inr.format(cm.cost)}</td><td class="num cpo">${cpoTxt(cm.cpo)}</td></tr>`;
+  document.getElementById(scope+"-body").innerHTML = rows;
+  document.getElementById(scope+"-all").checked = list.length>0 && list.every(s=>st.selected.has(s.name));
+}
+function sumCell(k, v, accent){ return `<div class="sumcell${accent?" accent":""}"><div class="k">${k}</div><div class="v">${v}</div></div>`; }
+function rowHTML(scope, s, i, checked){
+  return `<tr class="srow" data-scope="${scope}" data-i="${i}">
+    <td class="chk"><input type="checkbox" class="rowchk" data-name="${esc(s.name)}" ${checked?"checked":""}></td>
+    <td class="l store"><span class="chev">▸</span>${esc(s.name)}</td>
+    <td class="l"><span class="citytag">${s.city}</span></td>
+    <td class="l"><span class="typetag ${s.type.toLowerCase()}">${s.type}</span></td>
+    <td class="num">${intf.format(s.orders)}</td>
+    <td class="num">${inr.format(s.cost)}</td>
+    <td class="num cpo">${cpoTxt(s.cpo)}</td></tr>`;
+}
+function riderDetailHTML(s){
+  return `<div><div class="basis-line">Basis · ${esc(s.basis||"")}</div><div class="detail-h">Rider breakdown · pre-tax amounts${s.minFloored?" · store min-order floor applied to total":""}</div><table class="mini"><thead><tr><th class="l">Rider</th><th>Orders</th><th>Amount</th></tr></thead><tbody>${s.ridersDetail.map(r=>`<tr><td class="l mono">${esc(r.rider||"—")}</td><td class="num">${intf.format(r.orders)}</td><td class="num">${inr.format(r.amount)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function perDateDetailHTML(s){
+  return `<div><div class="detail-h">${esc(s.name)} · by date</div><table class="mini"><thead><tr><th class="l">Date</th><th>Orders</th><th>Cost</th><th>CPO</th></tr></thead><tbody>${s.perDate.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(p=>`<tr><td class="l">${esc(p.date)}</td><td class="num">${intf.format(p.orders)}</td><td class="num">${inr.format(p.cost)}</td><td class="num cpo">${cpoTxt(p.cpo)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+
+document.addEventListener("click", e => {
+  if (e.target.closest(".chk")) return;
+  const row = e.target.closest("tr.srow");
+  if (!row) return;
+  const next = row.nextElementSibling;
+  if (next && next.classList.contains("drow")){ next.remove(); row.classList.remove("open"); return; }
+  const scope = row.dataset.scope, i = +row.dataset.i;
+  const s = view[scope].filtered[i];
+  if (!s) return;
+  const tr = document.createElement("tr");
+  tr.className = "drow";
+  tr.innerHTML = `<td colspan="7">${scope==="bd" ? riderDetailHTML(s) : perDateDetailHTML(s)}</td>`;
+  row.after(tr); row.classList.add("open");
+});
+
 function exportXlsx(){
   if (!LAST) return;
-  const aoa = [["Date","Store","Basis","Total Orders","Total Cost (INR)","CPO (INR)"]];
-  for (const d of LAST.dates){
-    for (const s of d.stores)
-      aoa.push([d.date, s.name, s.basis, s.orders, round2(s.cost), s.cpo==null?"":round2(s.cpo)]);
-    aoa.push([d.date, "COMBINED — ALL STORES", "", d.combined.orders, round2(d.combined.cost), d.combined.cpo==null?"":round2(d.combined.cpo)]);
-  }
-  aoa.push([]);
-  aoa.push(["ALL DATES","COMBINED","", LAST.grand.orders, round2(LAST.grand.cost), LAST.grand.cpo==null?"":round2(LAST.grand.cpo)]);
-  const ws = XLSX.utils.aoa_to_sheet(aoa);
-  ws["!cols"] = [{wch:12},{wch:22},{wch:22},{wch:13},{wch:16},{wch:12}];
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "CPO Summary");
-  XLSX.writeFile(wb, "cpo_summary.xlsx");
+  const a1 = [["Date","Store","City","Type","Basis","Orders","Total Cost (INR)","CPO (INR)"]];
+  for (const d of LAST.dates){
+    for (const s of d.stores) a1.push([d.date, s.name, s.city, s.type, s.basis, s.orders, round2(s.cost), s.cpo==null?"":round2(s.cpo)]);
+    a1.push([d.date, "COMBINED", "", "", "", d.combined.orders, round2(d.combined.cost), d.combined.cpo==null?"":round2(d.combined.cpo)]);
+  }
+  a1.push([]); a1.push(["ALL DATES","COMBINED","","","",LAST.grand.orders, round2(LAST.grand.cost), LAST.grand.cpo==null?"":round2(LAST.grand.cpo)]);
+  const ws1 = XLSX.utils.aoa_to_sheet(a1); ws1["!cols"] = [{wch:12},{wch:22},{wch:7},{wch:6},{wch:24},{wch:10},{wch:16},{wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws1, "By date");
+  const a2 = [["Store","City","Type","Orders","Total Cost (INR)","Blended CPO (INR)"]];
+  for (const s of LAST.byStore) a2.push([s.name, s.city, s.type, s.orders, round2(s.cost), s.cpo==null?"":round2(s.cpo)]);
+  a2.push(["ALL STORES","","",LAST.grand.orders, round2(LAST.grand.cost), LAST.grand.cpo==null?"":round2(LAST.grand.cpo)]);
+  const ws2 = XLSX.utils.aoa_to_sheet(a2); ws2["!cols"] = [{wch:22},{wch:7},{wch:6},{wch:10},{wch:16},{wch:14}];
+  XLSX.utils.book_append_sheet(wb, ws2, "By store");
+  XLSX.writeFile(wb, "swish_last_mile_cpo.xlsx");
 }
-function round2(n){ return Math.round(n*100)/100; }
 
-/* ------------------------------------------------------------------ */
-/*  File handling                                                      */
-/* ------------------------------------------------------------------ */
 function handleFile(file){
   const errEl = document.getElementById("err");
   errEl.classList.add("hidden");
@@ -586,8 +716,7 @@ function handleFile(file){
   reader.onload = e => {
     try {
       const wb = XLSX.read(e.target.result, {type:"array"});
-      let rows = null, chosen = null;
-      const diag = [];
+      let rows = null, chosen = null; const diag = [];
       for (const name of wb.SheetNames){
         const r = XLSX.utils.sheet_to_json(wb.Sheets[name], {raw:true, defval:null});
         if (!r.length){ diag.push("“" + name + "” (empty)"); continue; }
@@ -596,179 +725,106 @@ function handleFile(file){
         diag.push("“" + name + "” [" + h.join(", ") + "]" + (ok ? " ✓" : ""));
         if (ok && !rows){ rows = r; chosen = name; }
       }
-      if (!rows)
-        throw new Error("No sheet had the required columns (a date, a store name, and an orders count). Sheets found — " + diag.join("  |  "));
+      if (!rows) throw new Error("No sheet had the required columns (a date, a store name, and an orders count). Sheets found — " + diag.join("  |  "));
       const fn = document.getElementById("fname");
-      fn.textContent = file.name + "  ·  " + rows.length + " rows"
-        + (wb.SheetNames.length > 1 ? "  ·  sheet “" + chosen + "”" : "");
+      fn.textContent = file.name + " · " + rows.length + " rows" + (wb.SheetNames.length > 1 ? " · sheet “" + chosen + "”" : "");
       fn.classList.remove("hidden");
-      render(compute(rows));
-    } catch (err) {
-      errEl.textContent = err.message || String(err);
-      errEl.classList.remove("hidden");
-    }
+      renderAll(compute(rows));
+    } catch (err) { errEl.textContent = err.message || String(err); errEl.classList.remove("hidden"); }
   };
   reader.onerror = () => { errEl.textContent = "Could not read the file."; errEl.classList.remove("hidden"); };
   reader.readAsArrayBuffer(file);
 }
 
-const drop = document.getElementById("drop");
 const fileInput = document.getElementById("file");
+const drop = document.getElementById("drop");
+document.getElementById("uploadBtn").addEventListener("click", ()=> fileInput.click());
 fileInput.addEventListener("change", e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
 ["dragenter","dragover"].forEach(ev => drop.addEventListener(ev, e=>{e.preventDefault();drop.classList.add("over");}));
 ["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e=>{e.preventDefault();drop.classList.remove("over");}));
 drop.addEventListener("drop", e => { if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
 
-/* ------------------------------------------------------------------ */
-/*  Calculation-logic tab — descriptions derived from the same RULES   */
-/* ------------------------------------------------------------------ */
-function fmt(n){ return Number(n).toLocaleString("en-IN",{maximumFractionDigits:2}); }
+const PANELS = ["overview","bydate","bystore","logic"];
+const PANEL_OF = {overview:"overview", bydate:"bydate", bystore:"bystore", logic:"logic"};
+function showTab(name){
+  PANELS.forEach(p => document.getElementById("panel-"+p).classList.toggle("hidden", p!==name));
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab===name));
+}
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", ()=> showTab(t.dataset.tab)));
 
 function perRiderHTML(rule){
   let bands = [];
   switch(rule.kind){
     case "tier": {
       const lo = rule.lo != null ? rule.lo : 10;
-      const r  = rule.rate != null ? rule.rate : 40;
-      bands = [
-        `&lt; ${lo} &rarr; orders &times; <span class="r">&#8377;${fmt(r)}</span>`,
-        `${lo}&ndash;${rule.bp} &rarr; <span class="r">&#8377;${fmt(rule.band)}</span> flat`,
-        `&gt; ${rule.bp} &rarr; &#8377;${fmt(rule.band)} + (orders &minus; ${rule.bp}) &times; <span class="r">&#8377;${fmt(r)}</span>`
-      ];
+      const r = rule.rate != null ? rule.rate : 40;
+      bands = [`&lt; ${lo} &rarr; orders &times; <span class="r">&#8377;${fmt(r)}</span>`,`${lo}&ndash;${rule.bp} &rarr; <span class="r">&#8377;${fmt(rule.band)}</span> flat`,`&gt; ${rule.bp} &rarr; &#8377;${fmt(rule.band)} + (orders &minus; ${rule.bp}) &times; <span class="r">&#8377;${fmt(r)}</span>`];
       let out = `<span class="lead">Per rider, by orders:</span><ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
       if (rule.bonus) out += `<span style="color:var(--muted);font-size:12px">+ &#8377;${rule.bonus.amt} per rider with ${rule.bonus.ge!=null?"&ge; "+rule.bonus.ge:"&gt; "+rule.bonus.gt} orders</span>`;
       return out;
     }
     case "orderTier":
-      bands = [
-        `&le; 10 &rarr; orders &times; <span class="r">&#8377;40</span>`,
-        `11&ndash;15 &rarr; orders &times; <span class="r">&#8377;45</span>`,
-        `16&ndash;20 &rarr; orders &times; <span class="r">&#8377;50</span>`,
-        `&gt; 20 &rarr; orders &times; <span class="r">&#8377;55</span>`
-      ];
+      bands = [`&le; 10 &rarr; orders &times; <span class="r">&#8377;40</span>`,`11&ndash;15 &rarr; orders &times; <span class="r">&#8377;45</span>`,`16&ndash;20 &rarr; orders &times; <span class="r">&#8377;50</span>`,`&gt; 20 &rarr; orders &times; <span class="r">&#8377;55</span>`];
       return `<span class="lead">Whole quantity at the tier rate:</span><ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
     case "perOrder":
-      return `Every order &times; <span class="r" style="font-family:var(--mono)">&#8377;${fmt(rule.rate)}</span>`
-        + (rule.minOrders ? `<br><span style="color:var(--muted);font-size:12px">store billed for at least ${rule.minOrders} orders/day even if fewer</span>` : "");
+      return `Every order &times; <span class="r">&#8377;${fmt(rule.rate)}</span>` + (rule.minOrders ? `<br><span style="color:var(--muted);font-size:12px">store billed for at least ${rule.minOrders} orders/day even if fewer</span>` : "");
     case "eff": {
-      const schemeBands = {
-        btm:[["&gt; 3.2",35],["2.6&ndash;3.2",40],["2.2&ndash;2.6",45],["1.8&ndash;2.2",50],["1.5&ndash;1.8",55],["&lt; 1.5",60]],
-        mara:[["&gt; 2.2",45],["1.8&ndash;2.2",50],["1.5&ndash;1.8",55],["&lt; 1.5",60]],
-        kora:[["&gt; 3.2",38],["2.6&ndash;3.2",42],["&le; 2.6",45]],
-        sec19:[["&gt; 2.2",59],["1.8&ndash;2.2",64.9],["1.5&ndash;1.8",70.8],["&lt; 1.5",76.7]]
-      }[rule.scheme];
-      bands = schemeBands.map(([r,rate])=>`eff ${r} &rarr; orders &times; <span class="r">&#8377;${rate}</span>`);
+      const sb = {btm:[["&gt; 3.2",35],["2.6&ndash;3.2",40],["2.2&ndash;2.6",45],["1.8&ndash;2.2",50],["1.5&ndash;1.8",55],["&lt; 1.5",60]],mara:[["&gt; 2.2",45],["1.8&ndash;2.2",50],["1.5&ndash;1.8",55],["&lt; 1.5",60]],kora:[["&gt; 3.2",38],["2.6&ndash;3.2",42],["&le; 2.6",45]],sec19:[["&gt; 2.2",59],["1.8&ndash;2.2",64.9],["1.5&ndash;1.8",70.8],["&lt; 1.5",76.7]]}[rule.scheme];
+      bands = sb.map(([r,rate])=>`eff ${r} &rarr; orders &times; <span class="r">&#8377;${rate}</span>`);
       let out = `<span class="lead">Daily efficiency = (orders &divide; riders) &divide; 10, then:</span><ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
       if (rule.bonus) out += `<span style="color:var(--muted);font-size:12px">+ &#8377;${rule.bonus.amt} per rider with ${rule.bonus.ge!=null?"&ge; "+rule.bonus.ge:"&gt; "+rule.bonus.gt} orders</span>`;
       if (rule.scheme==="kora") out += `<span style="color:var(--amber);font-size:12px;display:block;margin-top:4px">no band defined below 2.2 &mdash; &#8377;45 extended down</span>`;
       return out;
     }
     case "flat":
-      return `<span class="r" style="font-family:var(--mono)">&#8377;${fmt(rule.amount)}</span> per rider, regardless of orders`;
+      return `<span class="r">&#8377;${fmt(rule.amount)}</span> per rider, regardless of orders`;
     case "bands": {
       let lo = 0; const items = [];
-      rule.bands.forEach((b,i)=>{
-        const hi = (b.upTo!=null ? b.upTo : Infinity);
-        let range;
-        if (hi===Infinity) range = "&ge; " + lo;
-        else if (i===0)    range = "&lt; " + (hi+1);
-        else               range = lo + "&ndash;" + hi;
-        const val = b.flat!=null
-          ? `<span class="r">&#8377;${fmt(b.flat)}</span> total`
-          : `orders &times; <span class="r">&#8377;${fmt(b.per)}</span>`;
-        items.push(`${range} &rarr; ${val}`);
-        if (hi!==Infinity) lo = hi + 1;
-      });
+      rule.bands.forEach((b,i)=>{ const hi = (b.upTo!=null ? b.upTo : Infinity); let range; if (hi===Infinity) range = "&ge; " + lo; else if (i===0) range = "&lt; " + (hi+1); else range = lo + "&ndash;" + hi; const val = b.flat!=null ? `<span class="r">&#8377;${fmt(b.flat)}</span> total` : `orders &times; <span class="r">&#8377;${fmt(b.per)}</span>`; items.push(`${range} &rarr; ${val}`); if (hi!==Infinity) lo = hi + 1; });
       return `<span class="lead">Per rider, by orders:</span><ul class="bands"><li>${items.join("</li><li>")}</li></ul>`;
     }
     case "default800":
-      bands = [
-        `&le; 20 &rarr; <span class="r">&#8377;800</span> flat (even at 0 orders)`,
-        `&gt; 20 &rarr; &#8377;800 + (orders &minus; 20) &times; <span class="r">&#8377;40</span>`
-      ];
+      bands = [`&le; 20 &rarr; <span class="r">&#8377;800</span> flat (even at 0 orders)`,`&gt; 20 &rarr; &#8377;800 + (orders &minus; 20) &times; <span class="r">&#8377;40</span>`];
       return `<ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
     case "cpo": {
       const t = rule.table;
       bands.push(`&lt; ${t[0][0]} &rarr; <span class="r">&#8377;${fmt(rule.base)}</span>/order`);
-      for (let i=0;i<t.length;i++){
-        const lo=t[i][0], hi = i<t.length-1 ? t[i+1][0]-1 : null;
-        const range = hi===null ? `&ge; ${lo}` : (lo===hi ? `${lo}` : `${lo}&ndash;${hi}`);
-        bands.push(`${range} &rarr; <span class="r">&#8377;${fmt(t[i][1])}</span>/order`);
-      }
+      for (let i=0;i<t.length;i++){ const lo=t[i][0], hi = i<t.length-1 ? t[i+1][0]-1 : null; const range = hi===null ? `&ge; ${lo}` : (lo===hi ? `${lo}` : `${lo}&ndash;${hi}`); bands.push(`${range} &rarr; <span class="r">&#8377;${fmt(t[i][1])}</span>/order`); }
       return `<span class="lead">Cost = orders &times; CPO rate (step to band):</span><ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
     }
   }
   return "";
 }
-
 function storeLevelHTML(rule){
   switch(rule.post){
-    case "g1800":  return `Sum rider amounts, add <code>&#8377;1,800</code> &rarr; x. Charge <code>x&times;1.07 + x&times;0.07&times;0.18</code> (&asymp; &times;1.0826).`;
-    case "gst":    return `Sum of rider amounts <code>&times; 1.18</code> (GST).`;
-    case "maha":   return `Sum riders, add <code>&#8377;1,800</code>, then <code>&times; 1.07 &times; 1.18</code>.`;
+    case "g1800": return `Sum rider amounts, add <code>&#8377;1,800</code> &rarr; x. Charge <code>x&times;1.07 + x&times;0.07&times;0.18</code> (&asymp; &times;1.0826).`;
+    case "gst": return `Sum of rider amounts <code>&times; 1.18</code> (GST).`;
     case "addGst": return `Sum riders, add <code>&#8377;${fmt(rule.add)}</code>, then <code>&times; 1.18</code>.`;
     case "m107gst": return `Sum of rider amounts <code>&times; 1.07 &times; 1.18</code>.`;
-    default:       return `Raw sum of rider amounts &mdash; no tax or markup.`;
+    default: return `Raw sum of rider amounts &mdash; no tax or markup.`;
   }
 }
-
 function groupOf(rule){
   if (rule.kind==="eff") return "g6";
   if (rule.post==="g1800") return "g1";
-  if (rule.post==="gst")   return "g2";
-  if (rule.post==="maha" || rule.post==="addGst" || rule.post==="m107gst") return "g3";
+  if (rule.post==="gst") return "g2";
+  if (rule.post==="addGst" || rule.post==="m107gst") return "g3";
   if (rule.post==="none" && rule.kind==="perOrder") return "g4";
   return "g5";
 }
-const GROUP_TITLES = {
-  g1:"Aggregator — add ₹1,800, +7% markup, GST on the markup",
-  g2:"Aggregator — GST ×1.18 on the store total",
-  g3:"Bespoke markup",
-  g4:"Aggregator — flat per-order rate, no tax",
-  g5:"In-house — no tax",
-  g6:"Efficiency-based per-order rate (rate set by daily efficiency)"
-};
+const GROUP_TITLES = {g1:"Aggregator — add ₹1,800, +7% markup, GST on the markup",g2:"Aggregator — GST ×1.18 on the store total",g3:"Bespoke markup",g4:"Aggregator — flat per-order rate, no tax",g5:"In-house — no tax",g6:"Efficiency-based per-order rate (rate set by daily efficiency)"};
 const GROUP_ORDER = ["g6","g1","g2","g3","g4","g5"];
-
 function renderLogic(){
   const buckets = {g1:[],g2:[],g3:[],g4:[],g5:[],g6:[]};
   for (const [name, rule] of Object.entries(RULES)) buckets[groupOf(rule)].push([name, rule]);
-
   let html = `<p class="logic-intro">Exact rule applied to each store, generated from the calculator's own definitions. Store names are matched case-insensitively (spaces trimmed); anything not listed here uses the default rule at the bottom.</p>`;
-
-  const tableFor = rows => {
-    let t = `<table class="logic"><thead><tr><th>Store</th><th>Per-rider amount</th><th>Store-level (on the sum)</th></tr></thead><tbody>`;
-    for (const [name, rule] of rows)
-      t += `<tr><td class="s">${esc(name)}</td><td class="pr">${perRiderHTML(rule)}</td><td class="sl">${storeLevelHTML(rule)}</td></tr>`;
-    return t + `</tbody></table>`;
-  };
-
-  for (const g of GROUP_ORDER){
-    if (!buckets[g].length) continue;
-    buckets[g].sort((a,b)=>a[0].localeCompare(b[0]));
-    html += `<div class="lgroup"><div class="lgroup-h">${esc(GROUP_TITLES[g])}</div>${tableFor(buckets[g])}</div>`;
-  }
-  // default rule
+  const tableFor = rows => { let t = `<table class="logic"><thead><tr><th>Store</th><th>Per-rider amount</th><th>Store-level (on the sum)</th></tr></thead><tbody>`; for (const [name, rule] of rows) t += `<tr><td class="s">${esc(name)}</td><td class="pr">${perRiderHTML(rule)}</td><td class="sl">${storeLevelHTML(rule)}</td></tr>`; return t + `</tbody></table>`; };
+  for (const g of GROUP_ORDER){ if (!buckets[g].length) continue; buckets[g].sort((a,b)=>a[0].localeCompare(b[0])); html += `<div class="lgroup"><div class="lgroup-h">${esc(GROUP_TITLES[g])}</div>${tableFor(buckets[g])}</div>`; }
   html += `<div class="lgroup"><div class="lgroup-h">Any other / unlisted store — default</div>${tableFor([["(default)", DEFAULT_RULE]])}</div>`;
-
   document.getElementById("panel-logic").innerHTML = html;
 }
 
-/* ---- tab switching ---- */
-const tabCalc  = document.getElementById("tab-calc");
-const tabLogic = document.getElementById("tab-logic");
-const panelCalc  = document.getElementById("panel-calc");
-const panelLogic = document.getElementById("panel-logic");
-function showTab(calc){
-  panelCalc.classList.toggle("hidden", !calc);
-  panelLogic.classList.toggle("hidden", calc);
-  tabCalc.classList.toggle("active", calc);   tabCalc.setAttribute("aria-selected", calc);
-  tabLogic.classList.toggle("active", !calc); tabLogic.setAttribute("aria-selected", !calc);
-}
-tabCalc.addEventListener("click",  ()=>showTab(true));
-tabLogic.addEventListener("click", ()=>showTab(false));
-
-renderLogic();
+renderScope("bd"); renderScope("bs"); renderLogic();
 </script>
 </body>
 </html>
