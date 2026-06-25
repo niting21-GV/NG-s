@@ -1706,7 +1706,7 @@ footer .mono { font-family: var(--ff-mono); font-size: 11px; }
   <div class="hero-right">
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-num">18</div>
+        <div class="hero-stat-num">20</div>
         <div class="hero-stat-label">Hours modeled</div>
       </div>
       <div class="hero-stat">
@@ -1988,7 +1988,7 @@ footer .mono { font-family: var(--ff-mono); font-size: 11px; }
 // ────────────────────────────────────────────────
 // CONSTANTS & STATE
 // ────────────────────────────────────────────────
-const HOUR_ORDER = [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1];
+const HOUR_ORDER = [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3];
 const files = { lm:null, kt:null, orders:null, hist:null };
 const plannedOrders = {};   // store name -> planned daily order total
 let allResults = [];   // array of per-store result objects
@@ -2835,7 +2835,8 @@ function renderStoreChart(idx) {
 // Shift 12 → covers hours 12,13,14,15,16,17,18,19,20,21
 // Shift 14 → covers hours 14,15,16,17,18,19,20,21,22,23
 // Shift 16 → covers hours 16,17,18,19,20,21,22,23,0,1
-const SHIFTS = [8, 10, 12, 14, 16];
+// Shift 18 → covers hours 18,19,20,21,22,23,0,1,2,3
+const SHIFTS = [8, 10, 12, 14, 16, 18];
 function buildShiftCovers() {
   const sc = {};
   SHIFTS.forEach(start => {
