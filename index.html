@@ -344,7 +344,7 @@ const RULES = {
   "GGN-SEC19-03":{kind:"eff",scheme:"sec19",post:"none"},
   "GGN-SEC53-01":{kind:"perOrder",rate:64.9,post:"none",minOrders:500},
   "GGN-SEC51-02":{kind:"perOrder",rate:70.8,post:"none",minOrders:450},
-  "BLR-SARJ-03":{kind:"orderTier",post:"none"},
+  "BLR-SARJ-03":{kind:"cpo",base:40,post:"none",table:[[20,45],[22,50],[36,51],[41,52]]},
   "BLR-BELLA-03":{kind:"cpo",base:45,post:"none",table:[[23,45.5],[26,46],[29,46.5],[32,47],[35,48],[38,49],[40,50]]},
   "BLR-BTM-02":{kind:"cpo",base:40,post:"none",table:[[10,47.5],[12,48],[14,48.5],[16,49],[18,49.5],[20,50],[23,51],[26,52],[29,53],[33,54],[37,54]]},
   "BLR-INDI-02":{kind:"tier",band:900,bp:22,post:"none"},
