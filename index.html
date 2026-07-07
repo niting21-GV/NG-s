@@ -332,57 +332,60 @@ const RULES = {
   "TAVAREKERE-1":{kind:"tier",band:900,lo:18,bp:22,post:"g1800"},
   "BLR-WHITE-05":{kind:"tier",band:900,lo:18,bp:22,post:"g1800",bonus:{ge:25,amt:100}},
   "BLR-KUDLU-01":{kind:"cpo",base:45,post:"none",table:[[23,45.5],[26,46],[29,46.5],[32,47],[35,48],[38,49],[40,50]]},
-  "BLR-KORA-02":{kind:"tier",band:950,bp:20,post:"gst"},
+  "BLR-KORA-02":{kind:"perOrder",rate:48,post:"none",addFinal:7434},
   "BLR-MAHA-01":{kind:"tier",band:900,lo:18,bp:22,post:"g1800",bonus:{ge:25,amt:100}},
   "KASAVANAHALLI":{kind:"tier",band:900,lo:15,bp:22,post:"g1800"},
-  "BLR-SARJ-04":{kind:"tier",band:865,bp:20,post:"gst"},
-  "BLR-BTM-01":{kind:"eff",scheme:"btm",post:"gst"},
-  "BLR-MARA-03":{kind:"eff",scheme:"btm",post:"gst"},
-  "BLR-BELLA-05":{kind:"eff",scheme:"kora",post:"gst"},
+  "BLR-SARJ-04":{kind:"perOrder",rate:46,post:"none",addFinal:7434},
+  "BLR-BTM-01":{kind:"perOrder",rate:46,post:"none",addFinal:7434},
+  "BLR-MARA-03":{kind:"perOrder",rate:48,post:"none",addFinal:7434},
+  "BLR-BELLA-05":{kind:"perOrder",rate:46,post:"none",addFinal:7434},
   "KORAMANGALA-1":{kind:"tier",band:900,lo:18,bp:21,post:"g1800"},
   "BLR-WHITEFIELD-1":{kind:"tier",band:900,lo:18,bp:22,post:"g1800",bonus:{ge:30,amt:200}},
-  "GGN-SEC19-03":{kind:"eff",scheme:"sec19",post:"none"},
-  "GGN-SEC53-01":{kind:"perOrder",rate:64.9,post:"none",minOrders:500},
-  "GGN-SEC51-02":{kind:"perOrder",rate:70.8,post:"none",minOrders:450},
-  "BLR-SARJ-03":{kind:"cpo",base:40,post:"none",table:[[20,45],[22,50],[36,51],[41,52]]},
+  "GGN-SEC19-03":{kind:"perOrder",rate:55.5,post:"none",addFinal:7434},
+  "GGN-SEC53-01":{kind:"perOrder",rate:55.5,post:"none",addFinal:7434},
+  "GGN-SEC51-02":{kind:"perOrder",rate:55.5,post:"none",addFinal:7434},
+  "BLR-SARJ-03":{kind:"cpo",base:40,post:"none",table:[[20,45],[25,50],[40,51],[45,52]]},
   "BLR-BELLA-03":{kind:"cpo",base:45,post:"none",table:[[23,45.5],[26,46],[29,46.5],[32,47],[35,48],[38,49],[40,50]]},
-  "BLR-BTM-02":{kind:"cpo",base:40,post:"none",table:[[10,47.5],[12,48],[14,48.5],[16,49],[18,49.5],[20,50],[23,51],[26,52],[29,53],[33,54],[37,54]]},
+  "BLR-BTM-02":{kind:"cpo",base:40,post:"none",table:[[12,41],[15,42],[18,43],[21,44],[24,45],[27,46],[31,48],[35,49],[39,50],[44,53]]},
   "BLR-INDI-02":{kind:"tier",band:900,bp:22,post:"none"},
-  "BLR-YLK":{kind:"tier",band:900,bp:20,post:"none"},
   "BLR-INDIRANAGAR-1":{kind:"tier",band:900,lo:18,bp:20,post:"none",bonus:{gt:30,amt:100}},
   "BLR-JAK-01":{kind:"cpo",base:40,post:"none",table:[[8,40],[10,43],[12,48],[15,52],[17,54],[19,56],[21,58],[23,59],[26,61],[30,56],[34,58]]},
   "BLR-MARA-01":{kind:"cpo",base:40,post:"none",table:[[24,44],[28,45],[32,46],[36,47],[40,47]]},
   "BLR-WHITE-03":{kind:"cpo",base:40,post:"none",table:[[20,43.5],[24,44],[28,45],[32,46],[36,46],[40,47],[45,47]]},
-  "BLR-WHITE-06":{kind:"cpo",base:40,post:"none",table:[[18,46],[22,47],[26,48],[30,49],[34,49],[38,50],[45,50]]},
+  "BLR-WHITE-06":{kind:"cpo",base:40,post:"none",table:[[18,46],[22,47],[26,48],[30,49],[46,50]]},
   "GGN-SEC24-04":{kind:"bands",post:"none",bands:[{upTo:14,per:40},{upTo:17,flat:675},{upTo:20,flat:815},{upTo:23,flat:1000},{upTo:26,flat:1150},{upTo:29,flat:1340},{upTo:Infinity,per:50}]},
-  "GGN-SEC61-08":{kind:"cpo",base:40,post:"none",table:[[10,45],[13,45.384],[16,47.5],[20,48],[23,49.565],[25,50]]},
-  "BLR-YLK-01":{kind:"flat",amount:900,post:"none"},
-  "BLR-RMT-01":{kind:"flat",amount:1000,post:"none"},
+  "GGN-SEC61-08":{kind:"cpo",base:38,post:"none",table:[[10,40],[13,41],[15,43],[18,44],[23,45],[27,48],[30,50]]},
+  "BLR-YLK-01":{kind:"tier",band:900,bp:20,post:"none"},
+  "BLR-RMT-01":{kind:"cpo",base:40,post:"none",table:[[10,42],[13,43],[16,44],[19,45],[21,47.5],[23,48],[34,48.5],[40,50]]},
   "BLR-HLM-01":{kind:"flat",amount:900,post:"none"},
   "BLR-HBR-01":{kind:"flat",amount:900,post:"none"},
   "GGN-SEC14-07":{kind:"cpo",base:39,post:"none",table:[[11,40],[14,40.9],[17,42.1],[20,42.5],[23,44],[26,45.7],[29,48.3],[31,48.6]]},
   "NOI-ADV-01":{kind:"cpo",base:38,post:"none",table:[[13,38.85],[16,40],[19,42.11],[26,43.08],[30,43.33]]},
   "GGN-SEC49-05":{kind:"cpo",base:40,post:"none",table:[[8,42.5],[12,45.83],[16,46.25],[20,47],[25,48],[30,48.33]]},
+  "GGN-SEC66-10":{kind:"cpo",base:40,post:"none",table:[[10,42],[13,43],[16,44],[19,45],[22,45.5],[25,46],[30,47]]},
+  "NOI-SEC5-10":{kind:"cpo",base:40,post:"none",table:[[10,41],[13,42],[16,43],[19,44],[22,44.5],[25,45],[28,46]]},
 };
 const DEFAULT_RULE = {kind:"default800",post:"none"};
 
-const OLD_STORES = new Set(["BELLANDUR-2","BLR-BELLA-03","BLR-BELLA-05","BLR-BTM-01","BLR-BTM-02","BLR-INDI-02","BLR-INDIRANAGAR-1","BLR-KORA-02","BLR-KUDLU-01","BLR-MAHA-01","BLR-MARA-01","BLR-MARA-03","BLR-SARJ-03","BLR-SARJ-04","BLR-WHITE-03","BLR-WHITE-05","BLR-WHITE-06","BLR-WHITEFIELD-1","GGN-SEC19-03","GGN-SEC24-04","GGN-SEC51-02","GGN-SEC53-01","HSR-1","HSR-3","KASAVANAHALLI","KORAMANGALA-1","TAVAREKERE-1"]);
+const OLD_STORES = new Set(["BELLANDUR-2","BLR-BELLA-03","BLR-BELLA-05","BLR-BTM-01","BLR-BTM-02","BLR-INDI-02","BLR-INDIRANAGAR-1","BLR-KORA-02","BLR-KUDLU-01","BLR-MAHA-01","BLR-MARA-01","BLR-MARA-03","BLR-RMT-01","BLR-SARJ-03","BLR-SARJ-04","BLR-WHITE-03","BLR-WHITE-05","BLR-WHITE-06","BLR-WHITEFIELD-1","GGN-SEC19-03","GGN-SEC24-04","GGN-SEC51-02","GGN-SEC53-01","GGN-SEC61-08","GGN-SEC66-10","HSR-1","HSR-3","KASAVANAHALLI","KORAMANGALA-1","NOI-SEC5-10","TAVAREKERE-1"]);
 
 function postTag(rule){
+  const add = rule.addFinal ? " + ₹" + fmt(rule.addFinal) + " final add" : "";
   switch(rule.post){
-    case "g1800": return "+1800 ×1.0826";
-    case "gst": return "×1.18";
-    case "addGst": return "+" + rule.add + " ×1.18";
-    default: return "no tax";
+    case "g1800": return "+1800 ×1.0826" + add;
+    case "gst": return "×1.18" + add;
+    case "addGst": return "+" + rule.add + " ×1.18" + add;
+    default: return "no tax" + add;
   }
 }
 function basisLabel(rule){
+  const add = rule.addFinal ? " + ₹" + fmt(rule.addFinal) + " final add" : "";
   switch(rule.post){
-    case "g1800": return "1800 + 7% mkup + GST";
-    case "gst": return "×1.18";
-    case "addGst": return "+" + rule.add + " ×1.18";
-    case "m107gst": return "×1.07 ×1.18";
-    default: return rule.kind==="flat" ? "flat 900/rider" : "in-house / no tax";
+    case "g1800": return "1800 + 7% mkup + GST" + add;
+    case "gst": return "×1.18" + add;
+    case "addGst": return "+" + rule.add + " ×1.18" + add;
+    case "m107gst": return "×1.07 ×1.18" + add;
+    default: return (rule.kind==="flat" ? "flat 900/rider" : "in-house / no tax") + add;
   }
 }
 function riderAmount(rule, o){
@@ -445,13 +448,15 @@ function effRate(scheme, e){
   return 45;
 }
 function applyPost(rule, S){
+  let total;
   switch(rule.post){
-    case "g1800": { const x = S + 1800; return x*1.07 + x*0.07*0.18; }
-    case "gst": return S * 1.18;
-    case "addGst": return (S + rule.add) * 1.18;
-    case "m107gst": return S * 1.07 * 1.18;
-    default: return S;
+    case "g1800": { const x = S + 1800; total = x*1.07 + x*0.07*0.18; break; }
+    case "gst": total = S * 1.18; break;
+    case "addGst": total = (S + rule.add) * 1.18; break;
+    case "m107gst": total = S * 1.07 * 1.18; break;
+    default: total = S;
   }
+  return total + (rule.addFinal || 0);
 }
 
 const canon = h => String(h).toLowerCase().replace(/[^a-z0-9]/g,"");
@@ -529,9 +534,9 @@ function compute(rows){
         perRate = effRate(rule.scheme, eff);
         subtotal = s.orders * perRate + s.bonusTotal;
         basis = "eff " + eff.toFixed(2) + " · ₹" + fmt(perRate) + "/order" + (rule.bonus ? " · " + bonusTag(rule.bonus) : "") + " · " + postTag(rule);
-      } else if (rule.minOrders){
-        subtotal = Math.max(s.orders, rule.minOrders) * rule.rate;
-        basis = "₹" + fmt(rule.rate) + "/order · min " + rule.minOrders + " orders/day";
+      } else if (rule.kind === "perOrder"){
+        subtotal = Math.max(s.orders, rule.minOrders || 0) * rule.rate;
+        basis = "₹" + fmt(rule.rate) + "/order" + (rule.minOrders ? " · min " + rule.minOrders + " orders/day" : "") + " · " + postTag(rule);
       } else {
         subtotal = s.subtotalFixed + s.bonusTotal;
         basis = basisLabel(rule) + (rule.bonus ? " · " + bonusTag(rule.bonus) : "");
@@ -541,7 +546,7 @@ function compute(rows){
       const ridersDetail = s.riderRows.map(rr => {
         let amt;
         if (rule.kind === "eff") amt = rr.orders * perRate;
-        else if (rule.minOrders) amt = rr.orders * rule.rate;
+        else if (rule.kind === "perOrder") amt = rr.orders * rule.rate;
         else amt = riderAmount(rule, rr.orders);
         if (rr.hit && rule.bonus) amt += rule.bonus.amt;
         return {rider: rr.rider, orders: rr.orders, amount: amt};
@@ -858,7 +863,7 @@ function perRiderHTML(rule){
       bands = [`&le; 10 &rarr; orders &times; <span class="r">&#8377;40</span>`,`11&ndash;15 &rarr; orders &times; <span class="r">&#8377;45</span>`,`16&ndash;20 &rarr; orders &times; <span class="r">&#8377;50</span>`,`&gt; 20 &rarr; orders &times; <span class="r">&#8377;55</span>`];
       return `<span class="lead">Whole quantity at the tier rate:</span><ul class="bands"><li>${bands.join("</li><li>")}</li></ul>`;
     case "perOrder":
-      return `Every order &times; <span class="r">&#8377;${fmt(rule.rate)}</span>` + (rule.minOrders ? `<br><span style="color:var(--muted);font-size:12px">store billed for at least ${rule.minOrders} orders/day even if fewer</span>` : "");
+      return `Every order &times; <span class="r">&#8377;${fmt(rule.rate)}</span>` + (rule.minOrders ? `<br><span style="color:var(--muted);font-size:12px">store billed for at least ${rule.minOrders} orders/day even if fewer</span>` : "") + (rule.addFinal ? `<br><span style="color:var(--muted);font-size:12px">+ &#8377;${fmt(rule.addFinal)} added at store final amount</span>` : "");
     case "eff": {
       const sb = {btm:[["&gt; 3.2",35],["2.6&ndash;3.2",40],["2.2&ndash;2.6",45],["1.8&ndash;2.2",50],["1.5&ndash;1.8",55],["&lt; 1.5",60]],mara:[["&gt; 2.2",45],["1.8&ndash;2.2",50],["1.5&ndash;1.8",55],["&lt; 1.5",60]],kora:[["&gt; 3.2",38],["2.6&ndash;3.2",42],["&le; 2.6",45]],sec19:[["&gt; 2.2",59],["1.8&ndash;2.2",64.9],["1.5&ndash;1.8",70.8],["&lt; 1.5",76.7]]}[rule.scheme];
       bands = sb.map(([r,rate])=>`eff ${r} &rarr; orders &times; <span class="r">&#8377;${rate}</span>`);
@@ -887,12 +892,13 @@ function perRiderHTML(rule){
   return "";
 }
 function storeLevelHTML(rule){
+  const add = rule.addFinal ? ` Then add <code>&#8377;${fmt(rule.addFinal)}</code> to the final amount.` : "";
   switch(rule.post){
-    case "g1800": return `Sum rider amounts, add <code>&#8377;1,800</code> &rarr; x. Charge <code>x&times;1.07 + x&times;0.07&times;0.18</code> (&asymp; &times;1.0826).`;
-    case "gst": return `Sum of rider amounts <code>&times; 1.18</code> (GST).`;
-    case "addGst": return `Sum riders, add <code>&#8377;${fmt(rule.add)}</code>, then <code>&times; 1.18</code>.`;
-    case "m107gst": return `Sum of rider amounts <code>&times; 1.07 &times; 1.18</code>.`;
-    default: return `Raw sum of rider amounts &mdash; no tax or markup.`;
+    case "g1800": return `Sum rider amounts, add <code>&#8377;1,800</code> &rarr; x. Charge <code>x&times;1.07 + x&times;0.07&times;0.18</code> (&asymp; &times;1.0826).${add}`;
+    case "gst": return `Sum of rider amounts <code>&times; 1.18</code> (GST).${add}`;
+    case "addGst": return `Sum riders, add <code>&#8377;${fmt(rule.add)}</code>, then <code>&times; 1.18</code>.${add}`;
+    case "m107gst": return `Sum of rider amounts <code>&times; 1.07 &times; 1.18</code>.${add}`;
+    default: return `Raw sum of rider amounts &mdash; no tax or markup.${add}`;
   }
 }
 function groupOf(rule){
