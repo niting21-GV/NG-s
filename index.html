@@ -326,28 +326,28 @@
 "use strict";
 
 const RULES = {
-  "BELLANDUR-2":{kind:"tier",band:900,lo:18,bp:22,post:"g1800"},
-  "HSR-1":{kind:"tier",band:900,lo:18,bp:22,post:"g1800"},
-  "HSR-3":{kind:"tier",band:900,lo:18,bp:22,post:"g1800"},
-  "TAVAREKERE-1":{kind:"tier",band:900,lo:18,bp:22,post:"g1800"},
-  "BLR-WHITE-05":{kind:"tier",band:900,lo:18,bp:22,post:"g1800",bonus:{ge:25,amt:100}},
+  "BELLANDUR-2":{kind:"perOrder",rate:40,post:"g1050"},
+  "HSR-1":{kind:"perOrder",rate:40,post:"g1050"},
+  "HSR-3":{kind:"perOrder",rate:40,post:"g1050"},
+  "TAVAREKERE-1":{kind:"perOrder",rate:40,post:"g1050"},
+  "BLR-WHITE-05":{kind:"tier",band:900,lo:15,bp:22,post:"g1800",bonus:{ge:25,amt:100}},
   "BLR-KUDLU-01":{kind:"cpo",base:45,post:"none",table:[[23,45.5],[26,46],[29,46.5],[32,47],[35,48],[38,49],[40,50]]},
   "BLR-KORA-02":{kind:"perOrder",rate:48,post:"none",addFinal:7434},
-  "BLR-MAHA-01":{kind:"tier",band:900,lo:18,bp:22,post:"g1800",bonus:{ge:25,amt:100}},
+  "BLR-MAHA-01":{kind:"tier",band:900,lo:15,bp:22,post:"g1800",bonus:{ge:25,amt:100}},
   "KASAVANAHALLI":{kind:"tier",band:900,lo:15,bp:22,post:"g1800"},
   "BLR-SARJ-04":{kind:"perOrder",rate:46,post:"none",addFinal:7434},
   "BLR-BTM-01":{kind:"perOrder",rate:46,post:"none",addFinal:7434},
   "BLR-MARA-03":{kind:"perOrder",rate:48,post:"none",addFinal:7434},
   "BLR-BELLA-05":{kind:"perOrder",rate:46,post:"none",addFinal:7434},
-  "KORAMANGALA-1":{kind:"tier",band:900,lo:18,bp:21,post:"g1800"},
-  "BLR-WHITEFIELD-1":{kind:"tier",band:900,lo:18,bp:22,post:"g1800",bonus:{ge:30,amt:200}},
-  "GGN-SEC19-03":{kind:"perOrder",rate:55.5,post:"none",addFinal:7434},
-  "GGN-SEC53-01":{kind:"perOrder",rate:55.5,post:"none",addFinal:7434},
-  "GGN-SEC51-02":{kind:"perOrder",rate:55.5,post:"none",addFinal:7434},
+  "KORAMANGALA-1":{kind:"perOrder",rate:40,post:"g1050"},
+  "BLR-WHITEFIELD-1":{kind:"perOrder",rate:40,post:"g1050",bonus:{ge:30,amt:200}},
+  "GGN-SEC19-03":{kind:"perOrder",rate:55,post:"none",addFinal:1062},
+  "GGN-SEC53-01":{kind:"perOrder",rate:55,post:"none",addFinal:1062},
+  "GGN-SEC51-02":{kind:"perOrder",rate:55,post:"none",addFinal:1062},
   "BLR-SARJ-03":{kind:"cpo",base:40,post:"none",table:[[20,45],[25,50],[40,51],[45,52]]},
   "BLR-BELLA-03":{kind:"cpo",base:45,post:"none",table:[[23,45.5],[26,46],[29,46.5],[32,47],[35,48],[38,49],[40,50]]},
   "BLR-BTM-02":{kind:"cpo",base:40,post:"none",table:[[12,41],[15,42],[18,43],[21,44],[24,45],[27,46],[31,48],[35,49],[39,50],[44,53]]},
-  "BLR-INDI-02":{kind:"tier",band:900,bp:22,post:"none"},
+  "BLR-INDI-02":{kind:"tier",band:950,lo:18,bp:22,post:"none"},
   "BLR-INDIRANAGAR-1":{kind:"tier",band:900,lo:18,bp:20,post:"none",bonus:{gt:30,amt:100}},
   "BLR-JAK-01":{kind:"cpo",base:40,post:"none",table:[[8,40],[10,43],[12,48],[15,52],[17,54],[19,56],[21,58],[23,59],[26,61],[30,56],[34,58]]},
   "BLR-MARA-01":{kind:"cpo",base:40,post:"none",table:[[24,44],[28,45],[32,46],[36,47],[40,47]]},
@@ -364,6 +364,8 @@ const RULES = {
   "GGN-SEC49-05":{kind:"cpo",base:40,post:"none",table:[[8,42.5],[12,45.83],[16,46.25],[20,47],[25,48],[30,48.33]]},
   "GGN-SEC66-10":{kind:"cpo",base:40,post:"none",table:[[10,42],[13,43],[16,44],[19,45],[22,45.5],[25,46],[30,47]]},
   "NOI-SEC5-10":{kind:"cpo",base:40,post:"none",table:[[10,41],[13,42],[16,43],[19,44],[22,44.5],[25,45],[28,46]]},
+  "NOI-SEC74-08":{kind:"cpo",base:40,post:"none",table:[[5,43],[7,44],[9,45],[11,46],[13,47],[15,48],[17,49],[20,50],[23,52]]},
+  "GGN-SEC38-09":{kind:"cpo",base:40,post:"none",table:[[5,43],[7,44],[9,45],[11,46],[13,47],[15,48],[17,49],[20,50],[23,52]]},
 };
 const DEFAULT_RULE = {kind:"default800",post:"none"};
 
@@ -373,6 +375,7 @@ function postTag(rule){
   const add = rule.addFinal ? " + ₹" + fmt(rule.addFinal) + " final add" : "";
   switch(rule.post){
     case "g1800": return "+1800 ×1.0826" + add;
+    case "g1050": return "+1050 ×1.0826" + add;
     case "gst": return "×1.18" + add;
     case "addGst": return "+" + rule.add + " ×1.18" + add;
     default: return "no tax" + add;
@@ -382,6 +385,7 @@ function basisLabel(rule){
   const add = rule.addFinal ? " + ₹" + fmt(rule.addFinal) + " final add" : "";
   switch(rule.post){
     case "g1800": return "1800 + 7% mkup + GST" + add;
+    case "g1050": return "1050 + 7% mkup + GST" + add;
     case "gst": return "×1.18" + add;
     case "addGst": return "+" + rule.add + " ×1.18" + add;
     case "m107gst": return "×1.07 ×1.18" + add;
@@ -451,6 +455,7 @@ function applyPost(rule, S){
   let total;
   switch(rule.post){
     case "g1800": { const x = S + 1800; total = x*1.07 + x*0.07*0.18; break; }
+    case "g1050": { const x = S + 1050; total = x*1.07 + x*0.07*0.18; break; }
     case "gst": total = S * 1.18; break;
     case "addGst": total = (S + rule.add) * 1.18; break;
     case "m107gst": total = S * 1.07 * 1.18; break;
@@ -895,6 +900,7 @@ function storeLevelHTML(rule){
   const add = rule.addFinal ? ` Then add <code>&#8377;${fmt(rule.addFinal)}</code> to the final amount.` : "";
   switch(rule.post){
     case "g1800": return `Sum rider amounts, add <code>&#8377;1,800</code> &rarr; x. Charge <code>x&times;1.07 + x&times;0.07&times;0.18</code> (&asymp; &times;1.0826).${add}`;
+    case "g1050": return `Sum rider amounts, add <code>&#8377;1,050</code> &rarr; x. Charge <code>x&times;1.07 + x&times;0.07&times;0.18</code> (&asymp; &times;1.0826).${add}`;
     case "gst": return `Sum of rider amounts <code>&times; 1.18</code> (GST).${add}`;
     case "addGst": return `Sum riders, add <code>&#8377;${fmt(rule.add)}</code>, then <code>&times; 1.18</code>.${add}`;
     case "m107gst": return `Sum of rider amounts <code>&times; 1.07 &times; 1.18</code>.${add}`;
@@ -904,15 +910,16 @@ function storeLevelHTML(rule){
 function groupOf(rule){
   if (rule.kind==="eff") return "g6";
   if (rule.post==="g1800") return "g1";
+  if (rule.post==="g1050") return "g7";
   if (rule.post==="gst") return "g2";
   if (rule.post==="addGst" || rule.post==="m107gst") return "g3";
   if (rule.post==="none" && rule.kind==="perOrder") return "g4";
   return "g5";
 }
-const GROUP_TITLES = {g1:"Aggregator — add ₹1,800, +7% markup, GST on the markup",g2:"Aggregator — GST ×1.18 on the store total",g3:"Bespoke markup",g4:"Aggregator — flat per-order rate, no tax",g5:"In-house — no tax",g6:"Efficiency-based per-order rate (rate set by daily efficiency)"};
-const GROUP_ORDER = ["g6","g1","g2","g3","g4","g5"];
+const GROUP_TITLES = {g1:"Aggregator — add ₹1,800, +7% markup, GST on the markup",g2:"Aggregator — GST ×1.18 on the store total",g3:"Bespoke markup",g4:"Aggregator — flat per-order rate, no tax",g5:"In-house — no tax",g6:"Efficiency-based per-order rate (rate set by daily efficiency)",g7:"Aggregator — add ₹1,050, +7% markup, GST on the markup"};
+const GROUP_ORDER = ["g6","g1","g7","g2","g3","g4","g5"];
 function renderLogic(){
-  const buckets = {g1:[],g2:[],g3:[],g4:[],g5:[],g6:[]};
+  const buckets = {g1:[],g2:[],g3:[],g4:[],g5:[],g6:[],g7:[]};
   for (const [name, rule] of Object.entries(RULES)) buckets[groupOf(rule)].push([name, rule]);
   let html = `<p class="logic-intro">Exact rule applied to each store, generated from the calculator's own definitions. Store names are matched case-insensitively (spaces trimmed); anything not listed here uses the default rule at the bottom.</p>`;
   const tableFor = rows => { let t = `<table class="logic"><thead><tr><th>Store</th><th>Per-rider amount</th><th>Store-level (on the sum)</th></tr></thead><tbody>`; for (const [name, rule] of rows) t += `<tr><td class="s">${esc(name)}</td><td class="pr">${perRiderHTML(rule)}</td><td class="sl">${storeLevelHTML(rule)}</td></tr>`; return t + `</tbody></table>`; };
