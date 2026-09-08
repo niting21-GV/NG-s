@@ -3259,6 +3259,7 @@ function downloadXLSX() {
  body{font-family:var(--body);color:var(--text);overflow:hidden;background:var(--bg);
   -webkit-font-smoothing:antialiased;letter-spacing:-.003em}
  #map{position:fixed;inset:0;z-index:0;background:#1B211E}
+  .dark-tiles{filter:invert(1) hue-rotate(180deg) brightness(.95) contrast(.85) saturate(.6)}
  #aurora{position:fixed;top:-30%;left:50%;transform:translateX(-50%);width:1100px;height:520px;z-index:0;pointer-events:none;
   background:radial-gradient(closest-side,rgba(40,192,110,.18),transparent 70%),radial-gradient(closest-side,rgba(160,110,210,.10),transparent 70%);filter:blur(20px);opacity:.7}
  ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:5px}
@@ -3565,8 +3566,8 @@ var fmt=n=>n>=1000?(n/1000).toFixed(n>=10000?0:1)+"k":String(Math.round(n));
 function meta(lat,lon){return '<div class="coord">'+lat.toFixed(6)+", "+lon.toFixed(6)+'</div>';}
 
 function initMap(){
- var voy=L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{maxZoom:20,attribution:"© OpenStreetMap, © CARTO"});
- var streets=L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:20,attribution:"© OpenStreetMap, © CARTO"});
+ var voy=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap contributors",className:"dark-tiles"});
+ var streets=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap contributors"});
  var sat=L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,attribution:"© Esri"});
  map=L.map("map",{zoomControl:true,layers:[voy],preferCanvas:true}).setView([12.95,77.6],12);
  L.control.layers({"Dark":voy,"Streets":streets,"Satellite":sat},null,{position:"bottomright"}).addTo(map);
