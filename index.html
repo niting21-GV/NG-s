@@ -3524,7 +3524,7 @@ function estReach(tg,tags,A){if(tg==="Societies & Flats"){var lv=parseInt(tags["
 
 async function fetchOSM(ring,log){
  var ps=ring.map(c=>c[1]+" "+c[0]).join(" ");var P='(poly:"'+ps+'")';
- var q="[out:json][timeout:55];(nwr[\"amenity\"]"+P+";nwr[\"shop\"]"+P+";nwr[\"office\"]"+P+";nwr[\"leisure\"]"+P+";nwr[\"tourism\"]"+P+";nwr[\"healthcare\"]"+P+";nwr[\"public_transport\"]"+P+";nwr[\"railway\"~\"^(station|halt)$\"]"+P+";node[\"highway\"=\"bus_stop\"]"+P+";nwr[\"building\"~\"^(office|commercial|apartments|residential|dormitory)$\"][\"name\"]"+P+";nwr[\"landuse\"=\"residential\"][\"name\"]"+P+";nwr[\"place\"~\"^(neighbourhood|suburb|quarter)$\"][\"name\"]"+P+";nwr[\"name\"~\"tech park|it park|software park|paying guest|co.?living\",i]"+P+";);out center tags;";
+ var q="[out:json][timeout:55];(nwr[~\"^(amenity|shop|office|leisure|tourism|healthcare|public_transport)$\"~\".\"]"+P+";nwr[\"railway\"~\"^(station|halt)$\"]"+P+";node[\"highway\"=\"bus_stop\"]"+P+";nwr[\"building\"~\"^(office|commercial|apartments|residential|dormitory)$\"][\"name\"]"+P+";nwr[\"landuse\"=\"residential\"][\"name\"]"+P+";nwr[\"place\"~\"^(neighbourhood|suburb|quarter)$\"][\"name\"]"+P+";nwr[\"name\"~\"tech park|it park|software park|paying guest|co.?living\",i]"+P+";);out center tags;";
  var ms=["https://overpass-api.de/api/interpreter","https://overpass.kumi.systems/api/interpreter","https://overpass.private.coffee/api/interpreter","https://overpass.osm.ch/api/interpreter","https://overpass.nchc.org.tw/api/interpreter"];
  for(var mi=0;mi<ms.length;mi++){var url=ms[mi];try{log("osm · "+new URL(url).host,"dim");var t=performance.now();
    var ctrl=new AbortController();var to=setTimeout(function(){ctrl.abort();},60000);
